@@ -1,4 +1,4 @@
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as S from "./SignupInfo.styled";
 import Button from "../../components/common/button/Button";
@@ -15,6 +15,7 @@ import { useNavigate } from "react-router-dom";
 import { useUserStore } from "../../stores/useUserStore";
 import { useNicknameCheckMutation } from "../../hooks/mutations/user/useNicknameCheckMutation";
 import { useEffect, useState } from "react";
+import { BANK_OPTIONS } from "../../constants";
 
 const inputFields = [
   {
@@ -50,11 +51,13 @@ const Signup = () => {
   const {
     register,
     handleSubmit,
+    control,
     formState: { errors },
     watch,
   } = useForm<SignupInfoFormData>({
     resolver: zodResolver(signupInfoSchema),
     mode: "onChange",
+    shouldUnregister: true,
   });
 
   const [isNicknameChecked, setIsNicknameChecked] = useState(false);
@@ -89,16 +92,16 @@ const Signup = () => {
     if (!step1Data) return alert("이메일/비밀번호 정보가 없습니다.");
 
     const step1 = JSON.parse(step1Data);
-    const { agree, ...infoData } = data;
-    void agree; // 👈 사용하지 않는다는 걸 명시적으로 처리
-
-    const requestData = {
-      ...step1, // email, password
-      ...infoData, // nickname, name, phoneNumber, accountBank, accountNumber
+    const requestData: SignupRequestData = {
+      ...step1,
+      nickname: data.nickname,
+      name: data.name,
+      phoneNumber: data.phoneNumber,
+      accountBank: data.accountBank?.value ?? "", // ✅ string으로 변환
+      accountNumber: data.accountNumber,
     };
 
-    console.log("최종 제출:", requestData);
-    handleSignup(requestData);
+    handleSignup(requestData); // ✅ 타입 일치
   };
 
   return (
@@ -144,15 +147,19 @@ const Signup = () => {
             helperText={errors?.[name]?.message}
           />
         ))}
-        <Dropdown
-          label="은행 선택"
-          options={[
-            { value: "", label: "은행 선택" },
-            { value: "kakao", label: "카카오뱅크" },
-            { value: "shinhan", label: "신한은행" },
-          ]}
-          {...register("accountBank")}
-          helperText={errors.accountBank?.message}
+        <Controller
+          name="accountBank"
+          control={control}
+          render={({ field }) => (
+            <Dropdown
+              label="은행 선택"
+              options={BANK_OPTIONS}
+              {...field}
+              value={field.value ?? null}
+              placeholder="은행 선택"
+              helperText={errors.accountBank?.message}
+            />
+          )}
         />
         <InputField
           label="계좌번호"

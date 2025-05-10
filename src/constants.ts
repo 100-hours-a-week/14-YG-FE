@@ -1,2 +1,32 @@
 export const S3_BASE_URL =
   "https://moongsan-s3.s3.ap-northeast-2.amazonaws.com/";
+
+export const BANK_OPTIONS = [
+  { value: "농협", label: "농협" },
+  { value: "카카오뱅크", label: "카카오뱅크" },
+  { value: "KB 국민", label: "KB 국민" },
+  { value: "토스뱅크", label: "토스뱅크" },
+  { value: "신한", label: "신한" },
+  { value: "우리", label: "우리" },
+  { value: "IBK 기업", label: "IBK 기업" },
+  { value: "하나", label: "하나" },
+  { value: "새마을", label: "새마을" },
+  { value: "부산", label: "부산" },
+  { value: "iM 뱅크(대구)", label: "iM 뱅크(대구)" },
+  { value: "케이뱅크", label: "케이뱅크" },
+  { value: "신협", label: "신협" },
+  { value: "우체국", label: "우체국" },
+  { value: "SC 제일", label: "SC 제일" },
+  { value: "경남", label: "경남" },
+  { value: "광주", label: "광주" },
+  { value: "수협", label: "수협" },
+  { value: "전북", label: "전북" },
+  { value: "저축은행", label: "저축은행" },
+  { value: "제주", label: "제주" },
+  { value: "씨티", label: "씨티" },
+  { value: "KDB 산업", label: "KDB 산업" },
+  { value: "산림조합", label: "산림조합" },
+  { value: "SBI저축은행", label: "SBI저축은행" },
+  { value: "BOA", label: "BOA" },
+  { value: "중국", label: "중국" },
+];

@@ -3,6 +3,11 @@ import { Colors, FontStyles } from "../../../../styles";
 
 export const Container = styled.div`
   display: flex;
+  flex-direction: column;
+`;
+
+export const ButtonContainer = styled.div`
+  display: flex;
   align-items: center;
   gap: 8px;
 `;

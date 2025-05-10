@@ -5,21 +5,28 @@ import { SectionLine } from "../../SectionLine.styled";
 import ImageContainer from "../../image/imageContainer/ImageContainer";
 import { OrderPostProps } from "../../../../types/orderType";
 import { getImageUrl } from "../../../../utils/image";
+import { useNavigate } from "react-router-dom";
 
 interface MyListCardItem {
   item: OrderPostProps;
 }
 
 const MyListCard = ({ item }: MyListCardItem) => {
+  const navigate = useNavigate();
+
   return (
     <S.CardContainer>
-      <S.CommonSection>
+      <S.CommonSection
+        onClick={() => {
+          navigate(`/products/${item.postId}`);
+        }}
+      >
         <ImageContainer imageUrl={getImageUrl(item.imageKey)} />
         <S.CardInfo>
           <S.OrderState>입금확인완료</S.OrderState>
           <S.productInfo>
             <S.pickupPlace>{item.location}</S.pickupPlace>
-            <S.unitPrice>{item.price?.toLocaleString()}원</S.unitPrice>
+            <S.unitPrice>{item.unitPrice.toLocaleString()}원</S.unitPrice>
             <S.postTitle>{item.title}</S.postTitle>
           </S.productInfo>
           <S.OrderInfo>

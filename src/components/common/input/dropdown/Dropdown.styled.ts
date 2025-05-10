@@ -23,10 +23,5 @@ export const Select = styled.select`
 
 export const Option = styled.option`
   color: ${Colors.Grayscale60};
-`;
-
-export const HelperText = styled.span`
-  color: ${Colors.Main20};
-  ${FontStyles.XXS_Regular};
-  margin-top: 2px;
+  display: flex;
 `;

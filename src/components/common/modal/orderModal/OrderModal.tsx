@@ -22,7 +22,7 @@ const OrderModal = () => {
     productName,
     unitPrice,
     unitAmount,
-    totalAmount,
+    leftAmount,
     hostAccountBank,
     hostAccountNumber,
   } = useOrderStore();
@@ -57,7 +57,7 @@ const OrderModal = () => {
             <S.AboutPrice>
               <SelectButtonInput
                 unit={unitAmount}
-                max={totalAmount}
+                max={leftAmount}
                 onChange={setQuantity}
               />
               <S.PriceInfo>

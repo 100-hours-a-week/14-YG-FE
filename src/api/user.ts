@@ -76,6 +76,25 @@ export const login = async (data: LoginFormData) => {
 };
 
 /**
+ * 로그아웃
+ * @returns
+ */
+
+export const logout = async () => {
+  try {
+    const res = await api.delete("/api/users/token");
+
+    if (res.data) {
+      console.log(res.data);
+      return res.data;
+    }
+  } catch (error) {
+    console.error("주문 취소 실패:", error);
+    throw error;
+  }
+};
+
+/**
  * 프로필 정보 조회
  * @returns
  */

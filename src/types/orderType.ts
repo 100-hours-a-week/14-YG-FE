@@ -23,12 +23,12 @@ export interface OrderPostProps {
   postStatus: string;
   location: string;
   imageKey: string;
-  price: number;
+  unitPrice: number;
   orderQuantity: number;
   soldAmount: number;
   totalAmount: number;
   participantCount: number;
   orderStatus: string;
   dueSoon: boolean;
-  wish: boolean;
+  isWish: boolean;
 }

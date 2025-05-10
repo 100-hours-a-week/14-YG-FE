@@ -40,15 +40,17 @@ const Header = () => {
       </S.LogoPart>
       <S.SidePart>
         {/*<S.AlertIcon src={Bell} alt="alert" />*/}
-        <S.ProfileIcon
-          onClick={() => {
-            if (!user) {
-              openModal("login"); // 로그인 안 한 경우
-            } else {
-              navigate("/mypage"); // 로그인 한 경우
-            }
-          }}
-        />
+        {pathname !== "/mypage" && (
+          <S.ProfileIcon
+            onClick={() => {
+              if (!user) {
+                openModal("login"); // 로그인 안 한 경우
+              } else {
+                navigate("/mypage"); // 로그인 한 경우
+              }
+            }}
+          />
+        )}
       </S.SidePart>
     </S.HeaderContainer>
   );

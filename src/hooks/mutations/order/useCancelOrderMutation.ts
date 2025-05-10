@@ -11,6 +11,7 @@ export const useCancelOrderMutation = () => {
       queryClient.invalidateQueries({ queryKey: ["postDetail"] });
     },
     onError: (error) => {
+      alert("앗! 주문 취소를 실패했습니다 😓");
       console.error("주문 취소 실패", error);
     },
   });

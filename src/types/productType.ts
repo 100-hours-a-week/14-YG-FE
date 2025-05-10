@@ -52,6 +52,7 @@ export interface PostProps {
   unitAmount: number;
   soldAmount: number;
   totalAmount: number;
+  leftAmount: number;
   isParticipant: boolean;
   participantCount: number;
   dueDate: string;

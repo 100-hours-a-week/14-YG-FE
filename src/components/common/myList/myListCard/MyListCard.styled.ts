@@ -11,6 +11,7 @@ export const CommonSection = styled.div`
   gap: 10px;
   align-items: center;
   margin: 20px 30px;
+  cursor: pointer;
 `;
 
 export const CardInfo = styled.div`

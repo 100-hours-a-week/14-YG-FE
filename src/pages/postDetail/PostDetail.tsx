@@ -34,6 +34,7 @@ const PostDetail = () => {
       unitPrice: post.unitPrice,
       unitAmount: post.unitAmount,
       totalAmount: post.totalAmount,
+      leftAmount: post.leftAmount,
       hostAccountBank: post.userProfileResponse.accountBank ?? "정보없음",
       hostAccountNumber: post.userProfileResponse.accountNumber ?? "정보없음",
     });

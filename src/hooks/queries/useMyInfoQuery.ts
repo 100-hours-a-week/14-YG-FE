@@ -6,16 +6,21 @@ import { useUserStore } from "../../stores/useUserStore";
 export const useMyInfoQuery = () => {
   const setUser = useUserStore((s) => s.setUser);
 
+  // ✅ 쿠키에 AccessToken이 있는지 확인
+  const hasAccessToken =
+    typeof document !== "undefined" && document.cookie.includes("AccessToken");
+
   const { data, isSuccess } = useQuery({
     queryKey: ["myInfo"],
     queryFn: getMyInfo,
-    staleTime: 1000 * 60 * 5, // 5분 캐싱
+    staleTime: 1000 * 60 * 5,
     retry: false,
+    enabled: hasAccessToken, // ✅ 조건부 실행
   });
 
   useEffect(() => {
     if (isSuccess && data) {
-      setUser(data); // zustand에 저장
+      setUser(data);
     }
   }, [isSuccess, data, setUser]);
 

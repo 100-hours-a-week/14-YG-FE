@@ -6,6 +6,7 @@ interface OrderState {
   unitPrice: number;
   unitAmount: number;
   totalAmount: number;
+  leftAmount: number;
   hostAccountBank: string;
   hostAccountNumber: string;
 }
@@ -21,6 +22,7 @@ export const useOrderStore = create<OrderStore>((set) => ({
   unitPrice: 0,
   unitAmount: 0,
   totalAmount: 0,
+  leftAmount: 0,
   hostAccountBank: "",
   hostAccountNumber: "",
   setOrderInfo: (info) => set(info),
@@ -31,6 +33,7 @@ export const useOrderStore = create<OrderStore>((set) => ({
       unitPrice: 0,
       unitAmount: 0,
       totalAmount: 0,
+      leftAmount: 0,
       hostAccountBank: "",
       hostAccountNumber: "",
     }),

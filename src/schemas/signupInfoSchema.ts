@@ -18,8 +18,14 @@ export const signupInfoSchema = z.object({
   }),
 
   accountBank: z
-    .string()
-    .min(1, { message: "서비스에서 사용할 은행을 선택해 주세요" }),
+    .object({
+      label: z.string(),
+      value: z.string().min(1, "서비스에서 사용할 은행을 선택해 주세요."),
+    })
+    .nullable() // ✅ null 허용
+    .refine((val) => val !== null, {
+      message: "서비스에서 사용할 은행을 선택해 주세요.",
+    }),
 
   accountNumber: z.string().regex(/^\d{10,14}$/, {
     message: "하이픈(-)을 제외한 올바른 계좌번호를 입력해 주세요",

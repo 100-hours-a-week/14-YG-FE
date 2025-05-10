@@ -17,6 +17,21 @@ export const ProfileImg = styled.img<{ $type: "mypage" | "post" }>`
 export const ProfileInfo = styled.div`
   display: flex;
   flex-direction: column;
+  position: relative;
+  width: 100%;
+`;
+
+export const LogoutButton = styled.button`
+  background-color: ${Colors.Grayscale40};
+  color: ${Colors.Grayscale0};
+  border: none;
+  border-radius: 10px;
+  width: 60px;
+  height: 20px;
+  ${FontStyles.XS_Medium};
+  position: absolute;
+  right: 0;
+  cursor: pointer;
 `;
 
 export const NameInfo = styled.p<{ $type: "mypage" | "post" }>`

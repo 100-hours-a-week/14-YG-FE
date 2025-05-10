@@ -7,7 +7,6 @@ import ControlledNumberInput from "../../common/input/controlledNumberInput/Cont
 
 const UnitAmountSelector = () => {
   const {
-    register,
     watch,
     control,
     formState: { errors },
@@ -61,10 +60,18 @@ const UnitAmountSelector = () => {
           placeholder="상품 전체 수량을 입력해주세요."
           maxDigits={3}
         />
-        <Dropdown
-          options={[{ value: "", label: "주문단위" }, ...unitOptions]}
-          width="85px"
-          {...register("unitAmount")}
+        <Controller
+          name="accountBank"
+          control={control}
+          render={({ field }) => (
+            <Dropdown
+              label="은행 선택"
+              width="85px"
+              options={[{ value: "", label: "주문단위" }, ...unitOptions]}
+              {...field}
+              placeholder="주문단위"
+            />
+          )}
         />
       </S.TotalAmount>
       {(errors.totalAmount || errors.unitAmount) && (
