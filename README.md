@@ -83,6 +83,30 @@ src/
 
 ---
 
+## 🐞 트러블슈팅 사례
+
+### ✅ 1. styled-components에서 DOM 경고 발생
+- CSS 전용 props(`$isSelected`)를 일반 prop으로 넘겨 React에서 DOM 경고가 발생함.
+- `$` prefix를 사용하면 styled-components가 해당 prop을 DOM에 전달하지 않아 경고를 방지할 수 있음.
+
+### ✅ 2. z.literal(true) + refine 동작 누락
+- `refine()`을 사용해도 `z.literal(true)`에서 기본 에러 메시지로 덮여버림.
+- `errorMap`을 활용해 커스텀 에러 메시지를 정확하게 표시하도록 수정함.
+
+### ✅ 3. onChange 핸들러 중복/무시 문제
+- `...props` 안의 `onChange`와 내부 로직의 `handleChange()`가 충돌하며 일부 로직이 실행되지 않음.
+- `onChange`를 명시적으로 분리해 병합 호출함으로써 form 등록 및 UI 처리를 모두 보장함.
+
+### ✅ 4. useForm 제네릭 타입 충돌
+- `useForm<>()`의 제네릭 타입이 `zodResolver()`의 추론 타입과 정확히 일치하지 않아 타입 에러 발생.
+- 제네릭을 제거하고 `zodResolver()` 타입 추론을 그대로 따르게 하여 문제 해결.
+
+### ✅ 5. 쿠키 기반 인증에서 사용자 정보 혼동
+- SSR 환경 또는 프록시 서버(Vercel 등)에서 AccessToken 쿠키가 섞이며 사용자 정보가 잘못 로딩됨.
+- `SameSite=None; Secure` 설정, 클라이언트 초기화 로직 강화, React Query 캐시 명확화로 대응함.
+
+---
+
 ## 📈 향후 기능 추가 예정 (6월 작업 계획)
 
 - **WebSocket 기반 1:1 채팅**
@@ -115,10 +139,11 @@ AI, 백엔드, 클라우드 파트는 각각 별도의 리포지토리로 운영
 
 ## 🔍 리뷰 포인트 제안
 
-- MultiImageUploader의 구조 및 UX 흐름
-- NumberInput의 실시간 필터링 + 포맷팅 처리 방식
-- React Hook Form + Zod 기반 유효성 설계
-- 상태 흐름과 서버 데이터가 깔끔하게 분리된 구조
+- 참여자 / 주최자 역할 분기에 따른 UI 흐름 설계
+- 주문 상태(마감, 품절 등) 변화에 따른 비동기 UI 반응 구조
+- `Zustand`와 `Tanstack Query`를 결합한 상태 흐름 설계
+- `React Hook Form + Zod` 기반 폼 유효성 검증 패턴
+- 유지보수성과 확장성을 고려한 디렉토리 구조 및 모듈 분리 전략
 
 ---
 
