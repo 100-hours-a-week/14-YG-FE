@@ -1,6 +1,6 @@
-🚀 [뭉쳐야산(buy)다 바로가기](https://moongsan.com)
-
 # 🛒 공동구매 플랫폼 뭉쳐야산(buy)다 프론트엔드
+
+📌 배포 링크: [https://moongsan.com](https://moongsan.com)
 
 **moongsan**은 사용자 중심의 공동구매 참여 흐름을 UI/UX로 설계한 프로젝트입니다.  
 참여자와 주최자 간의 역할 분기, 마감 및 재고 변화에 따른 UI 반응, 다단계 입력 검증 등 커머스 기반의 복잡한 시나리오를 **React + TypeScript**로 구조화하여 구현했습니다.
