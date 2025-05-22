@@ -19,6 +19,8 @@
 
 ## 💡 구현 목표와 의도
 
+사용자 흐름과 커머스 로직을 안정적으로 구현하기 위해, 다음과 같은 구조적 목표를 중점적으로 설계했습니다:
+
 - 다양한 사용자 흐름에 대응 가능한 **입력 구조 및 유효성 검증 체계**
 - 상품 상태 변화(마감/품절 등)에 따른 **비동기 UI 동기화**
 - **참여자 vs 주최자 역할 분기**에 따른 동작 흐름 설계
@@ -161,7 +163,7 @@ AI, 백엔드, 클라우드 파트는 각각 별도의 리포지토리로 운영
 
 - 김진아  
 - GitHub: [github.com/jinaaaaaaaaaaaaa](https://github.com/jinaaaaaaaaaaaaa)  
-- Email: [jinatye@naver.com]
+- Email: [jinatye@naver.com](mailto:jinatye@naver.com)
 
 ---
 
