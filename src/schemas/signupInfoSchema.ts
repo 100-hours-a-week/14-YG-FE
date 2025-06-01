@@ -1,12 +1,6 @@
 import { z } from "zod";
 
 export const signupInfoSchema = z.object({
-  imageUrl: z
-    .string()
-    .url("올바른 이미지 주소를 입력해주세요.")
-    .optional()
-    .or(z.literal("")), // <- 빈 문자열 허용 시
-
   nickname: z
     .string()
     .min(2, { message: "2자 이상 12자 이하의 닉네임을 입력해주세요" })
@@ -27,7 +21,7 @@ export const signupInfoSchema = z.object({
 
   accountBank: z.object({
     label: z.string(),
-    value: z.string().min(1, "서비스에서 사용할 은행을 선택해 주세요."),
+    value: z.string().min(2, "서비스에서 사용하실 은행을 선택해 주세요."),
   }),
   accountNumber: z.string().regex(/^\d{10,14}$/, {
     message: "하이픈(-)을 제외한 올바른 계좌번호를 입력해 주세요",
