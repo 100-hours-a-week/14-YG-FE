@@ -51,7 +51,7 @@ const App = () => {
           {isLoading ? <Loading /> : <AppRouter />}
         </S.ScrollArea>
 
-        {user?.type === "ADMIN" && pathname === "/" && (
+        {pathname === "/" && (
           <S.MasterButton
             onClick={() => {
               if (!user) {

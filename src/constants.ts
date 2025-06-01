@@ -1,5 +1,5 @@
 export const S3_BASE_URL =
-  "https://moongsan-s3.s3.ap-northeast-2.amazonaws.com/";
+  "https://moongsan-dev-s3.s3.ap-northeast-2.amazonaws.com/";
 
 export const BANK_OPTIONS = [
   { value: "농협", label: "농협" },

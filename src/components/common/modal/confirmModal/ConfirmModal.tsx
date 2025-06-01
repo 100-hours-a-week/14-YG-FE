@@ -24,7 +24,8 @@ const ConfirmModal = () => {
       <S.Container>
         <Alert />
         <S.Message>{confirmTitle}</S.Message>
-        <S.Sub>{subDescription}</S.Sub>
+        {subDescription && <S.Sub>{subDescription}</S.Sub>}
+
         <S.Info $isSub={!subDescription}>{confirmDescription}</S.Info>
         <S.ButtonPart>
           <Button
