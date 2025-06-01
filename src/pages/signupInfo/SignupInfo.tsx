@@ -16,6 +16,7 @@ import { useEffect, useState } from "react";
 import { BANK_OPTIONS } from "../../constants";
 import { useSignupMutation } from "../../hooks/mutations/user/useSignupMutation";
 import { useNavigate } from "react-router-dom";
+import { uploadImages } from "../../api/image";
 
 const inputFields = [
   {
@@ -33,6 +34,7 @@ const inputFields = [
 const Signup = () => {
   const [isNicknameChecked, setIsNicknameChecked] = useState(false);
   const [isNicknameDuplicated, setIsNicknameDuplicated] = useState(false);
+  const [imageFile, setImageFile] = useState<File | null>(null);
   const { mutate: signup, isPending: waitingSignup } = useSignupMutation();
   const { mutate: checkNickname, isPending: checkingNickname } =
     useNicknameCheckMutation({
@@ -76,6 +78,10 @@ const Signup = () => {
     watch("accountNumber") &&
     watch("agree") === true;
 
+  useEffect(() => {
+    console.log("🔥 errors:", errors);
+  }, [errors]);
+
   const handleClick = () => {
     checkNickname(nickname);
   };
@@ -85,7 +91,7 @@ const Signup = () => {
     setIsNicknameDuplicated(false);
   }, [nickname]);
 
-  const onSubmit = (data: SignupInfoFormData) => {
+  const onSubmit = async (data: SignupInfoFormData) => {
     const step1Data = localStorage.getItem("signupStep1");
     if (!step1Data) {
       alert("이메일/비밀번호 정보가 없습니다. 처음부터 다시 회원가입해주세요.");
@@ -94,6 +100,20 @@ const Signup = () => {
     }
 
     const step1 = JSON.parse(step1Data);
+    let imageUrl = "";
+
+    if (imageFile) {
+      try {
+        const [uploadedKey] = await uploadImages([imageFile]);
+        imageUrl = uploadedKey;
+      } catch (err) {
+        console.error("이미지 업로드 실패:", err);
+        alert("이미지 업로드에 실패했습니다. 다시 시도해주세요.");
+        return;
+      }
+      console.log(imageUrl);
+    }
+
     const requestData: SignupRequestData = {
       ...step1,
       nickname: data.nickname,
@@ -101,6 +121,7 @@ const Signup = () => {
       phoneNumber: data.phoneNumber,
       accountBank: data.accountBank?.value ?? "", // ✅ string으로 변환
       accountNumber: data.accountNumber,
+      ...(imageUrl && { imageUrl }),
     };
 
     signup(requestData);
@@ -117,7 +138,12 @@ const Signup = () => {
         부정확한 경우 환불이 제한될 수 있습니다.
       </S.SectionInfo>
       <S.SignupForm onSubmit={handleSubmit(onSubmit)}>
-        <ImageUploader {...register("imageUrl")} styleType="circle" />
+        <ImageUploader
+          styleType="circle"
+          onChange={(url, file) => {
+            setImageFile(file); // S3 업로드용
+          }}
+        />
         <InputField
           label="닉네임"
           placeholder="사용할 닉네임 입력"
@@ -164,7 +190,7 @@ const Signup = () => {
               {...field}
               value={field.value ?? null}
               placeholder="은행 선택"
-              helperText={errors.accountBank?.message}
+              helperText={errors.accountBank?.value?.message}
             />
           )}
         />
