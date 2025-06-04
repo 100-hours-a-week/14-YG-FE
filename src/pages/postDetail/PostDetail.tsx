@@ -27,6 +27,7 @@ const PostDetail = () => {
   const { mutate: cancelOrder } = useCancelOrderMutation();
 
   const [ddayText, setDdayText] = useState<string>("");
+  console.log(post);
 
   useEffect(() => {
     if (!post?.dueDate) return;
@@ -41,6 +42,8 @@ const PostDetail = () => {
     };
 
     updateDday(); // 초기값 바로 설정
+
+    if (ddayText === "마감 종료") return;
 
     const timer = setInterval(updateDday, 1000); // 1초마다 갱신
 

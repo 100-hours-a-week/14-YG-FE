@@ -3,6 +3,7 @@ import 달뭉 from "../../../assets/images/달뭉.webp";
 import { UserInfo } from "../../../types/userType";
 import { useLogoutMutation } from "../../../hooks/mutations/user/useLogoutMutation";
 import { useModalStore } from "../../../stores/useModalStore";
+import { useUserStore } from "../../../stores/useUserStore";
 
 interface ProfileProps {
   type: "mypage" | "post";
@@ -23,6 +24,7 @@ interface ProfileProps {
 const Profile = ({ type, user }: ProfileProps) => {
   const { mutate: logout } = useLogoutMutation();
   const openModal = useModalStore((s) => s.openModal);
+  const currentUser = useUserStore((s) => s.user);
 
   const handleLogout = () => {
     openModal("confirm", {
@@ -50,10 +52,12 @@ const Profile = ({ type, user }: ProfileProps) => {
             <S.PhoneNumber>{user.phoneNumber}</S.PhoneNumber>
           </>
         )}
-
         <S.AccountInfo $type={type}>
-          {type === "post" && "주최자 계좌번호 : "}
-          {user.accountBank} {user.accountNumber}
+          {type === "mypage"
+            ? `${user.accountBank} ${user.accountNumber}`
+            : user.nickname === currentUser?.nickname
+              ? `주최자 계좌번호 : ${user.accountBank} ${user.accountNumber}`
+              : null}
         </S.AccountInfo>
       </S.ProfileInfo>
     </S.ProfilePart>
