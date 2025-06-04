@@ -14,6 +14,7 @@ import Loading from "./components/common/loading/Loding";
 import SuccessModal from "./components/common/modal/successModal/SuccessModal";
 import { SectionLine } from "./components/common/SectionLine.styled";
 import HostModal from "./components/common/modal/hostModal/HostModal";
+import Toast from "./components/common/toast/Toast";
 
 const App = () => {
   const openModal = useModalStore((s) => s.openModal);
@@ -68,6 +69,7 @@ const App = () => {
         {openedModal === "order" && user && <OrderModal />}
         {openedModal === "success" && <SuccessModal />}
         {openedModal === "host" && <HostModal />}
+        <Toast />
       </S.MainContainer>
     </S.Whole>
   );

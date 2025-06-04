@@ -1,11 +1,14 @@
 import { useState } from "react";
 import * as S from "./MyList.styled";
 import MyListCard from "../myListCard/MyListCard";
-import { useOrderList } from "../../../hooks/queries/useOrderQuery";
-import { useHostList } from "../../../hooks/queries/useHostList";
 import FilterSelector from "../../common/filteringSelector/FilteringSelector";
 import EmptySection from "../../common/emptySection/EmptySection";
 import { useModalStore } from "../../../stores/useModalStore";
+import {
+  useHostList,
+  useLikedList,
+  useOrderList,
+} from "../../../hooks/queries/useMyList";
 
 const statusMap = {
   공구중: "open",
@@ -28,9 +31,15 @@ const MyList = ({ activeTab }: MyListProps) => {
   // ✅ Hook은 조건 없이 항상 호출
   const orderQuery = useOrderList(commonParams);
   const hostQuery = useHostList(commonParams);
+  const likedQuery = useLikedList(commonParams);
 
   // ✅ 조건에 따라 데이터를 선택
-  const items = activeTab === "참여목록" ? orderQuery.data : hostQuery.data;
+  const items =
+    activeTab === "참여목록"
+      ? orderQuery.data
+      : activeTab === "주최목록"
+        ? hostQuery.data
+        : likedQuery.data;
   console.log(items);
 
   return (
@@ -44,7 +53,13 @@ const MyList = ({ activeTab }: MyListProps) => {
       </S.FilteringSection>
       {!items || items.length === 0 ? (
         <EmptySection
-          category={activeTab === "참여목록" ? "참여한" : "주최한"}
+          category={
+            activeTab === "참여목록"
+              ? "참여한"
+              : activeTab === "주최목록"
+                ? "주최한"
+                : "관심있는"
+          }
         />
       ) : (
         items.map((item) => (

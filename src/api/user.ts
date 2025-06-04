@@ -1,9 +1,10 @@
 import axios, { AxiosError } from "axios";
 import { LoginFormData } from "../schemas/loginSchema";
 import api from "./instance";
+import { GetMyListParams } from "../types/userType";
 
 export interface SignupRequestData {
-  //imageUrl?: string;
+  imageUrl: string;
   email: string;
   password: string;
   nickname: string;
@@ -228,5 +229,24 @@ export const deleteLike = async (postId: number) => {
     } else {
       alert("관심 취소 중 오류가 발생했습니다.");
     }
+  }
+};
+
+/**
+ * 관심공구 조회
+ * @returns
+ */
+export const getLikeList = async (params?: GetMyListParams) => {
+  try {
+    const res = await api.get("/api/group-buys/users/me/wishes", {
+      params,
+    });
+
+    if (res.data.data) {
+      return res.data.data;
+    }
+  } catch (error) {
+    console.error("참여목록 조회 실패:", error);
+    throw error;
   }
 };

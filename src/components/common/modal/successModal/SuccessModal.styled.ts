@@ -93,8 +93,14 @@ export const AccountWrapper = styled.div`
 export const Account = styled.p`
   max-width: 215px;
   ${FontStyles.XXS_SemiBold};
+  color: ${Colors.Grayscale60};
+
   > span {
-    color: ${Colors.Grayscale60};
+    text-decoration: underline;
+    cursor: pointer;
+    &:hover {
+      color: ${Colors.Grayscale90};
+    }
   }
 `;
 
