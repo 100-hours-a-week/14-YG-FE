@@ -1,6 +1,8 @@
 export interface UserInfo {
   userId: number;
   name: string;
+  email: string;
+  phoneNumber: string;
   nickname: string;
   accountBank: string;
   accountNumber: string;
@@ -31,7 +33,8 @@ export interface ListPostProps {
   postStatus: string;
   location: string;
   imageKey: string;
-  unitPrice: number;
+  unitPrice?: number;
+  orderPrice?: number;
   orderQuantity?: number;
   hostQuantity?: number;
   soldAmount: number;

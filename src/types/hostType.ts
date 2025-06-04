@@ -5,3 +5,8 @@ export interface AIResponse {
   count: number;
   summary: string;
 }
+
+export interface HostAccount {
+  accountBank: string;
+  accountNumber: string;
+}

@@ -54,6 +54,37 @@ export const PhoneNumber = styled(SubText)``;
 
 export const AccountInfo = styled.p<{ $type: "mypage" | "post" }>`
   ${({ $type }) =>
-    $type === "mypage" ? FontStyles.XXS_SemiBold : FontStyles.XXXS_SemiBold};
+    $type === "mypage" ? FontStyles.XXS_SemiBold : FontStyles.XXS_SemiBold};
   color: ${Colors.Grayscale60};
+  display: flex;
+  align-items: center;
+`;
+
+export const SecretBox = styled.div`
+  background-color: ${Colors.Grayscale10};
+  width: 150px;
+  margin-left: 5px;
+  padding: 3px;
+`;
+
+export const Ment = styled.p`
+  text-align: center;
+  color: ${Colors.Grayscale50};
+`;
+
+export const CopyButton = styled.button`
+  ${FontStyles.XXXS_SemiBold};
+  margin-left: 5px;
+  border-radius: 10px;
+  border: 1px solid ${Colors.Main10};
+  color: ${Colors.Main10};
+  padding: 1px 4px;
+  background-color: ${Colors.Grayscale0};
+  cursor: pointer;
+
+  &:disabled {
+    border: 1px solid ${Colors.Grayscale40};
+    color: ${Colors.Grayscale50};
+    cursor: default;
+  }
 `;

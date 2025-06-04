@@ -38,7 +38,11 @@ const MyListCard = ({ item, renderActions }: MyListCardItem) => {
             )}
             <S.ProductInfo>
               <S.PickupPlace>{item.location}</S.PickupPlace>
-              <S.UnitPrice>{item.unitPrice.toLocaleString()}원</S.UnitPrice>
+              <S.UnitPrice>
+                {item.orderPrice
+                  ? `${item.orderPrice.toLocaleString()}원`
+                  : `${item.unitPrice?.toLocaleString()}원`}
+              </S.UnitPrice>
               <S.PostTitle>{item.title}</S.PostTitle>
             </S.ProductInfo>
             <S.OrderInfo>

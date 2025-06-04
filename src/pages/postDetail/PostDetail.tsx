@@ -107,7 +107,12 @@ const PostDetail = () => {
               postId={post.postId}
               images={post.imageKeys?.map((img) => img.imageKey)}
             />
-            <Profile type="post" user={post.userProfileResponse} />
+            <Profile
+              type="post"
+              postId={post.postId}
+              user={post.userProfileResponse}
+              isParticipant={post.isParticipant}
+            />
           </S.TopSection>
           <SectionLine />
           <S.PostInfo>

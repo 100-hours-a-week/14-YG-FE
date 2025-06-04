@@ -34,3 +34,20 @@ export const getPost = async (postId: number) => {
     console.error("공동구매 리스트 조회 실패:", error);
   }
 };
+
+/**
+ * 계좌번호 조회
+ * @param postId
+ * @returns
+ */
+export const getAccount = async (postId: number) => {
+  try {
+    const res = await api.get(`/api/group-buys/${postId}/host/account`);
+
+    if (res.data.data) {
+      return res.data.data; // 백엔드 응답 구조에 따라 수정
+    }
+  } catch (error) {
+    console.error("공동구매 리스트 조회 실패:", error);
+  }
+};
