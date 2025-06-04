@@ -78,10 +78,6 @@ const Signup = () => {
     watch("accountNumber") &&
     watch("agree") === true;
 
-  useEffect(() => {
-    console.log("🔥 errors:", errors);
-  }, [errors]);
-
   const handleClick = () => {
     checkNickname(nickname);
   };
