@@ -44,3 +44,9 @@ export interface ListPostProps {
   dueSoon: boolean;
   isWish: boolean;
 }
+
+export interface ConfirmAccountParams {
+  name?: string;
+  accountBank?: string;
+  accountNumber?: string;
+}
