@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { Colors, FontStyles } from "../../../styles";
+import EtcButton from "../../../assets/icons/Etc.svg?react";
 
 export const ProfilePart = styled.div<{ $type: "mypage" | "post" }>`
   display: flex;
@@ -87,4 +88,8 @@ export const CopyButton = styled.button`
     color: ${Colors.Grayscale50};
     cursor: default;
   }
+`;
+
+export const StyledEtc = styled(EtcButton)`
+  cursor: pointer;
 `;

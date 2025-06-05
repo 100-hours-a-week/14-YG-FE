@@ -5,6 +5,8 @@ import { useLogoutMutation } from "../../../hooks/mutations/user/useLogoutMutati
 import { useModalStore } from "../../../stores/useModalStore";
 import { useToastStore } from "../../../stores/useToastStore";
 import { useHostAccount } from "../../../hooks/queries/useProductQuery";
+import { useUserStore } from "../../../stores/useUserStore";
+import DropdownMenu from "../../postDetail/dropDownMenu/DropDownMenu";
 
 interface ProfileProps {
   type: "mypage" | "post";
@@ -23,6 +25,7 @@ const Profile = ({ type, postId, user, isParticipant }: ProfileProps) => {
   const { mutate: logout } = useLogoutMutation();
   const openModal = useModalStore((s) => s.openModal);
   const { showToast, isDisabled } = useToastStore();
+  const currentUser = useUserStore((s) => s.user);
   const { data: hostAccount, isError } = useHostAccount(Number(postId));
   console.log(hostAccount);
   const handleLogout = () => {
@@ -91,6 +94,7 @@ const Profile = ({ type, postId, user, isParticipant }: ProfileProps) => {
           )}
         </S.AccountInfo>
       </S.ProfileInfo>
+      {user.nickname === currentUser?.nickname && <DropdownMenu />}
     </S.ProfilePart>
   );
 };
