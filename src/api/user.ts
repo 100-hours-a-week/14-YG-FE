@@ -1,7 +1,7 @@
 import axios, { AxiosError } from "axios";
 import { LoginFormData } from "../schemas/loginSchema";
 import api from "./instance";
-import { GetMyListParams } from "../types/userType";
+import { ConfirmAccountParams, GetMyListParams } from "../types/userType";
 
 export interface SignupRequestData {
   imageUrl: string;
@@ -71,6 +71,30 @@ export const confirmNickname = async (nickname: string) => {
 
     if (res.data.data) {
       return res.data.data;
+    } else {
+      throw new Error("응답에 data가 없습니다");
+    }
+  } catch (error) {
+    console.log(error);
+    if (error instanceof AxiosError && error.response?.data?.message) {
+      throw new Error(error.response.data.message); // 서버 메시지를 직접 전달
+    }
+    throw new Error("닉네임 확인 중 오류가 발생했습니다.");
+  }
+};
+
+/**
+ * 계좌 본인 인증
+ * @returns
+ */
+export const confirmAccount = async (params?: ConfirmAccountParams) => {
+  try {
+    const res = await api.get("/api/users/check-account", {
+      params: { params },
+    });
+
+    if (res.data) {
+      return res.data;
     } else {
       throw new Error("응답에 data가 없습니다");
     }

@@ -136,7 +136,7 @@ const Signup = () => {
       <S.SignupForm onSubmit={handleSubmit(onSubmit)}>
         <ImageUploader
           styleType="circle"
-          onChange={(url, file) => {
+          onChange={(_url, file) => {
             setImageFile(file); // S3 업로드용
           }}
         />
