@@ -15,9 +15,9 @@ import SuccessModal from "./components/common/modal/successModal/SuccessModal";
 import { SectionLine } from "./components/common/SectionLine.styled";
 import HostModal from "./components/common/modal/hostModal/HostModal";
 import Toast from "./components/common/toast/Toast";
+import MasterButton from "./components/common/masterButton/MasterButton";
 
 const App = () => {
-  const openModal = useModalStore((s) => s.openModal);
   const navigate = useNavigate();
   const { pathname } = useLocation();
   const user = useUserStore((s) => s.user);
@@ -51,19 +51,7 @@ const App = () => {
             !pathname.startsWith("/products/category/") && <SectionLine />}
           {isLoading ? <Loading /> : <AppRouter />}
         </S.ScrollArea>
-
-        {pathname === "/" && (
-          <S.MasterButton
-            onClick={() => {
-              if (!user) {
-                openModal("login");
-              } else {
-                navigate("/writePost");
-              }
-            }}
-          />
-        )}
-
+        {pathname === "/" && <MasterButton />}
         {openedModal === "login" && <LoginModal />}
         {openedModal === "confirm" && <ConfirmModal />}
         {openedModal === "order" && user && <OrderModal />}
