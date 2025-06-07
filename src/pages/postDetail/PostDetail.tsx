@@ -27,7 +27,6 @@ const PostDetail = () => {
   const { mutate: cancelOrder } = useCancelOrderMutation();
 
   const [ddayText, setDdayText] = useState<string>("");
-  console.log(post);
 
   useEffect(() => {
     if (!post?.dueDate) return;

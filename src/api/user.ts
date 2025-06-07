@@ -242,7 +242,7 @@ export const postLike = async (postId: number) => {
  */
 export const deleteLike = async (postId: number) => {
   try {
-    const res = await api.post(`/api/users/wish/${postId}`);
+    const res = await api.delete(`/api/users/wish/${postId}`);
 
     if (res.data) {
       return res.data;
