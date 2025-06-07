@@ -80,12 +80,12 @@ export const UrlTitle = styled(ProductTitle)`
 export const ProductInfo = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 3px;
+  gap: 2px;
   margin-bottom: 20px;
 `;
 
 export const PickupDate = styled.p`
-  ${FontStyles.XXXS_SemiBold};
+  ${FontStyles.XXS_SemiBold};
   color: ${Colors.Grayscale60};
 `;
 
@@ -95,7 +95,7 @@ export const unitPrice = styled.p`
 `;
 
 export const unitAmount = styled.p`
-  ${FontStyles.XXXS_Medium};
+  ${FontStyles.XXS_Medium};
   color: ${Colors.Grayscale60};
 `;
 
@@ -130,7 +130,7 @@ export const OrderButton = styled.button<{ $isCancel: boolean }>`
 `;
 
 export const Ddate = styled.p`
-  ${FontStyles.XXXS_Regular};
+  ${FontStyles.XXXS_SemiBold};
   color: ${Colors.Main10};
   margin-top: 3px;
 `;
@@ -138,13 +138,13 @@ export const Ddate = styled.p`
 export const DetailPart = styled.div`
   display: flex;
   flex-direction: column;
+  margin-top: 20px;
 `;
 
 export const SectionDivider = styled.div`
   display: flex;
   width: 100%;
   align-items: center;
-  margin: 10px 0px;
   gap: 15px;
 `;
 

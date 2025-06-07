@@ -27,7 +27,6 @@ const Profile = ({ type, postId, user, isParticipant }: ProfileProps) => {
   const { showToast, isDisabled } = useToastStore();
   const currentUser = useUserStore((s) => s.user);
   const { data: hostAccount, isError } = useHostAccount(Number(postId));
-  console.log(hostAccount);
   const handleLogout = () => {
     openModal("confirm", {
       confirmTitle: "로그아웃하시겠습니까?",

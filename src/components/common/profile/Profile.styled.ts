@@ -1,6 +1,5 @@
 import styled from "styled-components";
 import { Colors, FontStyles } from "../../../styles";
-import EtcButton from "../../../assets/icons/Etc.svg?react";
 
 export const ProfilePart = styled.div<{ $type: "mypage" | "post" }>`
   display: flex;
@@ -54,8 +53,7 @@ export const Email = styled(SubText)``;
 export const PhoneNumber = styled(SubText)``;
 
 export const AccountInfo = styled.p<{ $type: "mypage" | "post" }>`
-  ${({ $type }) =>
-    $type === "mypage" ? FontStyles.XXS_SemiBold : FontStyles.XXS_SemiBold};
+  ${FontStyles.XXS_SemiBold};
   color: ${Colors.Grayscale60};
   display: flex;
   align-items: center;
@@ -88,8 +86,4 @@ export const CopyButton = styled.button`
     color: ${Colors.Grayscale50};
     cursor: default;
   }
-`;
-
-export const StyledEtc = styled(EtcButton)`
-  cursor: pointer;
 `;

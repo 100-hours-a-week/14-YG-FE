@@ -8,15 +8,21 @@ import { useLikeStore } from "../../../stores/useLikeStore";
 import * as S from "./LikeToggle.styled";
 import { useUserStore } from "../../../stores/useUserStore";
 import { useModalStore } from "../../../stores/useModalStore";
+import { GetMyListParams } from "../../../types/userType";
 
 interface LikeToggleProps {
   postId: number;
   imageType?: "normal" | "full";
+  params?: GetMyListParams;
 }
 
-const LikeToggle = ({ postId, imageType = "normal" }: LikeToggleProps) => {
+const LikeToggle = ({
+  postId,
+  imageType = "normal",
+  params,
+}: LikeToggleProps) => {
   const { mutate: postLikeMutate } = usePostLikeMutation(postId);
-  const { mutate: deleteLikeMutate } = useDeleteLikeMutation(postId);
+  const { mutate: deleteLikeMutate } = useDeleteLikeMutation(postId, params);
   const toggleLike = useLikeStore((s) => s.toggleLike);
   const isLiked = useLikeStore((s) => s.isLiked(postId));
   const user = useUserStore((s) => s.user);

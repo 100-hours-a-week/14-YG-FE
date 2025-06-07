@@ -1,7 +1,6 @@
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import * as S from "./DateInput.styed";
-import { setHours, setMinutes } from "date-fns";
 
 interface DateInputProps {
   label?: string;
@@ -19,23 +18,36 @@ const DateInput = ({
   helperText,
 }: DateInputProps) => {
   const now = new Date();
-  const minSelectableDate = now;
-  const minSelectableTime = now;
+  const selectedDate = value ?? now;
+
+  const isToday = selectedDate.toDateString() === now.toDateString();
+
+  const commonProps = {
+    selected: value,
+    onChange,
+    showTimeSelect: true,
+    dateFormat: "yyyy.MM.dd h:mm aa",
+    placeholderText: placeholder,
+    customInput: <S.Input />,
+    popperPlacement: "bottom-start" as const,
+    minDate: now,
+  };
 
   return (
     <S.Container>
       {label && <S.Label>{label}</S.Label>}
       <DatePicker
-        selected={value}
-        onChange={onChange}
-        showTimeSelect
-        dateFormat="yyyy.MM.dd h:mm aa"
-        placeholderText={placeholder}
-        customInput={<S.Input />}
-        popperPlacement="bottom-start"
-        minDate={minSelectableDate} // ✅ 오늘 이후 날짜만
-        minTime={minSelectableTime} // ✅ 오늘이면 지금 이후 시간만
-        maxTime={setHours(setMinutes(new Date(), 59), 23)} // ✅ 오늘이면 23:59까지만
+        {...commonProps}
+        {...(isToday && {
+          minTime: now,
+          maxTime: new Date(
+            now.getFullYear(),
+            now.getMonth(),
+            now.getDate(),
+            23,
+            59
+          ),
+        })}
       />
       {helperText && <S.HelperText>{helperText}</S.HelperText>}
     </S.Container>

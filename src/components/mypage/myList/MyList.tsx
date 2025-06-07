@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import * as S from "./MyList.styled";
 import MyListCard from "../myListCard/MyListCard";
 import FilterSelector from "../../common/filteringSelector/FilteringSelector";
@@ -26,7 +26,8 @@ const MyList = ({ activeTab }: MyListProps) => {
   const [status, setStatus] = useState<StatusKey>("공구중");
   const openModal = useModalStore((s) => s.openModal);
 
-  const commonParams = { sort: statusMap[status] };
+  // ✅ 이거 useMemo로 고정!
+  const commonParams = useMemo(() => ({ sort: statusMap[status] }), [status]);
 
   // ✅ Hook은 조건 없이 항상 호출
   const orderQuery = useOrderList(commonParams);
@@ -65,6 +66,7 @@ const MyList = ({ activeTab }: MyListProps) => {
         items.map((item) => (
           <MyListCard
             key={item.postId}
+            params={commonParams}
             item={item}
             renderActions={() => {
               if (activeTab === "참여목록") {
@@ -77,7 +79,6 @@ const MyList = ({ activeTab }: MyListProps) => {
                   </>
                 );
               }
-
               if (activeTab === "주최목록" && status !== "공구종료") {
                 return (
                   <>
@@ -91,7 +92,6 @@ const MyList = ({ activeTab }: MyListProps) => {
                   </>
                 );
               }
-
               return null;
             }}
           />
