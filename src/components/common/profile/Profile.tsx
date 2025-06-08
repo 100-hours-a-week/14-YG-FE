@@ -7,6 +7,10 @@ import { useToastStore } from "../../../stores/useToastStore";
 import { useHostAccount } from "../../../hooks/queries/useProductQuery";
 import { useUserStore } from "../../../stores/useUserStore";
 import DropdownMenu from "../../postDetail/dropDownMenu/DropDownMenu";
+import ImageUploader from "../image/imageUploader/ImageUploader";
+import { useState } from "react";
+import { usePatchProfileImgMutation } from "../../../hooks/mutations/user/usePatchProfileImgMutation";
+import { uploadImages } from "../../../api/image";
 
 interface ProfileProps {
   type: "mypage" | "post";
@@ -27,6 +31,25 @@ const Profile = ({ type, postId, user, isParticipant }: ProfileProps) => {
   const { showToast, isDisabled } = useToastStore();
   const currentUser = useUserStore((s) => s.user);
   const { data: hostAccount, isError } = useHostAccount(Number(postId));
+  const [imageFile, setImageFile] = useState<File | null>(null);
+  const { mutate: patchImg } = usePatchProfileImgMutation();
+  console.log(user);
+
+  const handleImageChange = async (_url: string, file: File) => {
+    setImageFile(file);
+
+    if (imageFile) {
+      try {
+        const [uploadedKey] = await uploadImages([imageFile]);
+        console.log(uploadedKey);
+        patchImg(uploadedKey);
+      } catch (err) {
+        console.error("이미지 업로드 실패:", err);
+        alert("이미지 업로드에 실패했습니다. 다시 시도해주세요.");
+      }
+    }
+  };
+
   const handleLogout = () => {
     openModal("confirm", {
       confirmTitle: "로그아웃하시겠습니까?",
@@ -54,7 +77,19 @@ const Profile = ({ type, postId, user, isParticipant }: ProfileProps) => {
 
   return (
     <S.ProfilePart $type={type}>
-      <S.ProfileImg $type={type} src={달뭉} alt="프로필 이미지" />
+      {type === "post" ? (
+        <S.ProfileImg
+          src={user.profileImageUrl ? user.profileImageUrl : 달뭉}
+          alt="프로필 이미지"
+        />
+      ) : (
+        <ImageUploader
+          defaultPreview={user.profileImageUrl ? user.profileImageUrl : 달뭉}
+          styleType="circle"
+          onChange={handleImageChange}
+        />
+      )}
+
       <S.ProfileInfo>
         {type === "mypage" && (
           <S.LogoutButton onClick={handleLogout}>로그아웃</S.LogoutButton>
@@ -93,7 +128,9 @@ const Profile = ({ type, postId, user, isParticipant }: ProfileProps) => {
           )}
         </S.AccountInfo>
       </S.ProfileInfo>
-      {user.nickname === currentUser?.nickname && <DropdownMenu />}
+      {user.nickname === currentUser?.nickname && type !== "mypage" && (
+        <DropdownMenu />
+      )}
     </S.ProfilePart>
   );
 };

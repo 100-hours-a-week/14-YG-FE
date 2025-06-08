@@ -4,7 +4,6 @@ import api from "./instance";
 import { ConfirmAccountParams, GetMyListParams } from "../types/userType";
 
 export interface SignupRequestData {
-  imageUrl: string;
   email: string;
   password: string;
   nickname: string;
@@ -195,6 +194,28 @@ export const getRefreshToken = async () => {
       throw new Error(error.response.data.message); // 서버 메시지를 직접 전달
     }
     throw new Error("토큰 발행 중 알 수 없는 오류 발생");
+  }
+};
+
+/**
+ * 프로필 이미지 수정
+ * @returns
+ */
+export const patchProfileImg = async (image: string) => {
+  try {
+    const res = await api.patch("/api/users/profile/image", { image: image });
+
+    if (res.data) {
+      return res.data;
+    } else {
+      throw new Error("응답에 data가 없습니다");
+    }
+  } catch (error) {
+    console.log(error);
+    if (error instanceof AxiosError && error.response?.data?.message) {
+      throw new Error(error.response.data.message); // 서버 메시지를 직접 전달
+    }
+    throw new Error("프로필 이미지 수정 중 오류가 발생했습니다.");
   }
 };
 

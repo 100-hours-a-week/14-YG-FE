@@ -7,9 +7,9 @@ export const ProfilePart = styled.div<{ $type: "mypage" | "post" }>`
   gap: ${({ $type }) => ($type === "mypage" ? "15px" : "10px")};
 `;
 
-export const ProfileImg = styled.img<{ $type: "mypage" | "post" }>`
-  width: ${({ $type }) => ($type === "mypage" ? "80px" : "36px")};
-  height: ${({ $type }) => ($type === "mypage" ? "80px" : "36px")};
+export const ProfileImg = styled.img`
+  width: 36px;
+  height: 36px;
   border-radius: 50%;
   object-fit: cover;
 `;
