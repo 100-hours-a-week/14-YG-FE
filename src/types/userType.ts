@@ -9,12 +9,6 @@ export interface UserInfo {
   profileImageUrl: string;
 }
 
-export interface MyPageInfo extends UserInfo {
-  name: string;
-  email: string;
-  phoneNumber: string;
-}
-
 export interface GetMyListParams {
   sort?: "open" | "closed" | "ended";
   cursor?: number;
