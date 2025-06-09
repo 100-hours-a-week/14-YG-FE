@@ -2,9 +2,8 @@ import { forwardRef, useState, useRef, useEffect } from "react";
 import * as S from "./ImageUploader.styled";
 import { useModalStore } from "../../../../stores/useModalStore";
 import { useUserStore } from "../../../../stores/useUserStore";
-import { patchProfileImg } from "../../../../api/user";
-import { useToastStore } from "../../../../stores/useToastStore";
 import 달뭉 from "../../../../assets/images/달뭉.webp";
+import { usePatchProfileImgMutation } from "../../../../hooks/mutations/user/usePatchProfileImgMutation";
 
 interface ImageUploaderProps {
   helperText?: string;
@@ -28,11 +27,12 @@ const ImageUploader = forwardRef<HTMLInputElement, ImageUploaderProps>(
     const inputRef = useRef<HTMLInputElement | null>(null);
     const [isOpen, setIsOpen] = useState(false);
     const menuRef = useRef<HTMLUListElement>(null);
-    const showToast = useToastStore((s) => s.showToast);
     const user = useUserStore((s) => s.user);
     const openModal = useModalStore((s) => s.openModal);
+    const { mutate: patchImg } = usePatchProfileImgMutation();
 
     const handleToggle = () => {
+      console.log(user);
       if (!user) {
         openModal("login");
         return;
@@ -100,8 +100,7 @@ const ImageUploader = forwardRef<HTMLInputElement, ImageUploaderProps>(
               onClick={() => {
                 setIsOpen(false);
                 setPreview(달뭉); // 🔁 미리보기 제거
-                patchProfileImg(""); // 🔁 서버에 빈 이미지 key로 PATCH 요청
-                showToast("기본 이미지로 변경되었습니다!");
+                patchImg(""); // 🔁 서버에 빈 이미지 key로 PATCH 요청
               }}
             >
               이미지 삭제

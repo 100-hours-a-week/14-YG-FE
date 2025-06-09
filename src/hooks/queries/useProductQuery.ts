@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { getAccount, getGroupBuyList, getPost } from "../../api/product";
 import {
   GetGroupBuysParams,
-  GroupBuyItem,
+  GroupBuyList,
   PostProps,
 } from "../../types/productType";
 import { HostAccount } from "../../types/hostType";
@@ -24,8 +24,8 @@ export const useHostAccount = (postId: number) => {
 };
 
 export const useGroupBuysList = (params?: GetGroupBuysParams) => {
-  return useQuery<GroupBuyItem[]>({
-    queryKey: ["groupBuyList", params],
+  return useQuery<GroupBuyList>({
+    queryKey: ["groupBuyList-single", params],
     queryFn: () => getGroupBuyList(params),
   });
 };

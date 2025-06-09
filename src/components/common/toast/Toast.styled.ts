@@ -2,14 +2,15 @@ import styled from "styled-components";
 import { Colors, FontStyles } from "../../../styles";
 
 export const ToastBox = styled.div`
-  position: fixed;
-  top: 80px;
+  position: absolute;
+  top: 90px;
   left: 50%;
   transform: translateX(-50%);
   background-color: ${Colors.Main10};
   color: #fff;
   padding: 8px 15px;
   border-radius: 8px;
+  white-space: nowrap;
   ${FontStyles.SM_SemiBold};
   z-index: 1000;
   animation:

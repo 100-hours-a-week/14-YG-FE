@@ -1,10 +1,9 @@
 import styled from "styled-components";
 import { Colors, FontStyles } from "../../../styles";
 
-export const Container = styled.div<{ $type: "postList" | "myList" }>`
+export const Container = styled.div`
   display: flex;
   gap: 10px;
-  //margin: ${({ $type }) => ($type === "postList" ? "0px 20px" : "0px 30px")};
 `;
 
 export const Button = styled.button<{
