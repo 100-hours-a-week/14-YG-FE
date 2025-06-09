@@ -2,18 +2,28 @@ import { UserInfo } from "./userType";
 
 export interface GetGroupBuysParams {
   orderBy?: "latest" | "price_asc" | "ending_soon" | "due_soon_only";
-  postStatus?: "open" | "closed" | "ended";
   category?: number;
   cursorId?: number;
   cursorPrice?: number;
   cursorCreatedAt?: string;
   limit?: number;
+  keyword?: string;
+  openOnly?: boolean;
 }
 
 export interface GroupBuyImage {
   imageKey: string;
   isThumbnail: boolean;
   orderIndex: number;
+}
+
+export interface GroupBuyList {
+  count: number;
+  posts: GroupBuyItem[];
+  nextCursor: number;
+  nextCreatedAt: string;
+  nextCursorPrice: number;
+  hasMore: boolean;
 }
 
 export interface GroupBuyItem {

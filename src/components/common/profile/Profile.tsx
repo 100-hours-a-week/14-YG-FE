@@ -8,9 +8,10 @@ import { useHostAccount } from "../../../hooks/queries/useProductQuery";
 import { useUserStore } from "../../../stores/useUserStore";
 import DropdownMenu from "../../postDetail/dropDownMenu/DropDownMenu";
 import ImageUploader from "../image/imageUploader/ImageUploader";
-import { useState } from "react";
 import { usePatchProfileImgMutation } from "../../../hooks/mutations/user/usePatchProfileImgMutation";
 import { uploadImages } from "../../../api/image";
+import { getImageUrl } from "./../../../utils/image";
+import { useQueryClient } from "@tanstack/react-query";
 
 interface ProfileProps {
   type: "mypage" | "post";
@@ -31,22 +32,22 @@ const Profile = ({ type, postId, user, isParticipant }: ProfileProps) => {
   const { showToast, isDisabled } = useToastStore();
   const currentUser = useUserStore((s) => s.user);
   const { data: hostAccount, isError } = useHostAccount(Number(postId));
-  const [imageFile, setImageFile] = useState<File | null>(null);
   const { mutate: patchImg } = usePatchProfileImgMutation();
+  const queryClient = useQueryClient();
+
   console.log(user);
 
   const handleImageChange = async (_url: string, file: File) => {
-    setImageFile(file);
-
-    if (imageFile) {
-      try {
-        const [uploadedKey] = await uploadImages([imageFile]);
-        console.log(uploadedKey);
-        patchImg(uploadedKey);
-      } catch (err) {
-        console.error("이미지 업로드 실패:", err);
-        alert("이미지 업로드에 실패했습니다. 다시 시도해주세요.");
-      }
+    try {
+      const [uploadedKey] = await uploadImages([file]); // ✅ file 직접 사용
+      patchImg(uploadedKey, {
+        onSuccess: () => {
+          queryClient.invalidateQueries({ queryKey: ["myInfo"] });
+        },
+      });
+    } catch (err) {
+      console.error("이미지 업로드 실패:", err);
+      alert("이미지 업로드에 실패했습니다. 다시 시도해주세요.");
     }
   };
 
@@ -79,12 +80,14 @@ const Profile = ({ type, postId, user, isParticipant }: ProfileProps) => {
     <S.ProfilePart $type={type}>
       {type === "post" ? (
         <S.ProfileImg
-          src={user.profileImageUrl ? user.profileImageUrl : 달뭉}
+          src={user.profileImageUrl ? getImageUrl(user.profileImageUrl) : 달뭉}
           alt="프로필 이미지"
         />
       ) : (
         <ImageUploader
-          defaultPreview={user.profileImageUrl ? user.profileImageUrl : 달뭉}
+          defaultPreview={
+            user.profileImageUrl ? getImageUrl(user.profileImageUrl) : 달뭉
+          }
           styleType="circle"
           onChange={handleImageChange}
         />
