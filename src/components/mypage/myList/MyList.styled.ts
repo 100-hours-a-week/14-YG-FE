@@ -22,12 +22,11 @@ export const WhiteButton = styled.button`
   height: 25px;
   border-radius: 4px;
   cursor: pointer;
-`;
-
-export const MainButton = styled(WhiteButton)`
-  background-color: ${Colors.Main10};
-  color: ${Colors.Grayscale0};
-  border: none;
+  transition: all 0.2s;
+  &:hover {
+    background-color: ${Colors.Main10};
+    color: ${Colors.Grayscale0};
+  }
 `;
 
 export const EndButton = styled.button`

@@ -8,6 +8,7 @@ import WritePost from "./pages/writePost/WritePost";
 import PostList from "./pages/postList/PostList";
 import ChatList from "./pages/chatList/ChatList";
 import { Chat } from "./components/chatList/chatCard/ChatCard.styled";
+import EditPost from "./pages/editPost/EditPost";
 
 const AppRouter = () => {
   return (
@@ -21,6 +22,7 @@ const AppRouter = () => {
         <Route path="/signup" element={<Signup />} />
         <Route path="/signupInfo" element={<SignupInfo />} />
         <Route path="/writePost" element={<WritePost />} />
+        <Route path="/editPost/:postId" element={<EditPost />} />
         <Route path="/chat" element={<ChatList />} />
         <Route path="/chat/id" element={<Chat />} />
       </Routes>
