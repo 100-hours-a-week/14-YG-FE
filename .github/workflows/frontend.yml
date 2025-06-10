@@ -2,9 +2,9 @@ name: Frontend CI/CD with Artifact + Auto Start
 
 on:
   push:
-    branches: [deploy/test-sally]
+    branches: [dev]
   pull_request:
-    branches: [deploy/test-sally]
+    branches: [dev]
   workflow_dispatch:
 
 env:
@@ -43,7 +43,7 @@ jobs:
     name: Frontend CD
     needs: ci
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/deploy/test-sally'
+    if: github.ref == 'refs/heads/dev'
 
     steps:
       - name: Download dist artifact
