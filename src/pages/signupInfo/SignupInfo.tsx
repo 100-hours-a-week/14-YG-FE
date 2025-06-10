@@ -8,7 +8,6 @@ import {
 } from "../../schemas/signupInfoSchema";
 import InputField from "../../components/common/input/inputField/InputField";
 import Dropdown from "../../components/common/input/dropdown/Dropdown";
-import ImageUploader from "../../components/common/image/imageUploader/ImageUploader";
 import AgreeCheckBox from "../../components/common/agreeCheckbox/AgreeCheckBox";
 import { SignupRequestData } from "../../api/user";
 import { useNicknameCheckMutation } from "../../hooks/mutations/user/useNicknameCheckMutation";
@@ -85,7 +84,7 @@ const Signup = () => {
     setIsNicknameDuplicated(false);
   }, [nickname]);
 
-  const onSubmit = (data: SignupInfoFormData) => {
+  const onSubmit = async (data: SignupInfoFormData) => {
     const step1Data = localStorage.getItem("signupStep1");
     if (!step1Data) {
       alert("이메일/비밀번호 정보가 없습니다. 처음부터 다시 회원가입해주세요.");
@@ -94,6 +93,7 @@ const Signup = () => {
     }
 
     const step1 = JSON.parse(step1Data);
+
     const requestData: SignupRequestData = {
       ...step1,
       nickname: data.nickname,
@@ -117,7 +117,6 @@ const Signup = () => {
         부정확한 경우 환불이 제한될 수 있습니다.
       </S.SectionInfo>
       <S.SignupForm onSubmit={handleSubmit(onSubmit)}>
-        <ImageUploader {...register("imageUrl")} styleType="circle" />
         <InputField
           label="닉네임"
           placeholder="사용할 닉네임 입력"
@@ -164,7 +163,7 @@ const Signup = () => {
               {...field}
               value={field.value ?? null}
               placeholder="은행 선택"
-              helperText={errors.accountBank?.message}
+              helperText={errors.accountBank?.value?.message}
             />
           )}
         />

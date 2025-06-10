@@ -52,7 +52,9 @@ export const deleteOrder = async (postId: number) => {
  */
 export const getOrderList = async (params?: GetMyListParams) => {
   try {
-    const res = await api.get("/api/group-buys/user/participants", { params });
+    const res = await api.get("/api/group-buys/users/me/participants", {
+      params,
+    });
 
     if (res.data.data) {
       return res.data.data;

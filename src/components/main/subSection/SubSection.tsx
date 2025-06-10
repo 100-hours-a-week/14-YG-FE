@@ -38,11 +38,11 @@ const SubSection = ({
         </S.SectionHead>
       )}
 
-      {isError || !groupBuys || groupBuys.length === 0 ? (
+      {isError || !groupBuys?.posts || groupBuys.posts.length === 0 ? (
         <EmptySection category={title} />
       ) : (
         <S.RowScrollContainer>
-          {groupBuys.map((item) => (
+          {groupBuys.posts.map((item) => (
             <MainCard
               onClick={() => {
                 navigate(`/products/${item.postId}`);

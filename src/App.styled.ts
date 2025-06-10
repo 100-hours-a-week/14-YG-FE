@@ -1,6 +1,5 @@
 import styled from "styled-components";
 import { Colors } from "./styles";
-import MasterButtonIcon from "./assets/icons/MasterButton.svg?react";
 
 export const Whole = styled.div`
   position: relative;
@@ -38,17 +37,4 @@ export const ScrollArea = styled.div<{ $modalOpen: boolean }>`
   display: flex;
   flex-direction: column;
   overflow-y: ${({ $modalOpen }) => ($modalOpen ? "hidden" : "auto")};
-`;
-
-export const MasterButton = styled(MasterButtonIcon)`
-  position: absolute;
-  bottom: 20px;
-  right: 20px;
-  cursor: pointer;
-  z-index: 10;
-  cursor: pointer;
-
-  @media (max-width: 390px) {
-    right: 20px;
-  }
 `;

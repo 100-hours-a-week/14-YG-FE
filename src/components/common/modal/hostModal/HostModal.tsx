@@ -7,9 +7,54 @@ import Modal from "../Modal";
 import * as S from "./HostModal.styled";
 import { Button } from "../../button/Button.styled";
 
+interface Participant {
+  nickname: string;
+  depositor: string;
+  phone: string;
+  quantity: number;
+  price: number;
+}
+
+const dummyParticipants: Participant[] = Array.from(
+  { length: 7 },
+  (_, idx) => ({
+    nickname: `Kane${idx + 1}`,
+    depositor: `박진주${idx + 1}`,
+    phone: `010-1234-56${70 + idx}`,
+    quantity: 4,
+    price: 20000,
+  })
+);
+
 const HostModal = () => {
   const closeModal = useModalStore((s) => s.closeModal);
-  const [isChecked, setIsChecked] = useState(false);
+  const openModal = useModalStore((s) => s.openModal);
+  const [isCheckedList, setIsCheckedList] = useState<boolean[]>(
+    Array(dummyParticipants.length).fill(false)
+  );
+
+  const handleToggle = (index: number) => {
+    setIsCheckedList((prev) => {
+      const newChecked = !prev[index];
+      // false로 바뀌는 경우만 모달 오픈
+      if (!newChecked)
+        openModal("confirm", {
+          confirmTitle: "정말 상태를 변경하시겠습니까?",
+          subDescription: (
+            <>
+              입금 상태를 <span>'입금 대기'</span>로 되돌리시겠습니까?
+              <br />
+              이미 <span>입금완료</span>로 표시된 상태입니다.
+            </>
+          ),
+          confirmDescription:
+            "참여자 확인에 혼란이 생길 수 있으니 신중하게 확인 후 진행해주세요.",
+          confirmText: "변경하기",
+        });
+
+      return prev.map((checked, i) => (i === index ? newChecked : checked));
+    });
+  };
 
   return (
     <Modal onClose={closeModal}>
@@ -83,90 +128,22 @@ const HostModal = () => {
                 <col style={{ width: "14%" }} />
               </colgroup>
               <tbody>
-                <S.Tr>
-                  <S.Td>Kane</S.Td>
-                  <S.Td>박진주</S.Td>
-                  <S.Td>010-1234-5678</S.Td>
-                  <S.Td>4</S.Td>
-                  <S.Td>20,000</S.Td>
-                  <S.Td>
-                    <AgreeCheckBox
-                      boxStyle="box"
-                      checked={isChecked}
-                      onChange={() => setIsChecked((prev) => !prev)}
-                    />
-                  </S.Td>
-                </S.Tr>
-                <S.Tr>
-                  <S.Td>Kane</S.Td>
-                  <S.Td>박진주</S.Td>
-                  <S.Td>010-1234-5678</S.Td>
-                  <S.Td>4</S.Td>
-                  <S.Td>20,000</S.Td>
-                  <S.Td>
-                    <AgreeCheckBox
-                      boxStyle="box"
-                      checked={isChecked}
-                      onChange={() => setIsChecked((prev) => !prev)}
-                    />
-                  </S.Td>
-                </S.Tr>
-                <S.Tr>
-                  <S.Td>Kane</S.Td>
-                  <S.Td>박진주</S.Td>
-                  <S.Td>010-1234-5678</S.Td>
-                  <S.Td>4</S.Td>
-                  <S.Td>20,000</S.Td>
-                  <S.Td>
-                    <AgreeCheckBox
-                      boxStyle="box"
-                      checked={isChecked}
-                      onChange={() => setIsChecked((prev) => !prev)}
-                    />
-                  </S.Td>
-                </S.Tr>
-                <S.Tr>
-                  <S.Td>Kane</S.Td>
-                  <S.Td>박진주</S.Td>
-                  <S.Td>010-1234-5678</S.Td>
-                  <S.Td>4</S.Td>
-                  <S.Td>20,000</S.Td>
-                  <S.Td>
-                    <AgreeCheckBox
-                      boxStyle="box"
-                      checked={isChecked}
-                      onChange={() => setIsChecked((prev) => !prev)}
-                    />
-                  </S.Td>
-                </S.Tr>
-                <S.Tr>
-                  <S.Td>Kane</S.Td>
-                  <S.Td>박진주</S.Td>
-                  <S.Td>010-1234-5678</S.Td>
-                  <S.Td>4</S.Td>
-                  <S.Td>20,000</S.Td>
-                  <S.Td>
-                    <AgreeCheckBox
-                      boxStyle="box"
-                      checked={isChecked}
-                      onChange={() => setIsChecked((prev) => !prev)}
-                    />
-                  </S.Td>
-                </S.Tr>
-                <S.Tr>
-                  <S.Td>Kane</S.Td>
-                  <S.Td>박진주</S.Td>
-                  <S.Td>010-1234-5678</S.Td>
-                  <S.Td>4</S.Td>
-                  <S.Td>20,000</S.Td>
-                  <S.Td>
-                    <AgreeCheckBox
-                      boxStyle="box"
-                      checked={isChecked}
-                      onChange={() => setIsChecked((prev) => !prev)}
-                    />
-                  </S.Td>
-                </S.Tr>
+                {dummyParticipants.map((p, idx) => (
+                  <S.Tr key={idx}>
+                    <S.Td>{p.nickname}</S.Td>
+                    <S.Td>{p.depositor}</S.Td>
+                    <S.Td>{p.phone}</S.Td>
+                    <S.Td>{p.quantity}</S.Td>
+                    <S.Td>{p.price.toLocaleString()}</S.Td>
+                    <S.Td>
+                      <AgreeCheckBox
+                        boxStyle="box"
+                        checked={isCheckedList[idx]}
+                        onChange={() => handleToggle(idx)}
+                      />
+                    </S.Td>
+                  </S.Tr>
+                ))}
               </tbody>
             </S.Table>
           </S.ScrollBody>

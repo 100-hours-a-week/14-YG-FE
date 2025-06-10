@@ -20,8 +20,20 @@ export const Message = styled.p`
   ${FontStyles.MD1_SemiBold}
 `;
 
-export const Info = styled.p`
-  ${FontStyles.XXS_SemiBold};
+export const Sub = styled.p`
+  ${FontStyles.SM_Medium};
+  color: ${Colors.Grayscale60};
+  text-align: center;
+  line-height: 1.2;
+  margin: 15px 0px;
+  > span {
+    color: ${Colors.Main30};
+  }
+`;
+
+export const Info = styled.p<{ $isSub: boolean }>`
+  ${({ $isSub }) =>
+    $isSub ? FontStyles.XXS_SemiBold : FontStyles.XXS_Regular};
   color: ${Colors.Grayscale60};
 `;
 

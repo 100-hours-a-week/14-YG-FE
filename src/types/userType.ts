@@ -1,16 +1,12 @@
 export interface UserInfo {
   userId: number;
   name: string;
+  email: string;
+  phoneNumber: string;
   nickname: string;
   accountBank: string;
   accountNumber: string;
   profileImageUrl: string;
-}
-
-export interface MyPageInfo extends UserInfo {
-  name: string;
-  email: string;
-  phoneNumber: string;
 }
 
 export interface GetMyListParams {
@@ -31,7 +27,8 @@ export interface ListPostProps {
   postStatus: string;
   location: string;
   imageKey: string;
-  unitPrice: number;
+  unitPrice?: number;
+  orderPrice?: number;
   orderQuantity?: number;
   hostQuantity?: number;
   soldAmount: number;
@@ -40,4 +37,10 @@ export interface ListPostProps {
   orderStatus?: string;
   dueSoon: boolean;
   isWish: boolean;
+}
+
+export interface ConfirmAccountParams {
+  name?: string;
+  accountBank?: string;
+  accountNumber?: string;
 }

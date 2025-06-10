@@ -2,17 +2,18 @@ import * as S from "./MyListCard.styled";
 import ShoppingBag from "../../../assets/icons/ShoppingBag.svg";
 import { getImageUrl } from "../../../utils/image";
 import { useNavigate } from "react-router-dom";
-import { ListPostProps } from "../../../types/userType";
+import { GetMyListParams, ListPostProps } from "../../../types/userType";
 import CurrentParti from "../../common/currentParti/CurrentParti";
 import { SectionLine } from "../../common/SectionLine.styled";
 import ImageContainer from "../../common/image/imageContainer/ImageContainer";
 
 interface MyListCardItem {
   item: ListPostProps;
+  params?: GetMyListParams;
   renderActions?: (item: ListPostProps) => React.ReactNode;
 }
 
-const MyListCard = ({ item, renderActions }: MyListCardItem) => {
+const MyListCard = ({ item, params, renderActions }: MyListCardItem) => {
   const navigate = useNavigate();
   const actionContent = renderActions?.(item);
 
@@ -25,6 +26,7 @@ const MyListCard = ({ item, renderActions }: MyListCardItem) => {
           }}
         >
           <ImageContainer
+            params={params}
             imageUrl={getImageUrl(item.imageKey)}
             postId={item.postId}
           />
@@ -38,12 +40,20 @@ const MyListCard = ({ item, renderActions }: MyListCardItem) => {
             )}
             <S.ProductInfo>
               <S.PickupPlace>{item.location}</S.PickupPlace>
-              <S.UnitPrice>{item.unitPrice.toLocaleString()}원</S.UnitPrice>
+              <S.UnitPrice>
+                {item.orderPrice
+                  ? `${item.orderPrice.toLocaleString()}원`
+                  : `${item.unitPrice?.toLocaleString()}원`}
+              </S.UnitPrice>
               <S.PostTitle>{item.title}</S.PostTitle>
             </S.ProductInfo>
             <S.OrderInfo>
               <S.MyOrder>
-                <img src={ShoppingBag} alt="쇼핑백" /> 구매수량 :
+                {(item.orderQuantity || item.hostQuantity) && (
+                  <>
+                    <img src={ShoppingBag} alt="쇼핑백" /> 구매수량 :
+                  </>
+                )}
                 {item.orderQuantity ? item.orderQuantity : item.hostQuantity}
               </S.MyOrder>
               <CurrentParti

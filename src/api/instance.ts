@@ -1,4 +1,5 @@
 import axios from "axios";
+import { useUserStore } from "../stores/useUserStore";
 
 const api = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL,
@@ -8,5 +9,17 @@ const api = axios.create({
   },
 });
 
-// 인터셉터 불필요 (쿠키 자동 처리되므로)
+api.interceptors.response.use(
+  (res) => res,
+  (err) => {
+    if (err.response?.status === 401) {
+      // ✅ 상태 비우기
+      const { clearUser } = useUserStore.getState(); // ✅ zustand 직접 접근
+      clearUser();
+    }
+
+    return Promise.reject(err);
+  }
+);
+
 export default api;

@@ -42,6 +42,8 @@ const PostDetail = () => {
 
     updateDday(); // 초기값 바로 설정
 
+    if (ddayText === "마감 종료") return;
+
     const timer = setInterval(updateDday, 1000); // 1초마다 갱신
 
     return () => clearInterval(timer); // 언마운트 시 클리어
@@ -104,7 +106,12 @@ const PostDetail = () => {
               postId={post.postId}
               images={post.imageKeys?.map((img) => img.imageKey)}
             />
-            <Profile type="post" user={post.userProfileResponse} />
+            <Profile
+              type="post"
+              postId={post.postId}
+              user={post.userProfileResponse}
+              isParticipant={post.isParticipant}
+            />
           </S.TopSection>
           <SectionLine />
           <S.PostInfo>

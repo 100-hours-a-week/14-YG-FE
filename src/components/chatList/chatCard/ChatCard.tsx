@@ -8,11 +8,14 @@ import {
 } from "../../mypage/myListCard/MyListCard.styled";
 import CurrentParti from "../../common/currentParti/CurrentParti";
 import { SectionLine } from "../../common/SectionLine.styled";
+import { useNavigate } from "react-router-dom";
 
 const ChatCard = () => {
+  const navigate = useNavigate();
+
   return (
     <>
-      <CommonSection>
+      <CommonSection onClick={() => navigate("/chat/id")}>
         <ImageContainer postId={1} imageUrl={참치1} />
         <CardInfo>
           <S.Title>5명만 모집합니당</S.Title>

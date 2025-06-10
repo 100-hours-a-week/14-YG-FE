@@ -5,6 +5,7 @@ export type ModalType = "login" | "confirm" | "order" | "success" | "host";
 
 export type ConfirmPayload = {
   confirmTitle?: string;
+  subDescription?: React.ReactNode;
   confirmDescription?: string;
   confirmText?: string;
   cancelText?: string;

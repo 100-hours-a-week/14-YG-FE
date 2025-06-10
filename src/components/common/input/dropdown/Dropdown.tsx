@@ -118,11 +118,7 @@ const Dropdown = ({
   ...props
 }: DropdownProps) => {
   const handleChange = (option: Option | null) => {
-    if (option?.value === "") {
-      onChange?.(null); // "" → null로 변환해서 전달
-    } else {
-      onChange?.(option);
-    }
+    onChange?.(option);
   };
   return (
     <S.Container $width={width}>
