@@ -50,14 +50,19 @@ export const DeleteBtn = styled.button`
   background: #4b4b52;
   color: white;
   border-radius: 50%;
-  font-size: 12px;
-  width: 20px;
-  height: 20px;
+  border: none;
+  font-size: 10px;
+  width: 18px;
+  height: 18px;
   cursor: pointer;
+  &:hover {
+    background-color: ${Colors.Grayscale90};
+  }
 `;
 
 export const Label = styled.div`
   position: absolute;
   bottom: 4px;
-  ${FontStyles.XXXS_Medium}
+  color: ${Colors.Grayscale80};
+  ${FontStyles.XXXS_SemiBold};
 `;

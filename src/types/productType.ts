@@ -79,3 +79,30 @@ export interface PostProps {
   createdAt: string;
   userProfileResponse: UserInfo;
 }
+
+export interface EditPostRequest {
+  postId: number;
+  title: string;
+  name: string;
+  description: string;
+  hostQuantity: number;
+  dueDate: string;
+  pickupDate?: string;
+  dateModificationReason?: string;
+  imageKeys: string[];
+}
+
+export interface EditPostData {
+  title: string;
+  name: string;
+  description: string;
+  imageKeys: GroupBuyImage[];
+  dueDate: string;
+  location: string;
+  pickupDate: string;
+  price: number;
+  unitAmount: number;
+  totalAmount: number;
+  leftAmount: number;
+  hostQuantity: number;
+}

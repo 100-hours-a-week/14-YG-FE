@@ -5,6 +5,7 @@ export const Container = styled.div<{ $width?: string }>`
   display: flex;
   flex-direction: column;
   width: ${({ $width }) => $width || "100%"};
+  ${FontStyles.XS_Medium};
 `;
 
 export const Label = styled.label`

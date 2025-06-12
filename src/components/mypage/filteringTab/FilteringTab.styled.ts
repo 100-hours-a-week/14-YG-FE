@@ -20,4 +20,7 @@ export const TabButton = styled.button<{ $isSelected: boolean }>`
   background-color: transparent;
   cursor: pointer;
   transition: all 0.2s;
+  &:hover {
+    opacity: 0.85;
+  }
 `;

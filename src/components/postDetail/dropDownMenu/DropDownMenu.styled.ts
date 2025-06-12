@@ -23,7 +23,7 @@ export const Dropdown = styled.ul`
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
   list-style: none;
   padding: 8px 0;
-  width: 100px;
+  width: 80px;
 
   li {
     padding: 5px 16px;

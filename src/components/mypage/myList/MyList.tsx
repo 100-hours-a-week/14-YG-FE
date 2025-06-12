@@ -9,6 +9,7 @@ import {
   useLikedList,
   useOrderList,
 } from "../../../hooks/queries/useMyList";
+import { useNavigate } from "react-router-dom";
 
 const statusMap = {
   공구중: "open",
@@ -25,6 +26,7 @@ interface MyListProps {
 const MyList = ({ activeTab }: MyListProps) => {
   const [status, setStatus] = useState<StatusKey>("공구중");
   const openModal = useModalStore((s) => s.openModal);
+  const navigate = useNavigate();
 
   // ✅ 이거 useMemo로 고정!
   const commonParams = useMemo(() => ({ sort: statusMap[status] }), [status]);
@@ -83,10 +85,14 @@ const MyList = ({ activeTab }: MyListProps) => {
                 return (
                   <>
                     <S.TopButton>
-                      <S.MainButton onClick={() => openModal("host")}>
+                      <S.WhiteButton onClick={() => openModal("host")}>
                         참여자 확인하기
-                      </S.MainButton>
-                      <S.WhiteButton>공구글 수정</S.WhiteButton>
+                      </S.WhiteButton>
+                      <S.WhiteButton
+                        onClick={() => navigate(`/editPost/${item.postId}`)}
+                      >
+                        공구글 수정
+                      </S.WhiteButton>
                     </S.TopButton>
                     <S.EndButton>공구 종료</S.EndButton>
                   </>

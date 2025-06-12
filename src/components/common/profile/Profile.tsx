@@ -131,8 +131,8 @@ const Profile = ({ type, postId, user, isParticipant }: ProfileProps) => {
           )}
         </S.AccountInfo>
       </S.ProfileInfo>
-      {user.nickname === currentUser?.nickname && type !== "mypage" && (
-        <DropdownMenu />
+      {user.nickname === currentUser?.nickname && postId && (
+        <DropdownMenu postId={postId} />
       )}
     </S.ProfilePart>
   );

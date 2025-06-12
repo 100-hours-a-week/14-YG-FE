@@ -37,6 +37,9 @@ export const StyledLeftArrow = styled(LeftArrow)`
   transition: background-color 0.1s;
   cursor: pointer;
   color: ${Colors.Grayscale60};
+  &:hover {
+    color: ${Colors.Grayscale90};
+  }
 `;
 
 export const StyledRightArrow = styled(RightArrow)`
@@ -47,6 +50,9 @@ export const StyledRightArrow = styled(RightArrow)`
   transition: background-color 0.1s;
   cursor: pointer;
   color: ${Colors.Grayscale60};
+  &:hover {
+    color: ${Colors.Grayscale90};
+  }
 `;
 
 export const SlideIcon = styled.div`

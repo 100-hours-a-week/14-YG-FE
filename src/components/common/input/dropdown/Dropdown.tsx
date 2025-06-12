@@ -9,7 +9,7 @@ import { Colors } from "../../../../styles";
 import { HelperText } from "../../HelperText.styled";
 
 interface Option {
-  value: string;
+  value: number;
   label: string;
 }
 

@@ -3,6 +3,7 @@ import { Colors, FontStyles } from "../../styles";
 
 export const PostDetailContainer = styled.div`
   width: 100%;
+  margin-bottom: 30px;
 `;
 
 export const TopSection = styled.div`
@@ -55,7 +56,7 @@ export const TitlePart = styled.div`
 export const InfoPart = styled.div`
   display: flex;
   justify-content: space-between;
-  margin-top: 5px;
+  margin-top: 7px;
 `;
 
 export const PostTitle = styled.p`
@@ -80,13 +81,14 @@ export const UrlTitle = styled(ProductTitle)`
 export const ProductInfo = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 3px;
   margin-bottom: 20px;
 `;
 
 export const PickupDate = styled.p`
   ${FontStyles.XXS_SemiBold};
   color: ${Colors.Grayscale60};
+  white-space: nowrap; // ✅ 강제 줄바꿈 방지
 `;
 
 export const unitPrice = styled.p`
@@ -102,6 +104,7 @@ export const unitAmount = styled.p`
 export const OrderInfo = styled.div`
   display: flex;
   flex-direction: column;
+  gap: 2px;
   align-items: end;
 `;
 
@@ -110,7 +113,6 @@ export const OrderButton = styled.button<{ $isCancel: boolean }>`
   padding: 3px 7px;
   border: none;
   border-radius: 5px;
-  margin-bottom: 3px;
   background-color: ${({ $isCancel }) =>
     $isCancel ? Colors.Main30 : Colors.Main10};
   color: ${Colors.Grayscale0};
@@ -130,8 +132,9 @@ export const OrderButton = styled.button<{ $isCancel: boolean }>`
 `;
 
 export const Ddate = styled.p`
-  ${FontStyles.XXXS_SemiBold};
+  ${FontStyles.XXS_SemiBold};
   color: ${Colors.Main10};
+  white-space: nowrap; // ✅ 강제 줄바꿈 방지
   margin-top: 3px;
 `;
 
@@ -156,8 +159,9 @@ export const SectionName = styled.p`
 `;
 
 export const DetailInfo = styled.div`
-  ${FontStyles.XS_Medium};
+  ${FontStyles.SM_Medium};
   white-space: pre-wrap;
+  margin-top: 10px;
 `;
 
 export const PostDate = styled.p`
@@ -165,5 +169,5 @@ export const PostDate = styled.p`
   justify-content: end;
   color: ${Colors.Grayscale60};
   ${FontStyles.XXXS_SemiBold};
-  margin-top: 20px;
+  margin-top: 30px;
 `;

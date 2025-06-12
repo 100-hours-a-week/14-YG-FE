@@ -15,7 +15,7 @@ export const useMyInfoQuery = () => {
 
   useEffect(() => {
     if (isSuccess && data) {
-      setUser(data);
+      console.log(data);
     } else if (isError) {
       clearUser(); // 실패 시 로그아웃 처리
     }
