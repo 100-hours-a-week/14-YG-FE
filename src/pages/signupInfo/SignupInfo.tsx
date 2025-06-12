@@ -99,7 +99,9 @@ const Signup = () => {
       nickname: data.nickname,
       name: data.name,
       phoneNumber: data.phoneNumber,
-      accountBank: data.accountBank?.value ?? "", // ✅ string으로 변환
+      accountBank:
+        BANK_OPTIONS.find((bank) => bank.value === data.accountBank?.value)
+          ?.label ?? "",
       accountNumber: data.accountNumber,
     };
 
@@ -159,7 +161,7 @@ const Signup = () => {
           render={({ field }) => (
             <Dropdown
               label="은행 선택"
-              options={[{ label: "은행 선택", value: "" }, ...BANK_OPTIONS]}
+              options={[{ label: "은행 선택", value: 0 }, ...BANK_OPTIONS]}
               {...field}
               value={field.value ?? null}
               placeholder="은행 선택"

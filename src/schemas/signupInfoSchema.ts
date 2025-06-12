@@ -21,7 +21,7 @@ export const signupInfoSchema = z.object({
 
   accountBank: z.object({
     label: z.string(),
-    value: z.string().min(2, "서비스에 사용하실 은행을 선택해 주세요."),
+    value: z.number().min(1, "서비스에 사용할 은행을 선택해주세요"),
   }),
   accountNumber: z.string().regex(/^\d{10,14}$/, {
     message: "하이픈(-)을 제외한 올바른 계좌번호를 입력해 주세요",
