@@ -32,7 +32,7 @@ const MyListCard = ({ item, params, renderActions }: MyListCardItem) => {
           />
           <S.CardInfo>
             {item.orderStatus && (
-              <S.OrderState>
+              <S.OrderState $status={item.orderStatus === "CONFIRMED"}>
                 {item.orderStatus === "CONFIRMED"
                   ? "입금 확인 완료"
                   : "입금 확인 중"}

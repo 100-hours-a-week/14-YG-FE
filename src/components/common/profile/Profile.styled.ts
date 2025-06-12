@@ -40,7 +40,7 @@ export const LogoutButton = styled.button`
 
 export const NameInfo = styled.p<{ $type: "mypage" | "post" }>`
   ${({ $type }) =>
-    $type === "mypage" ? FontStyles.SM_SemiBold : FontStyles.XXS_SemiBold};
+    $type === "mypage" ? FontStyles.SM_Bold : FontStyles.XXS_Bold};
 `;
 
 const SubText = styled.p`

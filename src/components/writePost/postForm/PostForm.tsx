@@ -11,6 +11,9 @@ import * as S from "./PostForm.styled";
 import { PostFormData } from "../../../schemas/writePostSchema";
 import { useUserStore } from "../../../stores/useUserStore";
 import { EditPostFormData } from "../../../schemas/editPostSchema";
+import { useEffect, useState } from "react";
+import { useGetAIMutation } from "../../../hooks/mutations/host/useGetAIMutation";
+import Send from "../../../assets/icons/LightSend.svg";
 
 type FieldKey =
   | "title"
@@ -23,7 +26,7 @@ type FieldKey =
   | "submitButton";
 
 type PostFormProps = {
-  onSubmit: (data: PostFormData) => void;
+  onSubmit: (data: PostFormData | EditPostFormData) => void;
   setImageFiles: (files: File[]) => void;
   disabledFields?: FieldKey[];
   submitButtonText?: string;
@@ -45,12 +48,34 @@ const PostForm = ({
     register,
     handleSubmit,
     control,
-    formState: { errors },
+    formState: { errors, isValid },
     setValue,
     watch,
   } = useFormContext<EditPostFormData>();
+  const [isAISubmitted, setIsAISubmitted] = useState(false);
   const user = useUserStore((s) => s.user);
   const isDisabled = (field: FieldKey) => disabledFields?.includes(field);
+  const imageUrls = watch("imageUrls") ?? [];
+  console.log(imageUrls);
+
+  const { mutate: getAIMutate, isPending: isGeneratingAI } = useGetAIMutation(
+    setValue,
+    setIsAISubmitted
+  );
+
+  if (isGeneratingAI) {
+    disabledFields = ["totalAmount", "unitAmount"];
+  }
+
+  const url = watch("url");
+
+  useEffect(() => {
+    setIsAISubmitted(false);
+  }, [url]);
+
+  if (isGeneratingAI) {
+    setValue("price", -1);
+  }
 
   const pickupDate = watch("pickupDate");
 
@@ -63,30 +88,55 @@ const PostForm = ({
   return (
     <S.PostForm onSubmit={handleSubmit(onSubmit)}>
       <MultiImageUploader
-        value={watch("imageUrls")}
+        {...(mode === "edit" && {
+          defaultPreviewUrls: watch("imageUrls") as string[],
+        })}
         onChange={(urls, files) => {
           setValue("imageUrls", urls);
           setImageFiles(files);
         }}
         helperText={errors.imageUrls?.message}
       />
+      <S.URL>
+        <InputField
+          label="URL (선택)"
+          styleType="post"
+          placeholder="상품 URL을 입력해주세요"
+          {...register("url")}
+        />
+        <Button
+          disabled={!url || isGeneratingAI || isAISubmitted || !!errors.url}
+          onClick={() => {
+            if (!url || errors?.url || isGeneratingAI || isAISubmitted) return;
+            getAIMutate(url);
+          }}
+          buttonStyle="square"
+        >
+          <img src={Send} />
+        </Button>
+      </S.URL>
+      <HelperText>
+        {isGeneratingAI
+          ? "AI 답변 생성은 최대 1분 소요될 수 있습니다. 다른 폼들을 채워주시면 얼른 가져다드리겠습니다 💌 (❁´◡`❁)"
+          : errors.url?.message}
+      </HelperText>
       <InputField
         label="공구 제목"
         styleType="post"
         placeholder="공구 제목을 입력해주세요"
-        disabled={isDisabled("title")}
+        disabled={isGeneratingAI}
         {...register("title")}
-        value={watch("title")}
-        helperText={!isDisabled && errors.title?.message}
+        value={isGeneratingAI ? "AI 답변 생성중..." : watch("title")}
+        helperText={!isGeneratingAI && errors.title?.message}
       />
       <InputField
         label="상품 이름"
         styleType="post"
         placeholder="상품 이름을 입력해주세요"
-        disabled={isDisabled("name")}
+        disabled={isGeneratingAI}
         {...register("name")}
-        value={watch("name")}
-        helperText={!isDisabled && errors.name?.message}
+        value={isGeneratingAI ? "AI 답변 생성중..." : watch("name")}
+        helperText={!isGeneratingAI && errors.name?.message}
       />
 
       <S.Label>계좌번호</S.Label>
@@ -102,8 +152,8 @@ const PostForm = ({
         placeholder="가격을 입력해주세요"
         prefix="₩"
         maxDigits={9}
-        disabled={isDisabled("price")}
-        helperText={!isDisabled ? errors.price : undefined}
+        disabled={isDisabled("price") || isGeneratingAI}
+        helperText={!isDisabled && !isGeneratingAI ? errors.price : undefined}
       />
 
       <UnitAmountSelector
@@ -118,9 +168,9 @@ const PostForm = ({
         label="자세한 설명"
         placeholder="공구방에 올릴 게시글 내용을 작성해주세요."
         {...register("description")}
-        disabled={isDisabled("description")}
-        helperText={!isDisabled ? errors.description?.message : undefined}
-        value={watch("description")}
+        disabled={isGeneratingAI}
+        helperText={!isGeneratingAI ? errors.description?.message : undefined}
+        value={isGeneratingAI ? "AI 답변 생성중..." : watch("description")}
       />
 
       <Controller
@@ -156,7 +206,7 @@ const PostForm = ({
         <InputField
           label="픽업일자 변경 사유"
           styleType="post"
-          placeholder="픽업일자 변경 사유를 작성해주세요."
+          placeholder="픽업일 변경 사유를 작성해주세요."
           {...register("dateModificationReason")}
           helperText={errors.dateModificationReason?.message}
         />
@@ -167,7 +217,12 @@ const PostForm = ({
       )}
 
       <S.ButtonWrapper>
-        <Button type="submit" disabled={isDisabled("submitButton")}>
+        <Button
+          type="submit"
+          disabled={
+            imageUrls.length === 0 || !isValid || isDisabled("submitButton")
+          }
+        >
           {submitButtonText}
         </Button>
       </S.ButtonWrapper>

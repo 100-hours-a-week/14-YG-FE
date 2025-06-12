@@ -5,7 +5,18 @@ export const PostForm = styled.form`
   display: flex;
   flex-direction: column;
   gap: 15px;
-  margin-top: 15px;
+`;
+
+export const URL = styled.div`
+  display: flex;
+  align-items: end;
+  gap: 8px;
+  margin-bottom: -15px;
+
+  > button {
+    width: 75px;
+    height: 40px;
+  }
 `;
 
 export const Label = styled.label`

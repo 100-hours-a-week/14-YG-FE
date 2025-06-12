@@ -84,6 +84,8 @@ const PostDetail = () => {
     });
   };
 
+  console.log(post);
+
   const handleButtonClick = () => {
     if (!post) return;
 
@@ -135,7 +137,9 @@ const PostDetail = () => {
                 <S.PickupDate>
                   픽업 {formatDateTime(post.pickupDate)} / {post.location}
                 </S.PickupDate>
-                <S.unitPrice>{post.unitPrice.toLocaleString()}원</S.unitPrice>
+                <S.unitPrice>
+                  개당 {post.unitPrice.toLocaleString()}원
+                </S.unitPrice>
                 <S.unitAmount>(주문 단위: {post.unitAmount})</S.unitAmount>
               </S.ProductInfo>
               <S.OrderInfo>
@@ -165,7 +169,7 @@ const PostDetail = () => {
                       {post.postStatus === "OPEN"
                         ? `⏰ ${ddayText}`
                         : post.leftAmount === 0
-                          ? "🛒 품절! 수량이 모두 매진되었어요"
+                          ? "🛒 품절! 매진되었어요"
                           : "⏰ 마감기간이 지났어요"}
                     </S.Ddate>
                   </>
@@ -177,7 +181,7 @@ const PostDetail = () => {
                 <S.SectionName>상품 설명</S.SectionName>
                 <SectionLine />
               </S.SectionDivider>
-              <S.DetailInfo>{post.description}</S.DetailInfo>
+              <S.DetailInfo>{post.description.trimEnd()}</S.DetailInfo>
               <S.PostDate>{formatRelativeTime(post.createdAt)}</S.PostDate>
             </S.DetailPart>
           </S.PostInfo>

@@ -2,11 +2,11 @@ import { useMutation } from "@tanstack/react-query";
 import { getAI } from "../../../api/host";
 import { AIResponse } from "../../../types/hostType";
 import { UseFormSetValue } from "react-hook-form";
-import { PostFormData } from "../../../schemas/writePostSchema";
 import { AxiosError } from "axios";
+import { EditPostFormData } from "../../../schemas/editPostSchema";
 
 export const useGetAIMutation = (
-  setValue: UseFormSetValue<PostFormData>, // ✅ 타입 안전하게 정의
+  setValue: UseFormSetValue<EditPostFormData>, // ✅ 타입 안전하게 정의
   setIsAISubmitted: (v: boolean) => void
 ) => {
   return useMutation<AIResponse, Error, string>({

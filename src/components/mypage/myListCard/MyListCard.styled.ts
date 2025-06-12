@@ -23,9 +23,9 @@ export const CardInfo = styled.div`
   min-width: 0; // 💡 텍스트 줄바꿈/말줄임과 flex-item 크기 충돌 방지
 `;
 
-export const OrderState = styled.p`
-  ${FontStyles.XXS_SemiBold};
-  color: ${Colors.Grayscale80};
+export const OrderState = styled.p<{ $status: boolean }>`
+  ${FontStyles.XS_Bold};
+  color: ${({ $status }) => ($status ? Colors.Main30 : Colors.Grayscale80)};
 `;
 
 export const ProductInfo = styled.div`

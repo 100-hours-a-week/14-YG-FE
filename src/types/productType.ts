@@ -87,7 +87,7 @@ export interface EditPostRequest {
   description: string;
   hostQuantity: number;
   dueDate: string;
-  pickupDate: string;
+  pickupDate?: string;
   dateModificationReason?: string;
   imageKeys: string[];
 }
