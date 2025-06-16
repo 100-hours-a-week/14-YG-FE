@@ -14,7 +14,7 @@ import { useLoginMutation } from "../../../../hooks/mutations/user/useLoginMutat
 const LoginModal = () => {
   const navigate = useNavigate();
   const closeModal = useModalStore((s) => s.closeModal);
-  const { mutate: loginMutate } = useLoginMutation();
+  const { mutate: loginMutate, isPending } = useLoginMutation();
 
   const {
     register,
@@ -57,7 +57,9 @@ const LoginModal = () => {
             {...register("password")}
             helperText={errors.password?.message}
           />
-          <Button type="submit">로그인</Button>
+          <Button type="submit" disabled={isPending}>
+            {isPending ? "확인중입니다..." : "로그인"}
+          </Button>
         </S.LoginForm>
         <S.NaviSignup onClick={handleSignupClick}>회원가입</S.NaviSignup>
       </S.Container>
