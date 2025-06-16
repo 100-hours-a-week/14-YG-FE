@@ -8,12 +8,8 @@ import { usePrevChatQuery } from "../../hooks/queries/useChatQuery";
 const ChatRoom = () => {
   const { chatRoomId } = useParams();
   //const setTitle = useChatRoomStore((s) => s.setTitle);
-  const { mutate: sendMessage, isPending } = useSendMessageMutation(
-    Number(chatRoomId)
-  );
-  const { data: prevMessages, isLoading } = usePrevChatQuery(
-    Number(chatRoomId)
-  );
+  const { mutate: sendMessage } = useSendMessageMutation(Number(chatRoomId));
+  const { data: prevMessages } = usePrevChatQuery(Number(chatRoomId));
   const [message, setMessage] = useState("");
 
   console.log(prevMessages);
