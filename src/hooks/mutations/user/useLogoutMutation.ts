@@ -13,7 +13,7 @@ export const useLogoutMutation = () => {
     onSuccess: (data) => {
       alert(data.message);
       clearUser();
-      queryClient.clear();
+      queryClient.removeQueries({ queryKey: ["myInfo"] });
       navigate("/");
     },
     onError: (error) => {

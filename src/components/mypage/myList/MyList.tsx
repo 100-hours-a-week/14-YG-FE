@@ -8,7 +8,7 @@ import {
   useHostList,
   useLikedList,
   useOrderList,
-} from "../../../hooks/queries/useMyList";
+} from "../../../hooks/queries/useMyListQuery";
 import { useNavigate } from "react-router-dom";
 
 const statusMap = {

@@ -36,6 +36,7 @@ const Profile = ({ type, postId, user, isParticipant }: ProfileProps) => {
   const queryClient = useQueryClient();
 
   console.log(user);
+  console.log(hostAccount);
 
   const handleImageChange = async (_url: string, file: File) => {
     try {
@@ -106,28 +107,28 @@ const Profile = ({ type, postId, user, isParticipant }: ProfileProps) => {
           </>
         )}
         <S.AccountInfo $type={type}>
-          {isError && isParticipant ? (
-            "계좌 조회가 불가합니다. 관리자에게 문의해주세요."
-          ) : (
-            <>
-              {type === "post"
-                ? "주최자 계좌번호 : "
-                : `${user.accountBank} ${user.accountNumber}`}
-              {type === "post" && !hostAccount ? (
+          {type === "post" ? (
+            isParticipant && isError ? (
+              "계좌 조회가 불가합니다. 관리자에게 문의해주세요."
+            ) : !hostAccount ? (
+              <>
+                주최자 계좌번호 :
                 <S.SecretBox>
                   <S.Ment>주문 후 확인가능합니다</S.Ment>
                 </S.SecretBox>
-              ) : (
-                <>
-                  {hostAccount?.accountBank} {hostAccount?.accountNumber}
-                  {type !== "mypage" && (
-                    <S.CopyButton onClick={handleCopy} disabled={isDisabled}>
-                      복사
-                    </S.CopyButton>
-                  )}
-                </>
-              )}
-            </>
+              </>
+            ) : (
+              <>
+                주최자 계좌번호 : {hostAccount.accountBank}{" "}
+                {hostAccount.accountNumber}
+                <S.CopyButton onClick={handleCopy} disabled={isDisabled}>
+                  복사
+                </S.CopyButton>
+              </>
+            )
+          ) : (
+            // mypage일 때
+            `${user.accountBank} ${user.accountNumber}`
           )}
         </S.AccountInfo>
       </S.ProfileInfo>

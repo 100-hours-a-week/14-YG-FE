@@ -49,6 +49,7 @@ export const getAccount = async (postId: number) => {
       return res.data.data; // 백엔드 응답 구조에 따라 수정
     }
   } catch (error) {
-    console.error("공동구매 리스트 조회 실패:", error);
+    console.error("주최자 계좌 조회 실패:", error);
+    return null;
   }
 };

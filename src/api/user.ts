@@ -204,7 +204,7 @@ export const getRefreshToken = async () => {
 export const patchProfileImg = async (image: string) => {
   try {
     const res = await api.patch("/api/users/profile/image", {
-      imageUrl: image,
+      imageKey: image,
     });
 
     if (res.data) {
