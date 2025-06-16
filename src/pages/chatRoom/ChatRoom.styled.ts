@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { Colors, FontStyles } from "../../styles";
-import SendButton from "../../assets/icons/send.svg?react";
+import SendButton from "../../assets/icons/Send.svg?react";
 
 export const Container = styled.div`
   display: flex;
