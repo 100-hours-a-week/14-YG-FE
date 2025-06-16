@@ -16,6 +16,15 @@ const LoginModal = () => {
   const closeModal = useModalStore((s) => s.closeModal);
   const { mutate: loginMutate, isPending } = useLoginMutation();
 
+  const handleKakaoLogin = () => {
+    const kakaoRestKey = import.meta.env.VITE_KAKAO_REST_KEY;
+    const redirectUri = import.meta.env.VITE_KAKAO_REDIRECT_URI;
+    const kauthUrl = `https://kauth.kakao.com/oauth/authorize?client_id=${kakaoRestKey}&redirect_uri=${redirectUri}&response_type=code`;
+
+    // 카카오 로그인 페이지로 이동
+    window.location.href = kauthUrl;
+  };
+
   const {
     register,
     handleSubmit,
@@ -61,6 +70,10 @@ const LoginModal = () => {
             {isPending ? "확인중입니다..." : "로그인"}
           </Button>
         </S.LoginForm>
+        <S.KakaoLoginButton onClick={handleKakaoLogin}>
+          <S.KakaoLogo />
+          카카오로 바로 시작하기
+        </S.KakaoLoginButton>
         <S.NaviSignup onClick={handleSignupClick}>회원가입</S.NaviSignup>
       </S.Container>
     </Modal>

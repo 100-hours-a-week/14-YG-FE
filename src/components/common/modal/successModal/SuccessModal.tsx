@@ -6,19 +6,31 @@ import { Button } from "../../button/Button.styled";
 import { OrderResponse } from "../../../../types/orderType";
 import { useEffect, useRef, useState } from "react";
 import { useToastStore } from "../../../../stores/useToastStore";
+import { useOrderDetailQuery } from "../../../../hooks/queries/useOrderDetailQuery";
 
-const SuccessModal = () => {
+interface SuccessModalProps {
+  postId?: number;
+}
+
+const SuccessModal = ({ postId }: SuccessModalProps) => {
   const closeModal = useModalStore((s) => s.closeModal);
-  const orderInfo = useModalStore((s) => s.payload) as OrderResponse;
+  const storeOrderInfo = useModalStore((s) => s.payload) as
+    | OrderResponse
+    | undefined;
   const [accountWidth, setAccountWidth] = useState<number>(0);
   const accountRef = useRef<HTMLDivElement>(null);
   const { showToast } = useToastStore();
+  const { data: orderDetail } = useOrderDetailQuery(Number(postId));
+
+  const orderInfo = orderDetail ?? storeOrderInfo;
 
   useEffect(() => {
     if (accountRef.current) {
       setAccountWidth(accountRef.current.offsetWidth);
     }
   }, []);
+
+  if (!orderInfo) return null;
 
   const handleCopy = () => {
     if (!orderInfo) return;

@@ -125,3 +125,26 @@ export const getHostList = async (params?: GetMyListParams) => {
     throw error;
   }
 };
+
+/**
+ * 참여자 입금 상태 변경
+ * @param postId
+ * @param data
+ * @returns
+ */
+
+export const patchOrderStatus = async (postId: number, status: string) => {
+  try {
+    const res = await api.patch(`/api/group-buys/${postId}`, {
+      status: status,
+    });
+    return res.data;
+  } catch (error: unknown) {
+    if (axios.isAxiosError(error)) {
+      console.error("수정 실패:", error.response?.data || error.message);
+    } else {
+      console.error("수정 실패: 알 수 없는 에러", error);
+    }
+    throw error;
+  }
+};
