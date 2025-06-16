@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Controller, useFormContext, useWatch } from "react-hook-form";
 import * as S from "./UnitAmountSelector.styled";
 import Dropdown from "../../common/input/dropdown/Dropdown";
@@ -21,9 +21,6 @@ const UnitAmountSelector = ({
     setValue,
     formState: { errors },
   } = useFormContext();
-
-  const isDisabled = (field: "totalAmount" | "unitAmount" | "hostQuantity") =>
-    disabledFields?.includes(field);
 
   const totalAmount = useWatch({ name: "totalAmount" });
   const unitAmount = useWatch({ name: "unitAmount" });
@@ -72,6 +69,12 @@ const UnitAmountSelector = ({
       setValue("hostQuantity", unitNum);
     }
   }, [unitAmount, setValue]);
+
+  const isDisabled = useCallback(
+    (field: "totalAmount" | "unitAmount" | "hostQuantity") =>
+      disabledFields?.includes(field),
+    [disabledFields]
+  );
 
   useEffect(() => {
     if (mode !== "write") return; // ✅ edit 모드일 땐 아무 것도 하지 않음

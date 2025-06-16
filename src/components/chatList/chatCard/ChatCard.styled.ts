@@ -1,6 +1,14 @@
 import styled from "styled-components";
 import { Colors, FontStyles } from "../../../styles";
 
+export const CommonSection = styled.div`
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  cursor: pointer;
+  margin: 20px;
+`;
+
 export const Title = styled.p`
   ${FontStyles.MD2_SemiBold};
 `;

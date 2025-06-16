@@ -17,6 +17,7 @@ export const useOrderMutation = (postId: number) => {
       queryClient.invalidateQueries({
         queryKey: ["postDetail", postId],
       });
+      queryClient.invalidateQueries({ queryKey: ["hostAccount", postId] });
 
       closeModal();
       openModal("success", data);

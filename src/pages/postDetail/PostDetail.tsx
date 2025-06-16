@@ -24,7 +24,7 @@ const PostDetail = () => {
     isError,
     refetch,
   } = useProductDetail(Number(postId));
-  const { mutate: cancelOrder } = useCancelOrderMutation();
+  const { mutate: cancelOrder } = useCancelOrderMutation(Number(postId));
 
   const [ddayText, setDdayText] = useState<string>("");
 
@@ -79,7 +79,7 @@ const PostDetail = () => {
       confirmText: "참여취소",
       cancelText: "돌아가기",
       onConfirm: () => {
-        if (post) cancelOrder(post.postId);
+        if (post) cancelOrder();
       },
     });
   };

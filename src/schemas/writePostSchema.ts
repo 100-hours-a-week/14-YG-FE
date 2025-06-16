@@ -48,7 +48,7 @@ export const writePostSchema = z.object({
       errorMap: () => ({ message: "숫자만 입력 가능합니다." }),
     })
     .int("정수만 입력 가능합니다.")
-    .min(1, "개당 가격을 입력해 주세요.")
+    .min(1, "상품 전체 가격을 입력해 주세요.")
     .max(999_999_999, "더이상 입력할 수 없습니다."),
 
   description: z
