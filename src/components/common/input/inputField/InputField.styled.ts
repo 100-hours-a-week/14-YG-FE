@@ -8,7 +8,7 @@ export const InputFieldContainer = styled.div`
 `;
 
 export const InputLabel = styled.label<{
-  $styleType?: "signup" | "post" | "login";
+  $styleType?: "signup" | "post" | "login" | "checkAccount";
 }>`
   ${({ $styleType }) =>
     $styleType === "signup" ? FontStyles.SM_Regular : FontStyles.MD2_Bold}
@@ -39,7 +39,7 @@ export const Suffix = styled.span`
 export const InputBox = styled.input<{
   $prefix?: React.ReactNode;
   $suffix?: React.ReactNode;
-  $styleType?: "signup" | "post" | "login";
+  $styleType?: "signup" | "post" | "login" | "checkAccount";
 }>`
   width: 100%;
   border-radius: 8px;
@@ -77,6 +77,29 @@ export const InputBox = styled.input<{
     -webkit-box-shadow: 0 0 0px 1000px white inset;
     -webkit-text-fill-color: ${Colors.Grayscale60}; /* 텍스트 색도 지정해줘야 함 */
     transition: background-color 5000s ease-in-out 0s; /* 딜레이로 무효화 */
+  }
+`;
+
+export const CheckAccountInputBox = styled(InputBox)`
+  padding: 10px;
+  border: none;
+  border-radius: 0;
+  border-bottom: 1px solid ${Colors.Grayscale50};
+
+  &:hover {
+    border: none;
+    border-bottom: 1px solid ${Colors.Grayscale60};
+  }
+
+  &:focus {
+    border: none;
+    border-bottom: 1px solid ${Colors.Grayscale60};
+  }
+
+  &:disabled {
+    background-color: transparent;
+    border: none;
+    border-bottom: 1px solid ${Colors.Grayscale40};
   }
 `;
 
