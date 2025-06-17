@@ -3,7 +3,7 @@ import * as S from "./InputField.styled";
 
 type InputFieldProps = {
   label?: string;
-  styleType?: "signup" | "post" | "login";
+  styleType?: "signup" | "post" | "login" | "checkAccount";
   placeholder?: string;
   helperText?: React.ReactNode;
   type?: string;
@@ -25,18 +25,22 @@ const InputField = forwardRef<HTMLInputElement, InputFieldProps>(
     },
     ref
   ) => {
+    const InputComponent =
+      styleType === "checkAccount" ? S.CheckAccountInputBox : S.InputBox;
+
     return (
       <S.InputFieldContainer>
         {label && <S.InputLabel $styleType={styleType}>{label}</S.InputLabel>}
         <S.InputWrapper>
           {prefix && <S.Prefix>{prefix}</S.Prefix>}
-          <S.InputBox
+          <InputComponent
             $styleType={styleType}
-            ref={ref} // ✅ ref 연결됨!
+            ref={ref}
             type={type}
             placeholder={placeholder}
             {...rest}
             $prefix={prefix}
+            $suffix={suffix}
           />
           {suffix && <S.Suffix>{suffix}</S.Suffix>}
         </S.InputWrapper>

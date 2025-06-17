@@ -34,10 +34,11 @@ const customStyles: StylesConfig<Option, false> = {
   }),
   control: (provided) => ({
     ...provided,
-    borderRadius: "8px",
-    border: `1px solid ${Colors.Grayscale50}`,
+    borderRadius: "0px",
+    border: "none",
+    borderBottom: `1px solid ${Colors.Grayscale50}`,
     height: "40px",
-    padding: "0 4px",
+    //padding: "0 4px",
     boxShadow: "none",
     ":hover": {
       borderColor: Colors.Grayscale60,

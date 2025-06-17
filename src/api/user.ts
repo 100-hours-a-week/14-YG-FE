@@ -93,7 +93,7 @@ export const confirmAccount = async (params?: ConfirmAccountParams) => {
     });
 
     if (res.data) {
-      return res.data;
+      return res.data.message;
     } else {
       throw new Error("응답에 data가 없습니다");
     }
