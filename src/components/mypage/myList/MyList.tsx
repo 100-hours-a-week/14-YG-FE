@@ -75,7 +75,13 @@ const MyList = ({ activeTab }: MyListProps) => {
                 return (
                   <>
                     <S.TopButton>
-                      <S.WhiteButton>주문 상세</S.WhiteButton>
+                      <S.WhiteButton
+                        onClick={() =>
+                          openModal("success", { postId: item.postId })
+                        }
+                      >
+                        주문 상세
+                      </S.WhiteButton>
                       <S.WhiteButton>채팅방 이동</S.WhiteButton>
                     </S.TopButton>
                   </>

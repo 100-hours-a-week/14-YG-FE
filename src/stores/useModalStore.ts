@@ -1,5 +1,4 @@
 import { create } from "zustand";
-import { OrderResponse } from "../types/orderType";
 
 export type ModalType = "login" | "confirm" | "order" | "success" | "host";
 
@@ -15,7 +14,7 @@ export type ConfirmPayload = {
 
 export type ModalPayloadMap = {
   confirm: ConfirmPayload;
-  success: OrderResponse;
+  success: { postId: number };
   login: undefined;
   order: undefined;
   host: undefined;
@@ -24,7 +23,7 @@ export type ModalPayloadMap = {
 
 interface ModalState {
   openedModal: ModalType | null;
-  payload?: ConfirmPayload | OrderResponse;
+  payload?: ModalPayloadMap[ModalType];
 
   openModal: <T extends ModalType>(
     type: T,

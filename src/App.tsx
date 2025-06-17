@@ -22,6 +22,7 @@ const App = () => {
   const { pathname } = useLocation();
   const user = useUserStore((s) => s.user);
   const openedModal = useModalStore((s) => s.openedModal);
+  const payload = useModalStore((s) => s.payload);
   const openModal = useModalStore((s) => s.openModal);
   const isModalOpen = Boolean(openedModal);
   const { data, isLoading } = useMyInfoQuery();
@@ -58,7 +59,9 @@ const App = () => {
         {openedModal === "login" && <LoginModal />}
         {openedModal === "confirm" && <ConfirmModal />}
         {openedModal === "order" && user && <OrderModal />}
-        {openedModal === "success" && <SuccessModal />}
+        {openedModal === "success" && (
+          <SuccessModal postId={(payload as { postId: number })?.postId} />
+        )}
         {openedModal === "host" && <HostModal />}
         <Toast />
       </S.MainContainer>

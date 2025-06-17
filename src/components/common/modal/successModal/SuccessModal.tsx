@@ -3,26 +3,20 @@ import Modal from "../Modal";
 import * as S from "./SuccessModal.styled";
 import Box from "../../../../assets/images/Box.png";
 import { Button } from "../../button/Button.styled";
-import { OrderResponse } from "../../../../types/orderType";
 import { useEffect, useRef, useState } from "react";
 import { useToastStore } from "../../../../stores/useToastStore";
 import { useOrderDetailQuery } from "../../../../hooks/queries/useOrderDetailQuery";
 
 interface SuccessModalProps {
-  postId?: number;
+  postId: number;
 }
 
 const SuccessModal = ({ postId }: SuccessModalProps) => {
   const closeModal = useModalStore((s) => s.closeModal);
-  const storeOrderInfo = useModalStore((s) => s.payload) as
-    | OrderResponse
-    | undefined;
   const [accountWidth, setAccountWidth] = useState<number>(0);
   const accountRef = useRef<HTMLDivElement>(null);
   const { showToast } = useToastStore();
-  const { data: orderDetail } = useOrderDetailQuery(Number(postId));
-
-  const orderInfo = orderDetail ?? storeOrderInfo;
+  const { data: orderInfo } = useOrderDetailQuery(Number(postId));
 
   useEffect(() => {
     if (accountRef.current) {
