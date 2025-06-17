@@ -47,6 +47,31 @@ export const deleteOrder = async (postId: number) => {
 };
 
 /**
+ * 주문 상세 조회
+ * @param data
+ * @returns
+ */
+
+export const getOrderDetail = async (postId: number) => {
+  try {
+    const res = await api.get(`/api/orders/${postId}`);
+
+    if (res.data) {
+      return res.data.data;
+    } else {
+      throw new Error("응답에 data가 없습니다");
+    }
+  } catch (error) {
+    console.log(error);
+    // AxiosError 자체를 throw해야 useMutation에서 status 분기가 가능
+    if (error instanceof AxiosError) {
+      throw error;
+    }
+    throw new Error("주문 조회 중 알 수 없는 오류가 발생했습니다.");
+  }
+};
+
+/**
  * 참여목록 조회
  * @returns
  */
