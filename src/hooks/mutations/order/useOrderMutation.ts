@@ -18,9 +18,10 @@ export const useOrderMutation = (postId: number) => {
         queryKey: ["postDetail", postId],
       });
       queryClient.invalidateQueries({ queryKey: ["hostAccount", postId] });
-
+      queryClient.setQueryData(["orderDetail", postId], data);
       closeModal();
-      openModal("success", data);
+      openModal("success", { postId: postId });
+      console.log(postId);
     },
     onError: (error) => {
       if (error instanceof AxiosError) {
