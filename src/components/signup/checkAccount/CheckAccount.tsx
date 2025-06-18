@@ -10,7 +10,7 @@ import Dropdown from "../../common/input/dropdown/Dropdown";
 import { BANK_OPTIONS } from "../../../constants";
 import InputField from "../../common/input/inputField/InputField";
 import { ConfirmAccountParams } from "../../../types/userType";
-import { useCheckAccountQuery } from "../../../hooks/queries/useCheckAccountQuery";
+import { useCheckAccountMutation } from "../../../hooks/mutations/user/useCheckAccountMutation";
 
 const CheckAccount = () => {
   const {
@@ -24,7 +24,7 @@ const CheckAccount = () => {
     mode: "onChange",
     shouldUnregister: true,
   });
-  const { data: checkingAccount } = useCheckAccountQuery();
+  const { mutate: checkingAccount } = useCheckAccountMutation();
 
   const onSubmit = (data: CheckAccountFormData) => {
     const params: ConfirmAccountParams = {
@@ -34,6 +34,7 @@ const CheckAccount = () => {
           ?.label ?? "",
     };
     checkingAccount(params);
+    console.log(params);
   };
 
   return (
@@ -42,7 +43,7 @@ const CheckAccount = () => {
         <S.StyledIcon src={AccountIcon} />
         계좌 본인인증
       </S.Top>
-      <S.Form onSubmit={handleSubmit(onSubmit)}>
+      <S.FormWrapper>
         <InputField
           styleType="checkAccount"
           placeholder="실명 입력"
@@ -68,10 +69,14 @@ const CheckAccount = () => {
           {...register("accountNumber")}
           helperText={errors.accountNumber?.message}
         />
-        <S.Button type="submit" disabled={!isValid}>
+        <S.Button
+          type="button"
+          onClick={handleSubmit(onSubmit)}
+          disabled={!isValid}
+        >
           인증하기
         </S.Button>
-      </S.Form>
+      </S.FormWrapper>
     </S.Container>
   );
 };
