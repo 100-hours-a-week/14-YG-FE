@@ -19,7 +19,7 @@ export const Top = styled.div`
   gap: 5px;
 `;
 
-export const Form = styled.form`
+export const FormWrapper = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
