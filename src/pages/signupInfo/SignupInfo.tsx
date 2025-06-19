@@ -6,7 +6,6 @@ import {
   SignupInfoFormData,
   signupInfoSchema,
 } from "../../schemas/signupInfoSchema";
-import InputField from "../../components/common/input/inputField/InputField";
 import AgreeCheckBox from "../../components/common/agreeCheckbox/AgreeCheckBox";
 import { SignupRequestData } from "../../api/user";
 import { useNicknameCheckMutation } from "../../hooks/mutations/user/useNicknameCheckMutation";
@@ -14,11 +13,12 @@ import { useEffect, useState } from "react";
 import { BANK_OPTIONS } from "../../constants";
 import { useSignupMutation } from "../../hooks/mutations/user/useSignupMutation";
 import { useNavigate } from "react-router-dom";
-import CheckAccount from "../../components/signup/checkAccount/CheckAccount";
+import InfoForm from "../../components/signup/infoForm/InfoForm";
 
 const Signup = () => {
   const [isNicknameChecked, setIsNicknameChecked] = useState(false);
   const [isNicknameDuplicated, setIsNicknameDuplicated] = useState(false);
+  const [isAccountVerified, setIsAccountVerified] = useState(false);
   const { mutate: signup, isPending: waitingSignup } = useSignupMutation();
   const { mutate: checkNickname, isPending: checkingNickname } =
     useNicknameCheckMutation({
@@ -57,9 +57,8 @@ const Signup = () => {
     isNicknameChecked &&
     watch("name") &&
     watch("phoneNumber") &&
-    watch("accountBank") &&
-    watch("accountNumber") &&
-    watch("agree") === true;
+    watch("agree") === true &&
+    isAccountVerified;
 
   const handleClick = () => {
     checkNickname(nickname);
@@ -105,40 +104,17 @@ const Signup = () => {
         부정확한 경우 환불이 제한될 수 있습니다.
       </S.SectionInfo>
       <S.SignupForm onSubmit={handleSubmit(onSubmit)}>
-        <InputField
-          label="닉네임"
-          placeholder="사용할 닉네임 입력"
-          {...register("nickname")}
-          helperText={
-            errors.nickname?.message ||
-            (isNicknameDuplicated
-              ? "이미 사용 중인 닉네임입니다. 다시 입력해주세요."
-              : !isNicknameChecked && nickname.length >= 2
-                ? "닉네임 중복 확인을 해주세요"
-                : checkingNickname
-                  ? "닉네임 중복 확인 중입니다..."
-                  : "")
-          }
-          suffix={
-            !checkingNickname &&
-            !isNicknameChecked && ( // ✅ 중복 확인 완료되면 버튼 숨김
-              <S.ConfirmButton
-                type="button"
-                onClick={handleClick}
-                disabled={!isNicknameValid}
-              >
-                중복 확인
-              </S.ConfirmButton>
-            )
-          }
+        <InfoForm
+          register={register}
+          errors={errors}
+          nickname={nickname}
+          isNicknameValid={isNicknameValid}
+          isNicknameChecked={isNicknameChecked}
+          isNicknameDuplicated={isNicknameDuplicated}
+          checkingNickname={checkingNickname}
+          onCheckNickname={handleClick}
+          setIsAccountVerified={setIsAccountVerified}
         />
-        <InputField
-          label="전화번호"
-          placeholder="사용할 전화번호 입력"
-          {...register("phoneNumber")}
-          helperText={errors?.phoneNumber?.message}
-        />
-        <CheckAccount />
         <AgreeCheckBox
           label="개인정보 수집 동의"
           message="동의"

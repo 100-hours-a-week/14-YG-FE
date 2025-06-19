@@ -8,8 +8,10 @@ import FilteringTab from "../../components/mypage/filteringTab/FilteringTab";
 import { useState } from "react";
 import { Button } from "../../components/common/button/Button.styled";
 import MyList from "../../components/mypage/myList/MyList";
+import { useNavigate } from "react-router-dom";
 
 const Mypage = () => {
+  const navigate = useNavigate();
   const { mutate: deleteUser } = useDeleteUserMutation();
   const { data: user, isLoading } = useMyInfoQuery();
   const openModal = useModalStore((s) => s.openModal);
@@ -37,7 +39,9 @@ const Mypage = () => {
       <S.PageName>마이페이지</S.PageName>
       <S.ProfileSection>
         {user && <Profile type="mypage" user={user} />}
-        <Button>프로필 수정하기</Button>
+        <Button onClick={() => navigate("/editProfile")}>
+          프로필 수정하기
+        </Button>
       </S.ProfileSection>
       <FilteringTab
         options={tabOptions.slice()}

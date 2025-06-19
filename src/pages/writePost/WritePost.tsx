@@ -27,7 +27,6 @@ const WritePost = () => {
 
   const handleFormSubmit = async (data: PostFormData) => {
     try {
-      console.log(imageFiles);
       const imageKeys = await uploadImage(imageFiles);
       const { imageUrls, ...rest } = data;
       void imageUrls;

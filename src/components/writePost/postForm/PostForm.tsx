@@ -56,8 +56,6 @@ const PostForm = ({
   const user = useUserStore((s) => s.user);
   const isDisabled = (field: FieldKey) => disabledFields?.includes(field);
   const imageUrls = watch("imageUrls") ?? [];
-  console.log(imageUrls);
-
   const {
     mutate: getAIMutate,
     isSuccess,

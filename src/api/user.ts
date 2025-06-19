@@ -1,7 +1,11 @@
 import axios, { AxiosError } from "axios";
 import { LoginFormData } from "../schemas/loginSchema";
 import api from "./instance";
-import { ConfirmAccountParams, GetMyListParams } from "../types/userType";
+import {
+  ConfirmAccountParams,
+  EditProfileRequest,
+  GetMyListParams,
+} from "../types/userType";
 
 export interface SignupRequestData {
   email: string;
@@ -88,8 +92,8 @@ export const confirmNickname = async (nickname: string) => {
  */
 export const confirmAccount = async (params?: ConfirmAccountParams) => {
   try {
-    const res = await api.get("/api/users/check-account", {
-      params: { params },
+    const res = await api.get("/api/users/check/account", {
+      params,
     });
 
     if (res.data) {
@@ -123,6 +127,27 @@ export const login = async (data: LoginFormData) => {
     }
   } catch (error) {
     console.error("로그인 실패:", error);
+    throw error; // 🔥 다시 던지기!
+  }
+};
+
+/**
+ * 카카오로그인
+ * @param email
+ * @param password
+ * @returns 회원정보
+ */
+export const kakaoLogin = async () => {
+  try {
+    const res = await api.get("/api/oauth/kakao/callback/response");
+
+    if (res.data) {
+      return res.data;
+    } else {
+      throw new Error("응답에 data가 없습니다");
+    }
+  } catch (error) {
+    console.error("카카오로그인 실패:", error);
     throw error; // 🔥 다시 던지기!
   }
 };
@@ -174,6 +199,52 @@ export const getMyInfo = async () => {
         throw new Error("로그인이 만료되었습니다. 다시 로그인해주세요.");
       }
     }*/
+
+/**
+ * 기본정보 수정
+ * @returns
+ */
+
+export const editProfile = async (data: EditProfileRequest) => {
+  try {
+    const res = await api.patch("/api/users/profile", data);
+    return res.data.message;
+  } catch (error: unknown) {
+    if (axios.isAxiosError(error)) {
+      console.error(
+        "기본정보 수정 실패:",
+        error.response?.data || error.message
+      );
+    } else {
+      console.error("기본정보 수정 실패: 알 수 없는 에러", error);
+    }
+    throw error;
+  }
+};
+
+/**
+ * 비밀번호 수정
+ * @returns
+ */
+
+export const editPassword = async (password: string) => {
+  try {
+    const res = await api.patch("/api/users/profile/password", {
+      password: password,
+    });
+    return res.data.message;
+  } catch (error: unknown) {
+    if (axios.isAxiosError(error)) {
+      console.error(
+        "기본정보 수정 실패:",
+        error.response?.data || error.message
+      );
+    } else {
+      console.error("기본정보 수정 실패: 알 수 없는 에러", error);
+    }
+    throw error;
+  }
+};
 
 /**
  * 토큰 재발행
