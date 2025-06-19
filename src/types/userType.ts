@@ -44,3 +44,8 @@ export interface ConfirmAccountParams {
   accountBank?: string;
   accountNumber?: string;
 }
+
+export interface EditProfileRequest {
+  nickname?: string;
+  phoneNumber?: string;
+}

@@ -47,6 +47,5 @@ export const Button = styled.button`
     color: ${Colors.Grayscale60};
     background-color: ${Colors.Grayscale40};
     cursor: default;
-    display: none;
   }
 `;

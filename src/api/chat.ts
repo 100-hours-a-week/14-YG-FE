@@ -60,7 +60,7 @@ export const postMessage = async (chatRoomId: number, content: string) => {
   try {
     const res = await api.post(
       `/api/chats/participant/${chatRoomId}/messages`,
-      { content: content }
+      { messageContent: content }
     );
 
     if (res.data) {
@@ -92,7 +92,7 @@ export const getPrevMessage = async (chatRoomId: number, cursorId?: string) => {
     );
 
     if (res.data) {
-      return res.data;
+      return res.data.data;
     } else {
       throw new Error("응답에 data가 없습니다");
     }
