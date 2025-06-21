@@ -5,10 +5,12 @@ import SendButton from "../../assets/icons/Send.svg?react";
 export const Container = styled.div`
   display: flex;
   flex-direction: column;
+  height: 100vh;
 `;
 
 export const ChatPart = styled.div`
-  //flex: 1;
+  flex: 1;
+  overflow-y: auto;
 `;
 
 export const MessagePart = styled.div`
@@ -23,10 +25,13 @@ export const MessagePart = styled.div`
 export const MessageBox = styled.textarea`
   flex: 1;
   resize: none;
-  //border: none;
+  border: none;
+  outline: none;
   &::placeholder {
     ${FontStyles.SM_Medium};
   }
 `;
 
-export const StyledSendButton = styled(SendButton)``;
+export const StyledSendButton = styled(SendButton)`
+  cursor: pointer;
+`;

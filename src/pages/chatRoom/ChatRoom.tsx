@@ -5,6 +5,7 @@ import * as S from "./ChatRoom.styled";
 import { useState } from "react";
 import { usePrevChatQuery } from "../../hooks/queries/useChatQuery";
 import { useUserStore } from "../../stores/useUserStore";
+import ChatBox from "../../components/chat/ChatBox";
 
 const ChatRoom = () => {
   const { chatRoomId } = useParams();
@@ -15,8 +16,7 @@ const ChatRoom = () => {
   const [message, setMessage] = useState("");
   const user = useUserStore((s) => s.user);
 
-  console.log(prevMessages);
-
+  console.log("채팅 응답", prevMessages);
   if (!user) {
     alert("다시 로그인해주세요!");
     navigate("/");
@@ -29,7 +29,7 @@ const ChatRoom = () => {
     <S.Container>
       <S.ChatPart>
         {prevMessages?.chatMessageResponses.map((message) => (
-          <p key={message.messageId}>{message.messageContent}</p>
+          <ChatBox key={message.messageId} message={message} />
         ))}
       </S.ChatPart>
       <S.MessagePart>
