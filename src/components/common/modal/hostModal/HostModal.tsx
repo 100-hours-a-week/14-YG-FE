@@ -6,32 +6,20 @@ import { SectionLine } from "../../SectionLine.styled";
 import Modal from "../Modal";
 import * as S from "./HostModal.styled";
 import { Button } from "../../button/Button.styled";
-
-interface Participant {
-  nickname: string;
-  depositor: string;
-  phone: string;
-  quantity: number;
-  price: number;
-}
-
-const dummyParticipants: Participant[] = Array.from(
-  { length: 7 },
-  (_, idx) => ({
-    nickname: `Kane${idx + 1}`,
-    depositor: `박진주${idx + 1}`,
-    phone: `010-1234-56${70 + idx}`,
-    quantity: 4,
-    price: 20000,
-  })
-);
+import { usePartiListQuery } from "../../../../hooks/queries/usePartiListQuery";
 
 const HostModal = () => {
-  const closeModal = useModalStore((s) => s.closeModal);
-  const openModal = useModalStore((s) => s.openModal);
+  const { closeModal, openModal, payload } = useModalStore();
+  const postId = (payload as { postId: number })?.postId;
+  const { data: participants } = usePartiListQuery(Number(postId));
   const [isCheckedList, setIsCheckedList] = useState<boolean[]>(
-    Array(dummyParticipants.length).fill(false)
+    Array(participants?.length).fill(false)
   );
+  console.log(participants);
+
+  if (!participants) {
+    return null;
+  }
 
   const handleToggle = (index: number) => {
     setIsCheckedList((prev) => {
@@ -110,7 +98,7 @@ const HostModal = () => {
               <S.Tr>
                 <S.Th>닉네임</S.Th>
                 <S.Th>입금자명</S.Th>
-                <S.Th>전화번호</S.Th>
+                <S.Th>계좌번호</S.Th>
                 <S.Th>주문 수량</S.Th>
                 <S.Th>가격(원)</S.Th>
                 <S.Th>입금 상태</S.Th>
@@ -128,11 +116,11 @@ const HostModal = () => {
                 <col style={{ width: "14%" }} />
               </colgroup>
               <tbody>
-                {dummyParticipants.map((p, idx) => (
+                {participants?.map((p, idx) => (
                   <S.Tr key={idx}>
                     <S.Td>{p.nickname}</S.Td>
-                    <S.Td>{p.depositor}</S.Td>
-                    <S.Td>{p.phone}</S.Td>
+                    <S.Td>{p.name}</S.Td>
+                    <S.Td>{p.accountNumber}</S.Td>
                     <S.Td>{p.quantity}</S.Td>
                     <S.Td>{p.price.toLocaleString()}</S.Td>
                     <S.Td>
