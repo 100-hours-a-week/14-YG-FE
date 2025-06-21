@@ -17,7 +17,7 @@ export type ModalPayloadMap = {
   success: { postId: number };
   login: undefined;
   order: undefined;
-  host: undefined;
+  host: { postId: number };
   null: undefined;
 };
 

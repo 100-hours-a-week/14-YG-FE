@@ -87,7 +87,7 @@ const PostList = () => {
           공구중
         </S.SelectBox>
       </S.FilteringContainer>
-      <S.Count>{allPosts.length}개의 결과</S.Count>
+      <S.Count>{data?.pages[0].count}개의 결과</S.Count>
       <SectionLine />
       {isLoading ? (
         <Loading />

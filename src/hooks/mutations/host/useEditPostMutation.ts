@@ -1,4 +1,3 @@
-// useEditPostMutation.ts
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { editPost } from "../../../api/host";
 import { EditPostRequest } from "../../../types/productType";

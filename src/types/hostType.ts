@@ -10,3 +10,14 @@ export interface HostAccount {
   accountBank: string;
   accountNumber: string;
 }
+
+export interface OrderPartiData {
+  orderId: number;
+  nickname: string;
+  name: string;
+  accountName: string;
+  accountNumber: string;
+  price: number;
+  quantity: number;
+  status: string;
+}

@@ -10,6 +10,7 @@ import {
   useOrderList,
 } from "../../../hooks/queries/useMyListQuery";
 import { useNavigate } from "react-router-dom";
+import { useFinishPostMutation } from "../../../hooks/mutations/host/useFinishPostMutation";
 
 const statusMap = {
   공구중: "open",
@@ -27,6 +28,7 @@ const MyList = ({ activeTab }: MyListProps) => {
   const [status, setStatus] = useState<StatusKey>("공구중");
   const openModal = useModalStore((s) => s.openModal);
   const navigate = useNavigate();
+  const { mutate: finishPost } = useFinishPostMutation();
 
   // ✅ 이거 useMemo로 고정!
   const commonParams = useMemo(() => ({ sort: statusMap[status] }), [status]);
@@ -82,7 +84,17 @@ const MyList = ({ activeTab }: MyListProps) => {
                       >
                         주문 상세
                       </S.WhiteButton>
-                      <S.WhiteButton>채팅방 이동</S.WhiteButton>
+                      <S.WhiteButton
+                        onClick={() => {
+                          if (!item.chatRoomId) {
+                            alert("채팅방이 존재하지 않습니다.");
+                            return;
+                          }
+                          navigate(`/chat/${item.chatRoomId}`);
+                        }}
+                      >
+                        채팅방 이동
+                      </S.WhiteButton>
                     </S.TopButton>
                   </>
                 );
@@ -91,7 +103,11 @@ const MyList = ({ activeTab }: MyListProps) => {
                 return (
                   <>
                     <S.TopButton>
-                      <S.WhiteButton onClick={() => openModal("host")}>
+                      <S.WhiteButton
+                        onClick={() =>
+                          openModal("host", { postId: item.postId })
+                        }
+                      >
                         참여자 확인하기
                       </S.WhiteButton>
                       <S.WhiteButton
@@ -100,7 +116,9 @@ const MyList = ({ activeTab }: MyListProps) => {
                         공구글 수정
                       </S.WhiteButton>
                     </S.TopButton>
-                    <S.EndButton>공구 종료</S.EndButton>
+                    <S.EndButton onClick={() => finishPost(item.postId)}>
+                      공구 종료
+                    </S.EndButton>
                   </>
                 );
               }

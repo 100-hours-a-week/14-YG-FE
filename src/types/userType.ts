@@ -23,6 +23,7 @@ export interface MyListProps {
 
 export interface ListPostProps {
   postId: number;
+  chatRoomId?: number;
   title: string;
   postStatus: string;
   location: string;
