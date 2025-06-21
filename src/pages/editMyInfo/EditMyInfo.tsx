@@ -101,8 +101,6 @@ const EditMyInfo = () => {
       <C.SectionName>내 정보 수정</C.SectionName>
       <C.SignupForm onSubmit={handleSubmit(onSubmit)}>
         <InfoForm
-          register={register}
-          errors={errors}
           nickname={nickname}
           isNicknameValid={isNicknameValid}
           isNicknameChecked={isNicknameChecked}

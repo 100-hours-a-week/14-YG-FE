@@ -1,11 +1,6 @@
 import * as S from "./CheckAccount.styled";
 import AccountIcon from "../../../assets/images/CheckAccount.png";
-import { Controller, useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  CheckAccountFormData,
-  checkAccountSchema,
-} from "../../../schemas/checkAccountSchema";
+import { Controller, useFormContext } from "react-hook-form";
 import Dropdown from "../../common/input/dropdown/Dropdown";
 import { BANK_OPTIONS } from "../../../constants";
 import InputField from "../../common/input/inputField/InputField";
@@ -27,6 +22,7 @@ const CheckAccount = ({ onSuccess }: CheckAccountProps) => {
   const [isAccountChecked, setIsAccountChecked] = useState(false);
   const [isAuthError, setIsAuthError] = useState(false);
 
+  // ✅ 상위 useForm context 공유
   const {
     register,
     handleSubmit,
@@ -34,16 +30,12 @@ const CheckAccount = ({ onSuccess }: CheckAccountProps) => {
     formState: { errors, isValid },
     setValue,
     watch,
-  } = useForm({
-    resolver: zodResolver(checkAccountSchema),
-    mode: "onChange",
-    shouldUnregister: true,
-  });
+  } = useFormContext();
 
   const accountNumber = watch("accountNumber");
   const accountBank = watch("accountBank");
   const name = watch("name");
-  const { mutate: checkingAccount } = useCheckAccountMutation({
+  const { mutate: checkingAccount, isPending } = useCheckAccountMutation({
     onSuccess: (data) => {
       onSuccess(); // 인증 성공 시 콜백 실행
       console.log(data);
@@ -58,30 +50,25 @@ const CheckAccount = ({ onSuccess }: CheckAccountProps) => {
   });
 
   useEffect(() => {
-    if (!user) {
-      alert("다시 로그인해주세요!");
-      navigate("/");
-      return;
+    if (user) {
+      const matchedBank = BANK_OPTIONS.find(
+        (bank) => bank.label === user.accountBank
+      );
+      setValue("name", user.name);
+      setValue("accountBank", matchedBank || { label: "은행 선택", value: 0 });
+      setValue("accountNumber", user.accountNumber);
     }
-
-    const matchedBank = BANK_OPTIONS.find(
-      (bank) => bank.label === user.accountBank
-    );
-
-    setValue("name", user.name);
-    setValue("accountBank", matchedBank || { label: "은행 선택", value: 0 });
-    setValue("accountNumber", user.accountNumber);
   }, [user, setValue, navigate]);
 
-  const onSubmit = (data: CheckAccountFormData) => {
+  const onSubmit = () => {
     const params: ConfirmAccountParams = {
-      ...data,
+      name,
       accountBank:
-        BANK_OPTIONS.find((bank) => bank.value === data.accountBank?.value)
-          ?.label ?? "",
+        BANK_OPTIONS.find((bank) => bank.value === accountBank?.value)?.label ??
+        "",
+      accountNumber,
     };
     checkingAccount(params);
-    console.log(params);
   };
 
   useEffect(() => {
@@ -100,7 +87,7 @@ const CheckAccount = ({ onSuccess }: CheckAccountProps) => {
           styleType="checkAccount"
           placeholder="실명 입력"
           {...register("name")}
-          helperText={errors?.name?.message}
+          helperText={String(errors.name?.message ?? "")}
         />
         <Controller
           name="accountBank"
@@ -111,7 +98,7 @@ const CheckAccount = ({ onSuccess }: CheckAccountProps) => {
               {...field}
               value={field.value ?? null}
               placeholder="은행 선택"
-              helperText={errors.accountBank?.value?.message}
+              helperText={String(errors.accountBank?.message ?? "")}
             />
           )}
         />
@@ -119,15 +106,15 @@ const CheckAccount = ({ onSuccess }: CheckAccountProps) => {
           styleType="checkAccount"
           placeholder="사용할 계좌번호 입력"
           {...register("accountNumber")}
-          helperText={errors.accountNumber?.message}
+          helperText={String(errors.accountNumber?.message ?? "")}
         />
         {isValid && !isAccountChecked && (
           <S.Button
             type="button"
             onClick={handleSubmit(onSubmit)}
-            disabled={isAuthError}
+            disabled={isAuthError || isPending}
           >
-            인증하기
+            {isPending ? "확인중입니다..." : "인증하기"}
           </S.Button>
         )}
       </S.FormWrapper>
