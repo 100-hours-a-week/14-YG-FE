@@ -9,57 +9,54 @@ interface CursorParam {
 }
 
 export const useInfiniteGroupBuys = (baseParams: GetGroupBuysParams) => {
+  const { orderBy, category, openOnly, keyword } = baseParams;
+
   return useInfiniteQuery<
-    GroupBuyList, // 각 페이지의 데이터 타입
-    Error,
-    InfiniteData<GroupBuyList>,
-    [string, GetGroupBuysParams],
-    CursorParam
+    GroupBuyList, // 각 fetch에서 반환하는 페이지 단위 데이터
+    Error, // error 타입
+    InfiniteData<GroupBuyList>, // 최종 data 타입 (가공 없음)
+    [string, string, number | "all", boolean, string], // queryKey 타입
+    CursorParam // pageParam 타입
   >({
-    queryKey: ["groupBuyList-infinite", baseParams],
+    queryKey: [
+      "groupBuyList-infinite",
+      orderBy ?? "latest",
+      category ?? "all",
+      openOnly ?? false,
+      keyword ?? "",
+    ],
     queryFn: ({ pageParam }) => {
       const cursorParam = pageParam ?? {};
-      console.log(pageParam);
-      console.log("🚀 요청 params:", {
-        ...baseParams,
+      const params = {
+        orderBy,
+        ...(category ? { category } : {}),
+        ...(openOnly ? { openOnly: true } : {}),
+        ...(keyword ? { keyword } : {}),
         ...cursorParam,
         limit: 10,
-      });
+      };
 
-      return getGroupBuyList({
-        ...baseParams,
-        ...cursorParam,
-        limit: 10,
-      });
+      console.log("🚀 요청 params:", params);
+      return getGroupBuyList(params);
     },
     initialPageParam: {},
     getNextPageParam: (lastPage) => {
-      console.log(lastPage);
-      if (
-        !lastPage ||
-        typeof lastPage !== "object" ||
-        !("hasMore" in lastPage) ||
-        lastPage.hasMore === false
-      ) {
-        return undefined;
-      }
+      if (!lastPage?.hasMore) return undefined;
 
       const next: CursorParam = {
         cursorId: lastPage.nextCursor,
       };
 
-      if (
-        baseParams.orderBy === "price_asc" ||
-        baseParams.orderBy === "ending_soon"
-      ) {
-        next.cursorCreatedAt = lastPage.nextCreatedAt;
-      }
+      next.cursorCreatedAt = lastPage.nextCreatedAt;
 
-      if (baseParams.orderBy === "price_asc") {
+      if (orderBy === "price_asc") {
         next.cursorPrice = lastPage.nextCursorPrice;
       }
 
       return next;
     },
+    staleTime: 1000 * 60,
+    refetchOnMount: false,
+    refetchOnWindowFocus: false,
   });
 };
