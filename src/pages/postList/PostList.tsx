@@ -9,6 +9,7 @@ import EmptySection from "../../components/common/emptySection/EmptySection";
 import { useLocation, useParams } from "react-router-dom";
 import SadIcon from "../../assets/icons/Sad.svg?react";
 import { useInfiniteGroupBuys } from "../../hooks/queries/useInfiniteQuery";
+import { useQueryClient } from "@tanstack/react-query";
 
 const filterOptions = ["최신순", "가격 낮은 순", "마감 임박 순"] as const;
 type StatusKey = (typeof filterOptions)[number];
@@ -30,11 +31,19 @@ const PostList = () => {
   const [isChecked, setIsChecked] = useState<boolean>(false);
   const { category } = useParams();
   const categoryId = category ? categoryMap[category] : undefined;
-
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const searchKeyword = searchParams.get("search");
   const title = category === "moongsanPick" ? "뭉산PICK" : "전체";
+
+  const queryClient = useQueryClient();
+
+  useEffect(() => {
+    queryClient.removeQueries({
+      queryKey: ["groupBuyList-infinite"],
+      exact: false,
+    });
+  }, [queryClient]);
 
   const handleToggleCheck = () => {
     setIsChecked((prev) => !prev);
@@ -54,6 +63,9 @@ const PostList = () => {
     useInfiniteGroupBuys(params);
 
   const allPosts = data?.pages.flatMap((page) => page.posts) ?? [];
+
+  console.log(allPosts.map((post) => post.postId));
+
   const observerRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
@@ -66,7 +78,7 @@ const PostList = () => {
           fetchNextPage();
         }
       },
-      { threshold: 1.0 }
+      { threshold: 0.3 }
     );
 
     observer.observe(observerRef.current);
@@ -98,7 +110,7 @@ const PostList = () => {
             <div
               ref={observerRef}
               style={{
-                height: "10px", // 👈 중요: 감지용 영역 충분히 줘야 함
+                height: "50px", // 👈 중요: 감지용 영역 충분히 줘야 함
                 marginTop: "40px",
                 background: "transparent",
               }}

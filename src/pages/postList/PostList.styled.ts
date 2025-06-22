@@ -6,7 +6,7 @@ import NonCheckBox from "../../assets/icons/NonCheckBox.svg?react";
 export const Container = styled.div`
   display: flex;
   flex-direction: column;
-  height: 100%;
+  height: 100vh;
 `;
 
 export const FilteringContainer = styled.div`
@@ -44,7 +44,7 @@ export const StyledNonCheckBox = styled(NonCheckBox)`
 
 export const ScrollWrapper = styled.div`
   overflow-y: auto;
-  min-height: 120vh; // 💡 최소 화면보다 조금 더 길게 보장
+  height: calc(100vh - 150px);
 `;
 
 export const EmptySearch = styled.div`
