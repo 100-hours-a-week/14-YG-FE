@@ -3,7 +3,7 @@ import Modal from "../Modal";
 import * as S from "./SuccessModal.styled";
 import Box from "../../../../assets/images/Box.png";
 import { Button } from "../../button/Button.styled";
-import { useEffect, useRef, useState } from "react";
+import { useLayoutEffect, useRef, useState } from "react";
 import { useToastStore } from "../../../../stores/useToastStore";
 import { useOrderDetailQuery } from "../../../../hooks/queries/useOrderDetailQuery";
 
@@ -18,11 +18,14 @@ const SuccessModal = ({ postId }: SuccessModalProps) => {
   const { showToast } = useToastStore();
   const { data: orderInfo } = useOrderDetailQuery(Number(postId));
 
-  useEffect(() => {
-    if (accountRef.current) {
-      setAccountWidth(accountRef.current.offsetWidth);
-    }
-  }, []);
+  useLayoutEffect(() => {
+    const id = requestAnimationFrame(() => {
+      if (accountRef.current) {
+        setAccountWidth(accountRef.current.offsetWidth);
+      }
+    });
+    return () => cancelAnimationFrame(id);
+  }, [orderInfo]);
 
   if (!orderInfo) return null;
 

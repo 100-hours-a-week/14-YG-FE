@@ -76,7 +76,7 @@ export const Th = styled.th`
   box-sizing: border-box;
 `;
 
-export const Td = styled.td`
+export const Td = styled.td<{ $isCanceled?: boolean }>`
   ${FontStyles.XXS_SemiBold};
   text-align: center;
   vertical-align: middle;
@@ -85,6 +85,22 @@ export const Td = styled.td`
   tr:last-of-type & {
     border-bottom: none;
   }
+  ${({ $isCanceled }) =>
+    $isCanceled &&
+    `
+      color: ${Colors.Grayscale60};
+      text-decoration: line-through;
+    `}
+`;
+
+export const AccountButton = styled.button`
+  ${FontStyles.XXS_SemiBold};
+  color: ${Colors.Main10};
+  border: 1px solid ${Colors.Grayscale40};
+  background-color: ${Colors.Web10};
+  padding: 2px 8px;
+  border-radius: 5px;
+  cursor: pointer;
 `;
 
 export const Tr = styled.tr``;

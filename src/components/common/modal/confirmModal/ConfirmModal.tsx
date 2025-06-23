@@ -6,9 +6,20 @@ import {
 } from "../../../../stores/useModalStore";
 import Button from "../../button/Button";
 import Alert from "../../../../assets/icons/Alert.svg?react";
+interface ConfirmModalProps {
+  confirmTitle?: string;
+  subDescription?: React.ReactNode;
+  confirmDescription?: string;
+  confirmText?: string;
+  cancelText?: string;
+  onConfirm?: () => void;
+  onCancel?: () => void;
+}
 
-const ConfirmModal = () => {
-  const { payload, closeModal } = useModalStore();
+const ConfirmModal = (props: ConfirmModalProps) => {
+  const store = useModalStore();
+  const useStore = !props.confirmTitle; // props 없으면 store 모드로 판단
+
   const {
     confirmTitle,
     subDescription,
@@ -17,34 +28,34 @@ const ConfirmModal = () => {
     cancelText,
     onConfirm,
     onCancel,
-  } = (payload || {}) as ConfirmPayload;
+  } = useStore ? ((store.payload || {}) as ConfirmPayload) : props;
+
+  const handleClose = () => {
+    onCancel?.();
+    if (useStore) store.closeModal();
+  };
+
+  const handleConfirm = () => {
+    onConfirm?.();
+    if (useStore) store.closeModal();
+  };
 
   return (
-    <Modal onClose={closeModal}>
+    <Modal onClose={handleClose}>
       <S.Container>
         <Alert />
         <S.Message>{confirmTitle}</S.Message>
         {subDescription && <S.Sub>{subDescription}</S.Sub>}
-
         <S.Info $isSub={!subDescription}>{confirmDescription}</S.Info>
         <S.ButtonPart>
           <Button
-            onClick={() => {
-              onCancel?.();
-              closeModal();
-            }}
+            onClick={handleClose}
             buttonStyle="square"
             buttonState="cancel"
           >
             {cancelText || "취소"}
           </Button>
-          <Button
-            onClick={() => {
-              onConfirm?.();
-              closeModal();
-            }}
-            buttonStyle="square"
-          >
+          <Button onClick={handleConfirm} buttonStyle="square">
             {confirmText || "확인"}
           </Button>
         </S.ButtonPart>

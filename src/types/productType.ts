@@ -23,6 +23,7 @@ export interface GroupBuyList {
   nextCursor: number;
   nextCreatedAt: string;
   nextCursorPrice: number;
+  nextSoldRatio: number;
   hasMore: boolean;
 }
 
