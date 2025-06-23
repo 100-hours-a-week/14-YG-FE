@@ -48,8 +48,8 @@ const App = () => {
     <S.Whole>
       <WebBackground />
       <S.MainContainer>
+        <Header />
         <S.ScrollArea $modalOpen={isModalOpen} id="main-container">
-          <Header />
           {pathname !== "/" &&
             pathname !== "/products" &&
             !pathname.startsWith("/products/category/") && <SectionLine />}

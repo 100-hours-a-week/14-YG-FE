@@ -66,11 +66,13 @@ const PostForm = ({
     disabledFields = ["totalAmount", "unitAmount"];
   }
 
-  if (isSuccess) {
-    alert(
-      "공고글을 자동으로 채워봤어요!\n정확하지 않을 수 있으니 꼭 한번 확인하고 수정해 주세요 😊"
-    );
-  }
+  useEffect(() => {
+    if (isSuccess) {
+      alert(
+        "공고글을 자동으로 채워봤어요!\n정확하지 않을 수 있으니 꼭 한번 확인하고 수정해 주세요 😊"
+      );
+    }
+  }, [isSuccess]);
 
   const url = watch("url");
 

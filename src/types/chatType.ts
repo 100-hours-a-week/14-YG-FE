@@ -17,13 +17,13 @@ export interface ChatRooms {
 }
 
 export interface PrevChatList {
-  chatMessageResponses: PrevChat[];
+  chatMessageResponses: ChatMessage[];
   nextCursorId: string;
   nextCreatedAt?: string;
   hasNext: boolean;
 }
 
-export interface PrevChat {
+export interface ChatMessage {
   messageId: string;
   participantId: number;
   nickname: string;
