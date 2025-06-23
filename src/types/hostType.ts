@@ -21,3 +21,8 @@ export interface OrderPartiData {
   quantity: number;
   status: string;
 }
+
+export interface patchOrderStatusBody {
+  orderId: number;
+  status: "CANCELED" | "CONFIRMED" | "PENDING" | "REFUNDED";
+}

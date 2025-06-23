@@ -5,7 +5,7 @@ export const Container = styled.div`
   align-items: flex-start;
 `;
 
-export const Text = styled.p`
+export const Text = styled.span`
   margin: 0;
   word-break: break-word;
   flex: 1;

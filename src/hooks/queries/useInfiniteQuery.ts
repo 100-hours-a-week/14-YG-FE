@@ -6,6 +6,7 @@ interface CursorParam {
   cursorId?: number;
   cursorCreatedAt?: string;
   cursorPrice?: number;
+  cursorSoldRatio?: number;
 }
 
 export const useInfiniteGroupBuys = (baseParams: GetGroupBuysParams) => {
@@ -51,6 +52,10 @@ export const useInfiniteGroupBuys = (baseParams: GetGroupBuysParams) => {
 
       if (orderBy === "price_asc") {
         next.cursorPrice = lastPage.nextCursorPrice;
+      }
+
+      if (orderBy === "ending_soon") {
+        next.cursorSoldRatio = lastPage.nextSoldRatio;
       }
 
       return next;
