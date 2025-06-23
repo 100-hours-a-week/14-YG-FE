@@ -105,3 +105,34 @@ export const getPrevMessage = async (chatRoomId: number, cursorId?: string) => {
     throw new Error("채팅방 참여 중 알 수 없는 오류가 발생했습니다.");
   }
 };
+
+/**
+ * 실시간 메세지 조회(롱폴링)
+ * @param data
+ * @returns
+ */
+
+export const getCurrentMessage = async (
+  chatRoomId: number,
+  lastMessageId?: string
+) => {
+  try {
+    const res = await api.get(
+      `/api/chats/participant/${chatRoomId}/polling/latest`,
+      { params: { lastMessageId } }
+    );
+
+    if (res.data.data) {
+      return res.data.data;
+    } else {
+      throw new Error("응답에 data가 없습니다");
+    }
+  } catch (error) {
+    console.log(error);
+    // AxiosError 자체를 throw해야 useMutation에서 status 분기가 가능
+    if (error instanceof AxiosError) {
+      throw error;
+    }
+    throw new Error("실시간 메세지 조회 중 알 수 없는 오류가 발생했습니다.");
+  }
+};
