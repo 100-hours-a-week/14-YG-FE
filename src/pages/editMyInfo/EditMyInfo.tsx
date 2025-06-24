@@ -2,7 +2,7 @@
 import * as C from "../signupInfo/SignupInfo.styled";
 import InfoForm from "../../components/signup/infoForm/InfoForm";
 import { Button } from "../../components/common/button/Button.styled";
-import { useForm } from "react-hook-form";
+import { FormProvider, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   EditProfileFormData,
@@ -16,17 +16,20 @@ import { useNavigate } from "react-router-dom";
 import { useMyInfoQuery } from "../../hooks/queries/useMyInfoQuery";
 
 const EditMyInfo = () => {
+  const methods = useForm<EditProfileFormData>({
+    resolver: zodResolver(editProfileSchema),
+    mode: "onChange",
+    shouldUnregister: true,
+  });
+
   const {
     register,
     handleSubmit,
     formState: { errors, isValid },
     watch,
     setValue,
-  } = useForm({
-    resolver: zodResolver(editProfileSchema),
-    mode: "onChange",
-    shouldUnregister: true,
-  });
+  } = methods;
+
   const nickname = watch("nickname") || "";
   const [initialNickname, setInitialNickname] = useState("");
 
@@ -99,27 +102,29 @@ const EditMyInfo = () => {
   return (
     <C.SignupSection>
       <C.SectionName>내 정보 수정</C.SectionName>
-      <C.SignupForm onSubmit={handleSubmit(onSubmit)}>
-        <InfoForm
-          nickname={nickname}
-          isNicknameValid={isNicknameValid}
-          isNicknameChecked={isNicknameChecked}
-          isNicknameDuplicated={isNicknameDuplicated}
-          checkingNickname={checkingNickname}
-          onCheckNickname={handleClick}
-          setIsAccountVerified={setIsAccountVerified}
-        />
-        <InputField
-          onClick={() => navigate("/editPassword")}
-          label="비밀번호"
-          placeholder="비밀번호 변경"
-          {...register("password")}
-          helperText={errors?.password?.message}
-        />
-        <Button type="submit" disabled={!isFormValid || waitingEdit}>
-          {waitingEdit ? "정보 수정 중..." : "수정하기"}
-        </Button>
-      </C.SignupForm>
+      <FormProvider {...methods}>
+        <C.SignupForm onSubmit={handleSubmit(onSubmit)}>
+          <InfoForm
+            nickname={nickname}
+            isNicknameValid={isNicknameValid}
+            isNicknameChecked={isNicknameChecked}
+            isNicknameDuplicated={isNicknameDuplicated}
+            checkingNickname={checkingNickname}
+            onCheckNickname={handleClick}
+            setIsAccountVerified={setIsAccountVerified}
+          />
+          <InputField
+            onClick={() => navigate("/editProfile/password")}
+            label="비밀번호"
+            placeholder="비밀번호 변경"
+            {...register("password")}
+            helperText={errors?.password?.message}
+          />
+          <Button type="submit" disabled={!isFormValid || waitingEdit}>
+            {waitingEdit ? "정보 저장 중..." : "저장하기"}
+          </Button>
+        </C.SignupForm>
+      </FormProvider>
     </C.SignupSection>
   );
 };

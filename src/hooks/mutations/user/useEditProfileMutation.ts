@@ -31,7 +31,7 @@ export const useEditPasswordMutation = () => {
     mutationFn: (password: string) => editPassword(password),
     onSuccess: () => {
       showToast("비밀번호가 변경되었습니다.");
-      navigate("/mypage");
+      navigate("/editProfile");
       queryClient.invalidateQueries({ queryKey: ["myInfo"] });
     },
     onError: (err) => {

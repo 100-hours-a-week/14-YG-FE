@@ -25,13 +25,20 @@ const CheckAccount = ({ onSuccess }: CheckAccountProps) => {
   // ✅ 상위 useForm context 공유
   const {
     register,
-    handleSubmit,
     control,
-    formState: { errors, isValid },
+    formState: { errors },
     setValue,
     watch,
+    getFieldState,
+    trigger,
   } = useFormContext();
 
+  const nameState = getFieldState("name");
+  const bankState = getFieldState("accountBank");
+  const numberState = getFieldState("accountNumber");
+
+  const isCheckAccountValid =
+    !nameState.invalid && !bankState.invalid && !numberState.invalid;
   const accountNumber = watch("accountNumber");
   const accountBank = watch("accountBank");
   const name = watch("name");
@@ -43,7 +50,7 @@ const CheckAccount = ({ onSuccess }: CheckAccountProps) => {
       setIsAccountChecked(true);
     },
     onError: () => {
-      alert("본인 명의의 계좌를 올바르게 입력해주세요!");
+      alert("본인 명의의 계좌를 바르게 입력해주세요!");
       setIsAccountChecked(false);
       setIsAuthError(true);
     },
@@ -60,7 +67,10 @@ const CheckAccount = ({ onSuccess }: CheckAccountProps) => {
     }
   }, [user, setValue, navigate]);
 
-  const onSubmit = () => {
+  const handleCheckAccount = async () => {
+    const valid = await trigger(["name", "accountBank", "accountNumber"]);
+    if (!valid) return;
+
     const params: ConfirmAccountParams = {
       name,
       accountBank:
@@ -108,10 +118,10 @@ const CheckAccount = ({ onSuccess }: CheckAccountProps) => {
           {...register("accountNumber")}
           helperText={String(errors.accountNumber?.message ?? "")}
         />
-        {isValid && !isAccountChecked && (
+        {isCheckAccountValid && !isAccountChecked && (
           <S.Button
             type="button"
-            onClick={handleSubmit(onSubmit)}
+            onClick={handleCheckAccount}
             disabled={isAuthError || isPending}
           >
             {isPending ? "확인중입니다..." : "인증하기"}
