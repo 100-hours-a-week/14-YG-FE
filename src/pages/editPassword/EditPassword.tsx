@@ -13,7 +13,6 @@ const EditPassword = () => {
   const {
     register,
     handleSubmit,
-    //watch,
     formState: { errors, isValid },
   } = useForm<EditPasswordFormData>({
     resolver: zodResolver(editPasswordSchema),
@@ -29,10 +28,10 @@ const EditPassword = () => {
 
   return (
     <S.SignupSection>
-      <S.SectionName>가입 정보 입력</S.SectionName>
+      <S.SectionName>비밀번호 변경</S.SectionName>
       <S.SignupForm onSubmit={handleSubmit(onSubmit)}>
         <InputField
-          label="비밀번호"
+          label="변경할 비밀번호"
           type="password"
           placeholder="비밀번호 입력"
           {...register("password")}
@@ -46,7 +45,7 @@ const EditPassword = () => {
           helperText={errors.confirmPassword?.message}
         />
         <Button type="submit" disabled={!isValid}>
-          다음
+          수정하기
         </Button>
       </S.SignupForm>
     </S.SignupSection>

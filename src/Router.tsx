@@ -25,12 +25,12 @@ const AppRouter = () => {
         <Route path="/signup" element={<Signup />} />
         <Route path="/signupInfo" element={<SignupInfo />} />
         <Route path="/editProfile" element={<EditMyInfo />} />
-        <Route path="/editPassword" element={<EditPassword />} />
+        <Route path="/editProfile/password" element={<EditPassword />} />
         <Route path="/writePost" element={<WritePost />} />
         <Route path="/editPost/:postId" element={<EditPost />} />
         <Route path="/chat" element={<ChatList />} />
         <Route path="/chat/:chatRoomId" element={<ChatRoom />} />
-        <Route path="/api/oauth/kakao/callback" element={<KakaoCallback />} />
+        <Route path="/kakao/callback" element={<KakaoCallback />} />
       </Routes>
     </>
   );

@@ -237,11 +237,11 @@ export const editPassword = async (password: string) => {
   } catch (error: unknown) {
     if (axios.isAxiosError(error)) {
       console.error(
-        "기본정보 수정 실패:",
+        "비밀번호 변경 실패:",
         error.response?.data || error.message
       );
     } else {
-      console.error("기본정보 수정 실패: 알 수 없는 에러", error);
+      console.error("비밀번호 변경 실패: 알 수 없는 에러", error);
     }
     throw error;
   }
