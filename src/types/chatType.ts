@@ -16,6 +16,11 @@ export interface ChatRooms {
   totalAmount: number;
 }
 
+export interface PrevChatParams {
+  cursorMessageIdAfter?: string;
+  cursorMessageIdBefore?: string;
+}
+
 export interface PrevChatList {
   chatMessageResponses: ChatMessage[];
   nextCursorId: string;
