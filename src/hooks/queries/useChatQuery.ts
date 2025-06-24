@@ -1,5 +1,9 @@
 import { useQuery } from "@tanstack/react-query";
-import { ChatListResponse, PrevChatList } from "../../types/chatType";
+import {
+  ChatListResponse,
+  PrevChatList,
+  PrevChatParams,
+} from "../../types/chatType";
 import { getChatList, getPrevMessage } from "../../api/chat";
 
 export const useChatListQuery = () => {
@@ -9,10 +13,13 @@ export const useChatListQuery = () => {
   });
 };
 
-export const usePrevChatQuery = (chatRoomId: number, cursorId?: string) => {
+export const usePrevChatQuery = (
+  chatRoomId: number,
+  params?: PrevChatParams
+) => {
   return useQuery<PrevChatList>({
-    queryKey: ["prevChat", chatRoomId, cursorId],
-    queryFn: () => getPrevMessage(chatRoomId, cursorId),
+    queryKey: ["prevChat", chatRoomId, params],
+    queryFn: () => getPrevMessage(chatRoomId, params),
     enabled: !!chatRoomId,
   });
 };

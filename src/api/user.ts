@@ -133,13 +133,14 @@ export const login = async (data: LoginFormData) => {
 
 /**
  * 카카오로그인
- * @param email
- * @param password
- * @returns 회원정보
+ * @param code
+ * @returns
  */
-export const kakaoLogin = async () => {
+export const kakaoLogin = async (code: string) => {
   try {
-    const res = await api.get("/api/oauth/kakao/callback/response");
+    const res = await api.get("/api/oauth/kakao/callback/complete", {
+      params: { code },
+    });
 
     if (res.data) {
       return res.data;

@@ -1,5 +1,6 @@
 import { AxiosError } from "axios";
 import api from "./instance";
+import { PrevChatParams } from "../types/chatType";
 
 /**
  * 채팅방 참가
@@ -84,11 +85,14 @@ export const postMessage = async (chatRoomId: number, content: string) => {
  * @returns
  */
 
-export const getPrevMessage = async (chatRoomId: number, cursorId?: string) => {
+export const getPrevMessage = async (
+  chatRoomId: number,
+  params?: PrevChatParams
+) => {
   try {
     const res = await api.get(
       `/api/chats/participant/${chatRoomId}/message/past`,
-      { params: { cursorId } }
+      { params: { params } }
     );
 
     if (res.data) {

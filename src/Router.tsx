@@ -11,6 +11,7 @@ import EditPost from "./pages/editPost/EditPost";
 import ChatRoom from "./pages/chatRoom/ChatRoom";
 import EditMyInfo from "./pages/editMyInfo/EditMyInfo";
 import EditPassword from "./pages/editPassword/EditPassword";
+import KakaoCallback from "./pages/KakaoCallback";
 
 const AppRouter = () => {
   return (
@@ -29,6 +30,7 @@ const AppRouter = () => {
         <Route path="/editPost/:postId" element={<EditPost />} />
         <Route path="/chat" element={<ChatList />} />
         <Route path="/chat/:chatRoomId" element={<ChatRoom />} />
+        <Route path="/api/oauth/kakao/callback" element={<KakaoCallback />} />
       </Routes>
     </>
   );
