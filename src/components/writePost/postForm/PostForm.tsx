@@ -133,7 +133,7 @@ const PostForm = ({
         placeholder="공구 제목을 입력해주세요"
         disabled={isGeneratingAI}
         {...register("title")}
-        value={isGeneratingAI ? "AI 답변 생성중..." : watch("title")}
+        value={isGeneratingAI ? "AI 답변 생성중..." : (watch("title") ?? "")}
         helperText={!isGeneratingAI && errors.title?.message}
       />
       <InputField
@@ -142,7 +142,7 @@ const PostForm = ({
         placeholder="상품 이름을 입력해주세요"
         disabled={isGeneratingAI}
         {...register("name")}
-        value={isGeneratingAI ? "AI 답변 생성중..." : watch("name")}
+        value={isGeneratingAI ? "AI 답변 생성중..." : (watch("name") ?? "")}
         helperText={!isGeneratingAI && errors.name?.message}
       />
 
@@ -177,7 +177,9 @@ const PostForm = ({
         {...register("description")}
         disabled={isGeneratingAI}
         helperText={!isGeneratingAI ? errors.description?.message : undefined}
-        value={isGeneratingAI ? "AI 답변 생성중..." : watch("description")}
+        value={
+          isGeneratingAI ? "AI 답변 생성중..." : (watch("description") ?? "")
+        }
       />
 
       <Controller
