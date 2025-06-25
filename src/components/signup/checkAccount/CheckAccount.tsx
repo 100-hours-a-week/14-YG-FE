@@ -8,11 +8,11 @@ import { ConfirmAccountParams } from "../../../types/userType";
 import { useCheckAccountMutation } from "../../../hooks/mutations/user/useCheckAccountMutation";
 import { useUserStore } from "../../../stores/useUserStore";
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useToastStore } from "../../../stores/useToastStore";
 
 interface CheckAccountProps {
-  onSuccess: () => void;
+  onSuccess?: () => void;
 }
 
 const CheckAccount = ({ onSuccess }: CheckAccountProps) => {
@@ -21,6 +21,7 @@ const CheckAccount = ({ onSuccess }: CheckAccountProps) => {
   const navigate = useNavigate();
   const [isAccountChecked, setIsAccountChecked] = useState(false);
   const [isAuthError, setIsAuthError] = useState(false);
+  const { pathname } = useLocation();
 
   // ✅ 상위 useForm context 공유
   const {
@@ -44,7 +45,7 @@ const CheckAccount = ({ onSuccess }: CheckAccountProps) => {
   const name = watch("name");
   const { mutate: checkingAccount, isPending } = useCheckAccountMutation({
     onSuccess: (data) => {
-      onSuccess(); // 인증 성공 시 콜백 실행
+      onSuccess?.(); // 인증 성공 시 콜백 실행
       console.log(data);
       showToast("본인인증에 성공하였습니다!");
       setIsAccountChecked(true);
@@ -124,7 +125,11 @@ const CheckAccount = ({ onSuccess }: CheckAccountProps) => {
             onClick={handleCheckAccount}
             disabled={isAuthError || isPending}
           >
-            {isPending ? "확인중입니다..." : "인증하기"}
+            {isPending
+              ? "확인중입니다..."
+              : pathname === "/editProfile/account"
+                ? "저장하기"
+                : "인증하기"}
           </S.Button>
         )}
       </S.FormWrapper>

@@ -212,10 +212,9 @@ export const editProfile = async (data: EditProfileRequest) => {
     return res.data.message;
   } catch (error: unknown) {
     if (axios.isAxiosError(error)) {
-      console.error(
-        "기본정보 수정 실패:",
-        error.response?.data || error.message
-      );
+      const errorMessage = error.response?.data?.message || error.message;
+      console.error("기본정보 수정 실패:", errorMessage);
+      throw new Error(errorMessage); // ✅ 명확한 메시지 전달
     } else {
       console.error("기본정보 수정 실패: 알 수 없는 에러", error);
     }
@@ -236,12 +235,32 @@ export const editPassword = async (password: string) => {
     return res.data.message;
   } catch (error: unknown) {
     if (axios.isAxiosError(error)) {
-      console.error(
-        "비밀번호 변경 실패:",
-        error.response?.data || error.message
-      );
+      const errorMessage = error.response?.data?.message || error.message;
+      console.error("기본정보 수정 실패:", errorMessage);
+      throw new Error(errorMessage); // ✅ 명확한 메시지 전달
     } else {
       console.error("비밀번호 변경 실패: 알 수 없는 에러", error);
+    }
+    throw error;
+  }
+};
+
+/**
+ * 계좌정보 변경
+ * @returns
+ */
+
+export const editAccount = async (data: ConfirmAccountParams) => {
+  try {
+    const res = await api.patch("/api/users/profile/account", data);
+    return res.data.message;
+  } catch (error: unknown) {
+    if (axios.isAxiosError(error)) {
+      const errorMessage = error.response?.data?.message || error.message;
+      console.error("기본정보 수정 실패:", errorMessage);
+      throw new Error(errorMessage); // ✅ 명확한 메시지 전달
+    } else {
+      console.error("계좌정보 변경 실패: 알 수 없는 에러", error);
     }
     throw error;
   }

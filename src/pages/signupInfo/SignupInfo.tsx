@@ -14,6 +14,7 @@ import { BANK_OPTIONS } from "../../constants";
 import { useSignupMutation } from "../../hooks/mutations/user/useSignupMutation";
 import { useNavigate } from "react-router-dom";
 import InfoForm from "../../components/signup/infoForm/InfoForm";
+import CheckAccount from "../../components/signup/checkAccount/CheckAccount";
 
 const Signup = () => {
   const [isNicknameChecked, setIsNicknameChecked] = useState(false);
@@ -112,8 +113,8 @@ const Signup = () => {
             isNicknameDuplicated={isNicknameDuplicated}
             checkingNickname={checkingNickname}
             onCheckNickname={handleClick}
-            setIsAccountVerified={setIsAccountVerified}
           />
+          <CheckAccount onSuccess={() => setIsAccountVerified(true)} />
           <AgreeCheckBox
             label="개인정보 수집 동의"
             message="동의"
