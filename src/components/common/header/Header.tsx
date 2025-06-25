@@ -39,6 +39,8 @@ const Header = () => {
           localStorage.removeItem("signupStep1");
         },
       });
+    } else if (pathname === "/editProfile") {
+      navigate("/mypage");
     } else {
       navigate(-1);
     }

@@ -12,6 +12,7 @@ import ChatRoom from "./pages/chatRoom/ChatRoom";
 import EditMyInfo from "./pages/editMyInfo/EditMyInfo";
 import EditPassword from "./pages/editPassword/EditPassword";
 import KakaoCallback from "./pages/KakaoCallback";
+import EditAccount from "./pages/editAccount/EditAccount";
 
 const AppRouter = () => {
   return (
@@ -26,6 +27,7 @@ const AppRouter = () => {
         <Route path="/signupInfo" element={<SignupInfo />} />
         <Route path="/editProfile" element={<EditMyInfo />} />
         <Route path="/editProfile/password" element={<EditPassword />} />
+        <Route path="/editProfile/account" element={<EditAccount />} />
         <Route path="/writePost" element={<WritePost />} />
         <Route path="/editPost/:postId" element={<EditPost />} />
         <Route path="/chat" element={<ChatList />} />

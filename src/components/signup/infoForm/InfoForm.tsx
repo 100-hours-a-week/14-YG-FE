@@ -1,8 +1,8 @@
 import * as S from "./InfoForm.styled";
 import InputField from "../../common/input/inputField/InputField";
-import CheckAccount from "../checkAccount/CheckAccount";
 import { useFormContext } from "react-hook-form";
 import { SignupInfoFormData } from "../../../schemas/signupInfoSchema";
+import { useLocation } from "react-router-dom";
 
 interface InfoFormProps {
   nickname: string;
@@ -11,7 +11,8 @@ interface InfoFormProps {
   isNicknameDuplicated: boolean;
   checkingNickname: boolean;
   onCheckNickname: () => void;
-  setIsAccountVerified: (v: boolean) => void;
+  onPhoneSave?: () => void;
+  isPhoneChanged?: boolean;
 }
 
 const InfoForm = ({
@@ -21,8 +22,12 @@ const InfoForm = ({
   isNicknameDuplicated,
   checkingNickname,
   onCheckNickname,
-  setIsAccountVerified,
+  onPhoneSave,
+  isPhoneChanged,
 }: InfoFormProps) => {
+  const { pathname } = useLocation();
+  const isEdit = pathname === "/editProfile";
+
   const {
     register,
     formState: { errors },
@@ -38,7 +43,9 @@ const InfoForm = ({
           (isNicknameDuplicated
             ? "이미 사용 중인 닉네임입니다. 다시 입력해주세요."
             : !isNicknameChecked && nickname.length >= 2
-              ? "닉네임 중복 확인을 해주세요"
+              ? isEdit
+                ? "수정하려면 저장하기 버튼을 눌러주세요"
+                : "닉네임 중복 확인을 해주세요"
               : checkingNickname
                 ? "닉네임 중복 확인 중입니다..."
                 : "")
@@ -51,7 +58,7 @@ const InfoForm = ({
               onClick={onCheckNickname}
               disabled={!isNicknameValid}
             >
-              중복 확인
+              {isEdit ? "저장하기" : "중복 확인"}
             </S.ConfirmButton>
           )
         }
@@ -61,8 +68,16 @@ const InfoForm = ({
         placeholder="사용할 전화번호 입력"
         {...register("phoneNumber")}
         helperText={errors?.phoneNumber?.message}
+        suffix={
+          isEdit &&
+          isPhoneChanged &&
+          !errors?.phoneNumber && (
+            <S.ConfirmButton type="button" onClick={onPhoneSave}>
+              저장하기
+            </S.ConfirmButton>
+          )
+        }
       />
-      <CheckAccount onSuccess={() => setIsAccountVerified(true)} />
     </>
   );
 };
