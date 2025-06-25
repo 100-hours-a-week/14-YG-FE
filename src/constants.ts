@@ -1,5 +1,4 @@
-export const S3_BASE_URL =
-  "https://moongsan-dev-s3.s3.ap-northeast-2.amazonaws.com/";
+export const S3_BASE_URL = import.meta.env.VITE_S3_BASE_URL;
 
 export const BANK_OPTIONS = [
   { value: 1, label: "KB국민은행" },
