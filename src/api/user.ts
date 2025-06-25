@@ -136,10 +136,10 @@ export const login = async (data: LoginFormData) => {
  * @param code
  * @returns
  */
-export const kakaoLogin = async (code: string) => {
+export const kakaoLogin = async (redirectUri: string, code: string) => {
   try {
     const res = await api.get("/api/oauth/kakao/callback/complete", {
-      params: { code },
+      params: { redirectUri, code },
     });
 
     if (res.data) {
