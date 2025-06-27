@@ -95,9 +95,8 @@ const PostForm = ({
   return (
     <S.PostForm onSubmit={handleSubmit(onSubmit)}>
       <MultiImageUploader
-        {...(mode === "edit" && {
-          defaultPreviewUrls: watch("imageUrls") as string[],
-        })}
+        key={imageUrls.join(",")} // ✅ 강제 리렌더링을 유도
+        defaultPreviewUrls={imageUrls} // ✅ 항상 최신 값 전달
         onChange={(urls, files) => {
           setValue("imageUrls", urls);
           setImageFiles(files);
