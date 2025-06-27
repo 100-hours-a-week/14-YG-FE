@@ -92,7 +92,7 @@ export const getPrevMessage = async (
   try {
     const res = await api.get(
       `/api/chats/participant/${chatRoomId}/message/past`,
-      { params: { params } }
+      { params }
     );
 
     if (res.data) {
