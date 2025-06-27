@@ -4,6 +4,9 @@ export interface AIResponse {
   total_price: number;
   count: number;
   summary: string;
+  upload_image_key: string;
+  due_date: string;
+  pickup_date: string;
 }
 
 export interface HostAccount {

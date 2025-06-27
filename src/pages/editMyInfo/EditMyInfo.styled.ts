@@ -15,7 +15,7 @@ export const AccountInfo = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 5px;
+  gap: 8px;
 `;
 
 export const Top = styled.div`
@@ -38,7 +38,7 @@ export const InfoBox = styled.div`
   ${FontStyles.SM_Regular};
   display: flex;
   flex-direction: column;
-  gap: 5px;
+  gap: 8px;
   padding: 10px;
   > p > span {
     color: ${Colors.Grayscale80};
