@@ -1,13 +1,13 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { useSendMessageMutation } from "../../hooks/mutations/chat/useSendMessageMutation";
-//import { useChatRoomStore } from "../../stores/useChatRoomStore";
 import * as S from "./ChatRoom.styled";
 import { useEffect, useRef, useState } from "react";
-import { usePrevChatQuery } from "../../hooks/queries/useChatQuery";
 import { useUserStore } from "../../stores/useUserStore";
 import ChatBox from "../../components/chat/ChatBox";
 import { ChatMessage } from "../../types/chatType";
 import { useCurrentMessagePolling } from "../../hooks/useCurrentMessagePolling";
+import { useInfinitePastChat } from "../../hooks/queries/useChatQuery";
+import { useInView } from "react-intersection-observer";
 
 const ChatRoom = () => {
   const { chatRoomId } = useParams();
@@ -16,45 +16,76 @@ const ChatRoom = () => {
   const user = useUserStore((s) => s.user);
   const bottomRef = useRef<HTMLDivElement>(null);
   const isInitialScroll = useRef(true);
-  //const setTitle = useChatRoomStore((s) => s.setTitle);
-  const { mutate: sendMessage } = useSendMessageMutation(Number(chatRoomId));
-  const { data: prevMessages } = usePrevChatQuery(Number(chatRoomId));
+  const fetchLockRef = useRef(false); // ✅ 중복 호출 방지용
 
+  const { mutate: sendMessage } = useSendMessageMutation(Number(chatRoomId));
+
+  const { data, fetchNextPage, hasNextPage } = useInfinitePastChat(
+    Number(chatRoomId)
+  );
+  console.log(data);
   const [messages, setMessages] = useState<ChatMessage[]>([]);
 
+  // ⬆️ 상단 감지용
+  const { ref: topRef, inView: isTopInView } = useInView({ threshold: 0 });
+
+  // ✅ 무한스크롤 트리거 (중복 방지)
+  useEffect(() => {
+    if (isTopInView && hasNextPage && !fetchLockRef.current) {
+      fetchLockRef.current = true;
+      fetchNextPage().finally(() => {
+        fetchLockRef.current = false;
+      });
+    }
+  }, [isTopInView, hasNextPage, fetchNextPage]);
+
+  // 실시간 메시지 추가
   useCurrentMessagePolling(Number(chatRoomId), (newMessages) => {
     setMessages((prev) => [...prev, ...newMessages]);
   });
 
+  // 메시지 병합
   useEffect(() => {
-    if (prevMessages?.chatMessageResponses) {
-      setMessages(prevMessages.chatMessageResponses);
-    }
-  }, [prevMessages]);
+    if (data) {
+      const pastMessages = data.pages.flatMap(
+        (page) => page.chatMessageResponses
+      );
+      const allMessages = [...pastMessages, ...messages];
+      const uniqueMessagesMap = new Map<string, ChatMessage>();
+      for (const msg of allMessages) {
+        uniqueMessagesMap.set(msg.messageId, msg);
+      }
+      const dedupedMessages = Array.from(uniqueMessagesMap.values());
 
+      dedupedMessages.sort(
+        (a, b) =>
+          new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+      );
+
+      setMessages(dedupedMessages);
+    }
+  }, [data]);
+
+  // 첫 진입 시 맨 아래로
   useEffect(() => {
-    if (bottomRef.current) {
+    if (isInitialScroll.current && bottomRef.current) {
       setTimeout(() => {
-        bottomRef.current?.scrollIntoView({
-          behavior: isInitialScroll.current ? "auto" : "smooth",
-        });
+        bottomRef.current?.scrollIntoView({ behavior: "auto" });
         isInitialScroll.current = false;
-      }, 0); // 렌더 이후에 실행되도록 defer
+      }, 0);
     }
-  }, [messages]);
+  }, [data]);
 
-  console.log("채팅 응답", prevMessages);
   if (!user) {
     alert("다시 로그인해주세요!");
     navigate("/");
     return null;
   }
 
-  //setTitle();
-
   return (
     <S.Container>
       <S.ChatPart>
+        <div ref={topRef} style={{ height: 1 }} />
         {messages.map((message, idx) => {
           const prev = messages[idx - 1];
           const isContinuation = prev?.participantId === message.participantId;
@@ -70,13 +101,14 @@ const ChatRoom = () => {
         })}
         <div ref={bottomRef} />
       </S.ChatPart>
+
       <S.MessagePart>
         <S.MessageBox
           value={message}
           onChange={(e) => setMessage(e.target.value)}
           onKeyDown={(e) => {
             if (e.key === "Enter" && !e.shiftKey) {
-              e.preventDefault(); // 줄바꿈 방지
+              e.preventDefault();
               if (message.trim()) {
                 sendMessage({ content: message });
                 setMessage("");
@@ -84,11 +116,13 @@ const ChatRoom = () => {
             }
           }}
           placeholder={`${user.nickname}(으)로 대화해보세요.`}
-        ></S.MessageBox>
+        />
         <S.StyledSendButton
           onClick={() => {
-            sendMessage({ content: message });
-            setMessage("");
+            if (message.trim()) {
+              sendMessage({ content: message });
+              setMessage("");
+            }
           }}
         />
       </S.MessagePart>

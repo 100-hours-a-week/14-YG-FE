@@ -23,9 +23,9 @@ export interface PrevChatParams {
 
 export interface PrevChatList {
   chatMessageResponses: ChatMessage[];
-  nextCursorId: string;
-  nextCreatedAt?: string;
-  hasNext: boolean;
+  beforeCursorId?: string;
+  beforeCreatedAt?: string;
+  hasBefore: boolean;
 }
 
 export interface ChatMessage {
