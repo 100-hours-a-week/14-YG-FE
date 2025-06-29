@@ -4,6 +4,11 @@ export interface ChatListResponse {
   hasMore: boolean;
 }
 
+export interface ChatListParams {
+  cursorJoinedAt?: string;
+  limit?: number;
+}
+
 export interface ChatRooms {
   chatRoomId: string;
   imagekey: string;

@@ -1,6 +1,6 @@
 import { AxiosError } from "axios";
 import api from "./instance";
-import { PrevChatParams } from "../types/chatType";
+import { ChatListParams, PrevChatParams } from "../types/chatType";
 
 /**
  * 채팅방 참가
@@ -33,9 +33,9 @@ export const enterChat = async (groupBuyId: number) => {
  * @returns
  */
 
-export const getChatList = async () => {
+export const getChatList = async (params?: ChatListParams) => {
   try {
-    const res = await api.get("/api/chats/users/me/participant");
+    const res = await api.get("/api/chats/users/me/participant", { params });
 
     if (res.data.data) {
       return res.data.data;
