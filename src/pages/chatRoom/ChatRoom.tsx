@@ -23,6 +23,7 @@ const ChatRoom = () => {
   const { data, fetchNextPage, hasNextPage } = useInfinitePastChat(
     Number(chatRoomId)
   );
+
   console.log(data);
   const [messages, setMessages] = useState<ChatMessage[]>([]);
 
@@ -64,7 +65,7 @@ const ChatRoom = () => {
 
       setMessages(dedupedMessages);
     }
-  }, [data]);
+  }, [data, messages]);
 
   // 첫 진입 시 맨 아래로
   useEffect(() => {
