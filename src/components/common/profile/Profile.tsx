@@ -36,8 +36,6 @@ const Profile = ({ type, postId, user, isParticipant }: ProfileProps) => {
   const queryClient = useQueryClient();
 
   console.log(user);
-  console.log(hostAccount);
-
   const handleImageChange = async (_url: string, file: File) => {
     try {
       const [uploadedKey] = await uploadImages([file]); // ✅ file 직접 사용
@@ -64,11 +62,11 @@ const Profile = ({ type, postId, user, isParticipant }: ProfileProps) => {
   };
 
   const handleCopy = () => {
-    if (!user.accountNumber) return;
+    if (!hostAccount) return;
     if (isDisabled) return;
 
     navigator.clipboard
-      .writeText(user.accountNumber)
+      .writeText(hostAccount.accountNumber)
       .then(() => {
         showToast("계좌번호가 복사되었습니다!");
       })
