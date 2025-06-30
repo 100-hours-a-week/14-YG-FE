@@ -26,6 +26,7 @@ const ChatRoom = () => {
 
   console.log(data);
   const [messages, setMessages] = useState<ChatMessage[]>([]);
+  const messagesRef = useRef<ChatMessage[]>([]);
 
   // ⬆️ 상단 감지용
   const { ref: topRef, inView: isTopInView } = useInView({ threshold: 0 });
@@ -64,8 +65,9 @@ const ChatRoom = () => {
       );
 
       setMessages(dedupedMessages);
+      messagesRef.current = dedupedMessages;
     }
-  }, [data, messages]);
+  }, [data]);
 
   // 첫 진입 시 맨 아래로
   useEffect(() => {

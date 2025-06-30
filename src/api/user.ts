@@ -173,24 +173,14 @@ export const logout = async () => {
 
 /**
  * 프로필 정보 조회
- * @returns
+ * @returns 사용자 정보
  */
-// user.ts
 export const getMyInfo = async () => {
   try {
     const res = await api.get("/api/users/profile");
     if (res.data.data) return res.data.data;
   } catch (error) {
-    if (error instanceof AxiosError) {
-      console.log("로그인 필요");
-    } else {
-      console.log("알 수 없는 에러");
-    }
-    throw new Error("회원 정보를 불러오는 데 실패했습니다.");
-  }
-};
-
-/*} // ✅ AccessToken 만료인 경우
+    // ✅ AccessToken 만료인 경우
     if (error instanceof AxiosError && error.response?.status === 403) {
       try {
         await getRefreshToken(); // ✅ 새 토큰 발급받고
@@ -199,8 +189,17 @@ export const getMyInfo = async () => {
       } catch {
         throw new Error("로그인이 만료되었습니다. 다시 로그인해주세요.");
       }
-    }*/
+    }
 
+    // ✅ 기타 에러 처리
+    if (error instanceof AxiosError) {
+      console.log("로그인 필요");
+    } else {
+      console.log("알 수 없는 에러");
+    }
+    throw new Error("회원 정보를 불러오는 데 실패했습니다.");
+  }
+};
 /**
  * 기본정보 수정
  * @returns
