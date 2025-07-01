@@ -6,6 +6,7 @@ export const MypageContainer = styled.div`
   height: 100%;
   display: flex;
   flex-direction: column;
+  width: 100%;
 `;
 
 export const PageName = styled.p`
@@ -32,8 +33,8 @@ export const ProfileSection = styled.div`
 export const DeleteUser = styled.p`
   margin-top: auto;
   padding-bottom: 20px;
-  width: 100%;
-  text-align: center;
+  width: fit-content;
+  align-self: center;
   justify-content: end;
   color: ${Colors.Grayscale60};
   ${FontStyles.MD2_Regular};

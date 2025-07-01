@@ -14,7 +14,7 @@ export const useEditPostMutation = (postId: number) => {
         queryKey: ["postDetail-edit", postId],
       });
       console.log("공구글 수정 성공:", data);
-      navigate(`/products/${data.data.postId}`);
+      navigate(`/products/${data.data.postId}`, { replace: true });
     },
     onError: (err) => {
       console.error("공구글 수정 실패", err);

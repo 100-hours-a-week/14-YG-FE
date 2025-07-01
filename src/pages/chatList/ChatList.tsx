@@ -9,6 +9,7 @@ import { useInView } from "react-intersection-observer";
 const ChatList = () => {
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } =
     useInfiniteChatList();
+  console.log(data);
 
   const allChatRooms = data?.pages.flatMap((page) => page.chatRooms) ?? [];
 
