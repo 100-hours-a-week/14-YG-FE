@@ -118,17 +118,17 @@ const UnitAmountSelector = ({
       </S.TotalAmount>
       {!isDisabled("totalAmount") &&
         !isDisabled("unitAmount") &&
-        (errors.totalAmount || unitAmount === "") && (
+        (errors.totalAmount || unitAmount === 0) && (
           <S.HelperText>
             {typeof errors.totalAmount?.message === "string"
               ? errors.totalAmount.message
-              : unitAmount === ""
+              : unitAmount === 0
                 ? "주문 단위를 선택해주세요."
                 : ""}
           </S.HelperText>
         )}
 
-      {unitAmount && (
+      {unitAmount > 0 && (
         <S.MyParti>
           <S.Label>공구 참여 수량</S.Label>
           <Controller
@@ -139,7 +139,7 @@ const UnitAmountSelector = ({
               <SelectButtonInput
                 unit={unit}
                 max={hostMaxQuantity ?? totalAmount}
-                min={0}
+                min={unit}
                 initial={field.value}
                 onChange={field.onChange}
               />

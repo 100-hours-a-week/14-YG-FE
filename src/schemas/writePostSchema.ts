@@ -20,7 +20,10 @@ export const writePostSchema = z.object({
     .min(2, "상품 전체 수량은 2개 이상이어야 합니다.")
     .max(999, "더이상 입력할 수 없습니다."),
 
-  unitAmount: z.coerce.number().int("정수만 입력 가능합니다."),
+  unitAmount: z.coerce
+    .number()
+    .int("정수만 입력 가능합니다.")
+    .gt(0, "주문 단위를 선택해주세요."),
 
   // 주최자 예상 구매 수량 (제한 없음)
   hostQuantity: z.coerce.number().int("정수만 입력 가능합니다."),

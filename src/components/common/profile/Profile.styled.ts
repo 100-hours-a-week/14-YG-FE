@@ -52,7 +52,7 @@ export const RealName = styled(SubText)``;
 export const Email = styled(SubText)``;
 export const PhoneNumber = styled(SubText)``;
 
-export const AccountInfo = styled.p<{ $type: "mypage" | "post" }>`
+export const AccountInfo = styled.div<{ $type: "mypage" | "post" }>`
   ${FontStyles.XXS_SemiBold};
   color: ${Colors.Grayscale60};
   display: flex;
