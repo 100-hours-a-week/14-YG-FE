@@ -23,6 +23,11 @@ export const useCurrentMessagePolling = (
         } else {
           console.error("💥 Polling error:", err);
         }
+      } finally {
+        // 💥 무조건 다음 polling 돌도록 보장
+        if (isPolling.current) {
+          setTimeout(() => poll(), 500);
+        }
       }
 
       if (isPolling.current) {

@@ -70,7 +70,7 @@ export const useInfinitePastChat = (chatRoomId: number) => {
     },
     enabled: !!chatRoomId,
     staleTime: 1000 * 60,
-    refetchOnMount: false,
+    refetchOnMount: true,
     refetchOnWindowFocus: false,
   });
 };
