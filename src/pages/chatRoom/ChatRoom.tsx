@@ -8,8 +8,10 @@ import { ChatMessage } from "../../types/chatType";
 import { useCurrentMessagePolling } from "../../hooks/useCurrentMessagePolling";
 import { useInfinitePastChat } from "../../hooks/queries/useChatQuery";
 import { useInView } from "react-intersection-observer";
+import { useQueryClient } from "@tanstack/react-query";
 
 const ChatRoom = () => {
+  const queryClient = useQueryClient();
   const { chatRoomId } = useParams();
   const navigate = useNavigate();
   const [message, setMessage] = useState("");
@@ -18,13 +20,19 @@ const ChatRoom = () => {
   const isInitialScroll = useRef(true);
   const fetchLockRef = useRef(false); // ✅ 중복 호출 방지용
 
+  useEffect(() => {
+    if (chatRoomId) {
+      queryClient.removeQueries({
+        queryKey: ["prevChatInfinite", Number(chatRoomId)],
+      });
+    }
+  }, [chatRoomId, queryClient]);
+
   const { mutate: sendMessage } = useSendMessageMutation(Number(chatRoomId));
 
   const { data, fetchNextPage, hasNextPage } = useInfinitePastChat(
     Number(chatRoomId)
   );
-
-  console.log(data);
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const messagesRef = useRef<ChatMessage[]>([]);
 
@@ -68,6 +76,12 @@ const ChatRoom = () => {
       messagesRef.current = dedupedMessages;
     }
   }, [data]);
+
+  useEffect(() => {
+    if (bottomRef.current) {
+      bottomRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [messages]);
 
   // 첫 진입 시 맨 아래로
   useEffect(() => {

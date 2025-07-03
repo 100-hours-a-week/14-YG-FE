@@ -18,6 +18,7 @@ export const useOrderMutation = (postId: number) => {
         queryKey: ["postDetail", postId],
       });
       queryClient.invalidateQueries({ queryKey: ["hostAccount", postId] });
+      queryClient.refetchQueries({ queryKey: ["chatList"] });
       queryClient.setQueryData(["orderDetail", postId], data);
       closeModal();
       openModal("success", { postId: postId });
