@@ -27,7 +27,26 @@ const WritePost = () => {
 
   const handleFormSubmit = async (data: PostFormData) => {
     try {
-      const imageKeys = await uploadImage(imageFiles);
+      const urls = data.imageUrls ?? [];
+
+      // 1. 로컬 이미지 업로드
+      const localUploadResults =
+        imageFiles.length > 0 ? await uploadImage(imageFiles) : [];
+
+      // 2. imageUrls 순서 유지하면서 key 매핑
+      let localIndex = 0;
+      const imageKeys = urls.map((url) => {
+        if (url.includes("/tmp/")) {
+          // AI 이미지 → tmp 키 추출
+          const parts = url.split("/");
+          const tmpIndex = parts.findIndex((p) => p === "tmp");
+          return tmpIndex >= 0 ? `tmp/${parts[tmpIndex + 1]}` : "";
+        } else {
+          // 로컬 이미지 → 업로드 결과에서 순서대로 가져오기
+          return localUploadResults[localIndex++] ?? "";
+        }
+      });
+
       const { imageUrls, ...rest } = data;
       void imageUrls;
 

@@ -21,6 +21,7 @@ const KakaoCallback = () => {
     switch (loginData.message) {
       case "로그인에 성공했습니다.":
         // 기존 유저: 홈으로
+        alert(`반갑습니다. ${loginData.data.nickname}님🥳`);
         useUserStore.getState().setUser(loginData.data); // 유저 저장
         navigate("/");
         break;

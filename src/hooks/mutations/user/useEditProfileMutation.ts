@@ -35,7 +35,7 @@ export const useEditPasswordMutation = () => {
     mutationFn: (password: string) => editPassword(password),
     onSuccess: () => {
       showToast("비밀번호가 변경되었습니다.");
-      navigate("/editProfile");
+      navigate("/editProfile", { replace: true });
       queryClient.invalidateQueries({ queryKey: ["myInfo"] });
     },
     onError: (err) => {
@@ -53,7 +53,7 @@ export const useEditAccountMutation = () => {
     mutationFn: (data: ConfirmAccountParams) => editAccount(data),
     onSuccess: () => {
       showToast("계좌정보가 변경되었습니다.");
-      navigate("/editProfile");
+      navigate("/editProfile", { replace: true });
       queryClient.invalidateQueries({ queryKey: ["myInfo"] });
     },
     onError: (err) => {

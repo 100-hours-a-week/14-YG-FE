@@ -8,6 +8,7 @@ interface ImageData {
   file: File;
   preview: string;
   isMain: boolean;
+  fromAI?: boolean;
 }
 
 interface MultiImageUploaderProps {
@@ -38,6 +39,7 @@ const MultiImageUploader = ({
           file: new File([], "server-image.jpg"), // ❗ 이건 edit 용도에만 있어야 함
           preview: url,
           isMain: i === 0,
+          fromAI: true,
         }));
 
       if (defaults.length > 0) {
@@ -75,9 +77,13 @@ const MultiImageUploader = ({
         }
 
         const updatedUrls = merged.map((img) => img.preview);
-        const updatedFiles = merged.map((img) => img.file);
-        onChange(updatedUrls, updatedFiles);
+        const updatedFiles = [...merged] // 전체 이미지에서
+          .filter((img) => !img.fromAI && img.file.name !== "server-image.jpg")
+          .map((img) => img.file);
+        console.log("🧪 merged", merged);
+        console.log("🧪 updatedFiles", updatedFiles);
 
+        onChange(updatedUrls, updatedFiles);
         return merged;
       });
     });
@@ -95,8 +101,8 @@ const MultiImageUploader = ({
       // ✅ 이미지 삭제 후 onChange 재호출
       const updatedUrls = updated.map((img) => img.preview);
       const updatedFiles = updated
-        .map((img) => img.file)
-        .filter((file) => file.size > 0);
+        .filter((img) => !img.fromAI)
+        .map((img) => img.file);
 
       onChange(updatedUrls, updatedFiles);
 

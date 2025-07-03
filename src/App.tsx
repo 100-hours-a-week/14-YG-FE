@@ -55,7 +55,9 @@ const App = () => {
             !pathname.startsWith("/products/category/") && <SectionLine />}
           {isLoading ? <Loading /> : <AppRouter />}
         </S.ScrollArea>
-        {pathname === "/" && <MasterButton />}
+        {(pathname === "/" ||
+          pathname === "/mypage" ||
+          pathname === "/products") && <MasterButton />}
         {openedModal === "login" && <LoginModal />}
         {openedModal === "confirm" && <ConfirmModal />}
         {openedModal === "order" && user && <OrderModal />}
