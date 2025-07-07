@@ -9,13 +9,15 @@ export const Anounce = styled.div`
   border-radius: 10px;
   padding: 5px;
   align-items: start;
+  justify-content: center;
   box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.1);
 `;
 
 export const Img = styled.img`
   display: flex;
   justify-content: start;
-  width: 60px;
+  width: 70px;
+  margin-left: -10px;
 `;
 
 export const Ment = styled.div`
