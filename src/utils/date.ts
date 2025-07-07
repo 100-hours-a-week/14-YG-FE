@@ -27,19 +27,23 @@ export function formatDateTime(dateString: string): string {
 }
 
 /**
- * 몇 시간 전, 몇 분 전처럼 상대 시간 표시
+ * 몇 시간 전, 몇 분 전처럼 상대 시간 표시 (+9시간 보정 포함)
  */
 export function formatRelativeTime(dateString: string): string {
   const now = new Date();
   const target = new Date(dateString);
-  const diff = (now.getTime() - target.getTime()) / 1000; // 초 차이
+
+  // ✅ 9시간(32400초 = 9 * 60 * 60 * 1000) 보정
+  const correctedTarget = new Date(target.getTime() + 9 * 60 * 60 * 1000);
+
+  const diff = (now.getTime() - correctedTarget.getTime()) / 1000; // 초 단위 차이
 
   if (diff < 60) return "방금 전";
   if (diff < 3600) return `${Math.floor(diff / 60)}분 전`;
   if (diff < 86400) return `${Math.floor(diff / 3600)}시간 전`;
   if (diff < 2592000) return `${Math.floor(diff / 86400)}일 전`;
 
-  return target.toLocaleDateString("ko-KR"); // 오래됐으면 날짜 출력
+  return correctedTarget.toLocaleDateString("ko-KR");
 }
 
 /**
