@@ -130,16 +130,39 @@ const HostModal = () => {
           <DotText
             text={
               <S.StyledText>
-                참여자가 입금을 완료한 경우, 오른쪽의 토글을 눌러 입금 상태를
-                '완료'로 변경해야 참여자의 입금 여부가 확인됩니다.
-              </S.StyledText>
-            }
-          />
-          <DotText
-            text={
-              <S.StyledText>
-                입금자명과 입금 내역을 비교하여 토글 상태를 정확히 설정해
-                주세요.
+                참여자와 취소자 모두 <span>‘입금/환불 여부’ 칸의 체크박스</span>
+                로 상태를 표시합니다.
+                <DotText
+                  text={
+                    <S.StyledText>
+                      <span>참여자</span>의 경우, 입금자명과 입금 내역을 확인한
+                      뒤 체크해 주세요.
+                    </S.StyledText>
+                  }
+                />
+                <DotText
+                  text={
+                    <S.StyledText>
+                      <span>취소자</span>는 닉네임에 <span>취소선</span>이
+                      있으며,
+                      <DotText
+                        text={
+                          <S.StyledText>
+                            입금한 경우: 표시된 계좌로 환불한 뒤 체크
+                          </S.StyledText>
+                        }
+                      />
+                      <DotText
+                        text={
+                          <S.StyledText>
+                            입금하지 않은 경우: 환불 없이{" "}
+                            <span>취소만 확인</span>하고 체크해 주세요.
+                          </S.StyledText>
+                        }
+                      />
+                    </S.StyledText>
+                  }
+                />
               </S.StyledText>
             }
           />

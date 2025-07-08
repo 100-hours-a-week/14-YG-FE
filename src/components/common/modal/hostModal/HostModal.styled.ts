@@ -46,6 +46,10 @@ export const StyledText = styled.p`
   color: ${Colors.Grayscale60};
   line-height: 15px;
   margin-left: 2px;
+  span {
+    color: ${Colors.Main30};
+    ${FontStyles.XXS_SemiBold};
+  }
 `;
 
 export const ListLabel = styled.label`
