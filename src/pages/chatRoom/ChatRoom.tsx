@@ -133,6 +133,9 @@ const ChatRoom = () => {
 
   return (
     <S.Container>
+      <S.Announce>
+        메세지가 제대로 보이지 않으면 채팅방을 나갔다가 들어와주세요
+      </S.Announce>
       <S.ChatPart ref={chatContainerRef}>
         <div ref={topRef} style={{ height: 1 }} />
         {messages.map((message, idx) => {
