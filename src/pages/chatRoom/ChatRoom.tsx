@@ -15,6 +15,7 @@ const ChatRoom = () => {
   const { chatRoomId } = useParams();
   const navigate = useNavigate();
   const [message, setMessage] = useState("");
+  const messageRef = useRef("");
   const user = useUserStore((s) => s.user);
   const bottomRef = useRef<HTMLDivElement>(null);
   const isInitialScroll = useRef(true);
@@ -22,6 +23,12 @@ const ChatRoom = () => {
   const chatContainerRef = useRef<HTMLDivElement>(null);
   const prevScrollHeightRef = useRef<number>(0);
   const shouldScrollToBottomRef = useRef(false);
+  const isSendingRef = useRef(false);
+
+  // 항상 ref 최신화
+  useEffect(() => {
+    messageRef.current = message;
+  }, [message]);
 
   useEffect(() => {
     if (chatRoomId) {
@@ -117,12 +124,21 @@ const ChatRoom = () => {
   }, [data]);
 
   const handleSend = () => {
-    if (message.trim()) {
-      sendMessage({ content: message });
-      setMessage("");
+    const trimmed = messageRef.current.trim();
+    if (!trimmed || isSendingRef.current) return;
 
-      shouldScrollToBottomRef.current = true;
-    }
+    isSendingRef.current = true;
+    sendMessage(
+      { content: trimmed },
+      {
+        onSuccess: () => {
+          setMessage("");
+        },
+        onSettled: () => {
+          isSendingRef.current = false;
+        },
+      }
+    );
   };
 
   if (!user) {
@@ -133,6 +149,9 @@ const ChatRoom = () => {
 
   return (
     <S.Container>
+      <S.Announce>
+        메세지가 제대로 보이지 않으면 채팅방을 나갔다가 들어와주세요
+      </S.Announce>
       <S.ChatPart ref={chatContainerRef}>
         <div ref={topRef} style={{ height: 1 }} />
         {messages.map((message, idx) => {
@@ -156,10 +175,7 @@ const ChatRoom = () => {
           onKeyDown={(e) => {
             if (e.key === "Enter" && !e.shiftKey) {
               e.preventDefault();
-              if (message.trim()) {
-                sendMessage({ content: message });
-                setMessage("");
-              }
+              handleSend();
             }
           }}
           placeholder={`${user.nickname}(으)로 대화해보세요.`}

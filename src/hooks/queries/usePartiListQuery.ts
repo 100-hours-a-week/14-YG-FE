@@ -7,5 +7,6 @@ export const usePartiListQuery = (postId: number) => {
     queryKey: ["partiList", postId],
     queryFn: () => getPartiList(postId),
     enabled: !!postId,
+    refetchOnMount: true,
   });
 };

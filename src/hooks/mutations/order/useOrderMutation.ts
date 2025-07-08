@@ -18,18 +18,17 @@ export const useOrderMutation = (postId: number) => {
         queryKey: ["postDetail", postId],
       });
       queryClient.invalidateQueries({ queryKey: ["hostAccount", postId] });
-      queryClient.refetchQueries({ queryKey: ["chatList"] });
       queryClient.setQueryData(["orderDetail", postId], data);
       closeModal();
       openModal("success", { postId: postId });
-      console.log(postId);
     },
     onError: (error) => {
       if (error instanceof AxiosError) {
         const status = error.response?.status;
+        const message = error.response?.data?.message;
 
         if (status === 409) {
-          alert("이미 주문한 공구입니다.");
+          alert(message);
           closeModal();
         } else if (status === 403 || error.message === "Access Denied") {
           alert("로그인이 만료되었습니다. 다시 로그인 해주세요.");

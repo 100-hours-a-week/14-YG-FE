@@ -9,6 +9,16 @@ export const Container = styled.div`
   overflow: hidden;
 `;
 
+export const Announce = styled.div`
+  margin: 10px;
+  padding: 5px;
+  text-align: center;
+  background-color: ${Colors.Web10};
+  border-radius: 10px;
+  ${FontStyles.SM_SemiBold};
+  color: ${Colors.Grayscale80};
+`;
+
 export const ChatPart = styled.div`
   flex: 1;
   overflow-y: auto;

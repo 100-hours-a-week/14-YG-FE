@@ -34,8 +34,8 @@ export const useInfiniteChatList = () => {
         cursorJoinedAt: lastPage.nextCursorJoinedAt,
       };
     },
-    staleTime: 1000 * 60,
-    refetchOnMount: false,
+    staleTime: 0,
+    refetchOnMount: true,
     refetchOnWindowFocus: false,
   });
 };

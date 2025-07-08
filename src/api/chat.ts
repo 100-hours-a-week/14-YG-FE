@@ -115,7 +115,6 @@ export const getPrevMessage = async (
  * @param data
  * @returns
  */
-
 export const getCurrentMessage = async (
   chatRoomId: number,
   lastMessageId?: string
@@ -123,7 +122,9 @@ export const getCurrentMessage = async (
   try {
     const res = await api.get(
       `/api/chats/participant/${chatRoomId}/polling/latest`,
-      { params: { lastMessageId } }
+      {
+        params: { lastMessageId },
+      }
     );
 
     if (res.data.data) {
@@ -133,7 +134,15 @@ export const getCurrentMessage = async (
     }
   } catch (error) {
     console.log(error);
-    // AxiosError 자체를 throw해야 useMutation에서 status 분기가 가능
+
+    // ❗ Axios 요청이 AbortSignal로 취소된 경우 처리
+    if (
+      error instanceof AxiosError &&
+      (error.name === "CanceledError" || error.code === "ERR_CANCELED")
+    ) {
+      throw error; // 필요한 경우 로그만 남기고 무시해도 됨
+    }
+
     if (error instanceof AxiosError) {
       throw error;
     }

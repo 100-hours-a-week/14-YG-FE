@@ -10,12 +10,24 @@ const KakaoCallback = () => {
   const code = urlParams.get("code");
   const redirectUri = window.location.origin + "/kakao/callback";
 
-  const { data: loginData, isLoading } = useKakaoLoginQuery({
+  const {
+    data: loginData,
+    isLoading,
+    isError,
+  } = useKakaoLoginQuery({
     code: String(code),
     redirectUri,
   });
 
   useEffect(() => {
+    if (isError) {
+      alert(
+        "카카오 로그인 중 오류가 발생했습니다.\n잠시 후 다시 시도해주세요."
+      );
+      navigate("/");
+      return;
+    }
+
     if (!loginData) return;
 
     switch (loginData.message) {
@@ -48,7 +60,7 @@ const KakaoCallback = () => {
         navigate("/");
         break;
     }
-  }, [loginData, navigate]);
+  }, [loginData, navigate, isError]);
 
   if (isLoading) return <Loading message="로그인 중입니다..." />;
 
