@@ -18,6 +18,7 @@ interface ProfileProps {
   postId?: number;
   user: UserInfo;
   isParticipant?: boolean;
+  isHidden?: boolean;
 }
 
 /**
@@ -26,7 +27,13 @@ interface ProfileProps {
  * @returns
  */
 
-const Profile = ({ type, postId, user, isParticipant }: ProfileProps) => {
+const Profile = ({
+  type,
+  postId,
+  user,
+  isParticipant,
+  isHidden,
+}: ProfileProps) => {
   const { mutate: logout } = useLogoutMutation();
   const openModal = useModalStore((s) => s.openModal);
   const { showToast, isDisabled } = useToastStore();
@@ -129,7 +136,7 @@ const Profile = ({ type, postId, user, isParticipant }: ProfileProps) => {
           )}
         </S.AccountInfo>
       </S.ProfileInfo>
-      {user.nickname === currentUser?.nickname && postId && (
+      {user.nickname === currentUser?.nickname && postId && !isHidden && (
         <DropdownMenu postId={postId} />
       )}
     </S.ProfilePart>

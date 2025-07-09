@@ -112,6 +112,7 @@ const PostDetail = () => {
               postId={post.postId}
               user={post.userProfileResponse}
               isParticipant={post.isParticipant}
+              isHidden={post.postStatus !== "OPEN"}
             />
           </S.TopSection>
           <SectionLine />
