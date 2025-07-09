@@ -158,6 +158,22 @@ export const SectionName = styled.p`
   white-space: nowrap; // ✅ 강제 줄바꿈 방지
 `;
 
+export const GoChat = styled.button`
+  margin-top: 15px;
+  border: none;
+  background-color: ${Colors.Grayscale10};
+  color: ${Colors.Grayscale60};
+  ${FontStyles.SM_SemiBold};
+  padding: 5px;
+  transition: transform 0.2s all;
+  border-radius: 20px;
+  &:hover {
+    cursor: pointer;
+    background-color: ${Colors.Web10};
+    color: ${Colors.Grayscale80};
+  }
+`;
+
 export const DetailInfo = styled.div`
   ${FontStyles.SM_Medium};
   white-space: pre-wrap;

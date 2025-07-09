@@ -36,6 +36,8 @@ export const useOrderMutation = (postId: number) => {
           openModal("login");
         } else if (status === 400) {
           alert("앗! 한발 늦은 것 같아요... 방금 모집이 마감되었어요😭");
+        } else if (status === 429) {
+          alert("주문취소 접수되어 환불 진행 중입니다");
         }
       } else {
         alert("알 수 없는 오류가 발생했습니다. 인스타그램으로 문의해주세요.");

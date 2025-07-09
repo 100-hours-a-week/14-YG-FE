@@ -4,7 +4,7 @@ import { SectionLine } from "../../components/common/SectionLine.styled";
 import Profile from "../../components/common/profile/Profile";
 import ImageSlider from "../../components/common/image/imageSlider/ImageSlider";
 import { useModalStore } from "../../stores/useModalStore";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { formatDateTime, formatRelativeTime, getDday } from "../../utils/date";
 import { useOrderStore } from "../../stores/useOrderStore";
 import { useUserStore } from "../../stores/useUserStore";
@@ -16,6 +16,7 @@ import { useEffect, useState } from "react";
 const PostDetail = () => {
   const openModal = useModalStore((s) => s.openModal);
   const setOrderInfo = useOrderStore((s) => s.setOrderInfo);
+  const navigate = useNavigate();
   const { postId } = useParams();
   const user = useUserStore((s) => s.user);
   const {
@@ -84,8 +85,6 @@ const PostDetail = () => {
     });
   };
 
-  console.log(post);
-
   const handleButtonClick = () => {
     if (!post) return;
 
@@ -113,6 +112,7 @@ const PostDetail = () => {
               postId={post.postId}
               user={post.userProfileResponse}
               isParticipant={post.isParticipant}
+              isHidden={post.postStatus !== "OPEN"}
             />
           </S.TopSection>
           <SectionLine />
@@ -176,6 +176,11 @@ const PostDetail = () => {
                 )}
               </S.OrderInfo>
             </S.InfoPart>
+            {post.isParticipant && (
+              <S.GoChat onClick={() => navigate(`/chat/${post.chatRoomId}`)}>
+                채팅방 참여해보기
+              </S.GoChat>
+            )}
             <S.DetailPart>
               <S.SectionDivider>
                 <S.SectionName>상품 설명</S.SectionName>

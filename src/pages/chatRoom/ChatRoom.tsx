@@ -150,6 +150,7 @@ const ChatRoom = () => {
   return (
     <S.Container>
       <S.Announce>
+        현재 실시간 채팅이 원활하지 못합니다😭 <br />
         메세지가 제대로 보이지 않으면 채팅방을 나갔다가 들어와주세요
       </S.Announce>
       <S.ChatPart ref={chatContainerRef}>
