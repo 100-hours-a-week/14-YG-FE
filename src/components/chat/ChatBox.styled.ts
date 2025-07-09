@@ -21,6 +21,7 @@ export const MessagePart = styled.div<{ $isMyMessage?: boolean }>`
   display: flex;
   flex-direction: column;
   gap: 5px;
+  width: 100%;
   align-items: ${({ $isMyMessage }) =>
     $isMyMessage ? "flex-end" : "flex-start"};
 `;
@@ -33,8 +34,11 @@ export const Message = styled.div<{ $isMyMessage?: boolean }>`
   background-color: ${Colors.Grayscale10};
   ${FontStyles.SM_Regular};
   width: fit-content;
+  max-width: 85%;
   padding: 5px 8px;
   border-radius: ${({ $isMyMessage }) =>
     $isMyMessage ? "16px 0px 16px 16px" : "0px 16px 16px 16px"};
   white-space: pre-line;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
 `;

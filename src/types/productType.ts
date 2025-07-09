@@ -58,6 +58,7 @@ export interface PostRequestData {
 }
 
 export interface PostProps {
+  chatRoomId: number;
   postId: number;
   title: string;
   name: string;

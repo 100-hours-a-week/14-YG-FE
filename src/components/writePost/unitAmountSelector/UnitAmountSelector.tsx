@@ -66,9 +66,11 @@ const UnitAmountSelector = ({
     const unitNum = Number(unitAmount);
     if (!isNaN(unitNum)) {
       setUnit(unitNum);
-      setValue("hostQuantity", unitNum);
+      if (mode === "write") {
+        setValue("hostQuantity", unitNum);
+      }
     }
-  }, [unitAmount, setValue]);
+  }, [unitAmount, setValue, mode]);
 
   const isDisabled = useCallback(
     (field: "totalAmount" | "unitAmount" | "hostQuantity") =>
@@ -134,7 +136,7 @@ const UnitAmountSelector = ({
           <Controller
             name="hostQuantity"
             control={control}
-            defaultValue={unit}
+            // defaultValue={unit}
             render={({ field }) => (
               <SelectButtonInput
                 unit={unit}
@@ -142,6 +144,7 @@ const UnitAmountSelector = ({
                 min={unit}
                 initial={field.value}
                 onChange={field.onChange}
+                mode={mode}
               />
             )}
           />

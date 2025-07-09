@@ -35,8 +35,6 @@ const Profile = ({ type, postId, user, isParticipant }: ProfileProps) => {
   const { mutate: patchImg } = usePatchProfileImgMutation();
   const queryClient = useQueryClient();
 
-  console.log(user);
-  console.log(hostAccount);
   const handleImageChange = async (_url: string, file: File) => {
     try {
       const [uploadedKey] = await uploadImages([file]); // ✅ file 직접 사용
