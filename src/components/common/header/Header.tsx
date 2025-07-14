@@ -4,11 +4,18 @@ import Service from "../../../assets/icons/Service.svg";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useModalStore } from "../../../stores/useModalStore";
 import { useUserStore } from "../../../stores/useUserStore";
+import Bell from "../../../assets/icons/Bell.svg";
+import AlertBell from "../../../assets/icons/AlertBell.svg";
+import { useNotificationStore } from "../../../stores/useNotificationStore";
+
 const Header = () => {
   const openModal = useModalStore((s) => s.openModal);
   const navigate = useNavigate();
   const { pathname } = useLocation();
   const user = useUserStore((s) => s.user);
+  const unreadCount = useNotificationStore(
+    (s) => s.notifications.filter((n) => !n.read).length
+  );
 
   const handleLogoClick = () => {
     if (pathname === "/signup" || pathname === "/signupInfo") {
@@ -51,6 +58,8 @@ const Header = () => {
       {pathname !== "/" && <S.GoBack onClick={handleGoBack} />}
       {pathname === "/chat" ? (
         <S.LogoPart>채팅 리스트</S.LogoPart>
+      ) : pathname === "/notification" ? (
+        <S.LogoPart>알림</S.LogoPart>
       ) : (
         <S.LogoPart onClick={handleLogoClick}>
           <img src={Logo} alt="logo" />
@@ -58,7 +67,17 @@ const Header = () => {
         </S.LogoPart>
       )}
       <S.SidePart>
-        {/*<S.AlertIcon src={Bell} alt="alert" />*/}
+        <S.AlertIcon
+          src={unreadCount > 0 ? AlertBell : Bell}
+          alt="alert"
+          onClick={() => {
+            if (!user) {
+              openModal("login"); // 로그인 안 한 경우
+            } else {
+              navigate("/notification"); // 로그인 한 경우
+            }
+          }}
+        />
         {pathname !== "/mypage" && (
           <S.ProfileIcon
             onClick={() => {

@@ -40,6 +40,7 @@ export const SidePart = styled.div`
 
 export const AlertIcon = styled.img`
   width: 24px;
+  cursor: pointer;
 `;
 
 export const ProfileIcon = styled(User)`
