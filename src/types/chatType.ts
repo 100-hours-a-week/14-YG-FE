@@ -41,3 +41,11 @@ export interface ChatMessage {
   messageContent: string;
   createdAt: string;
 }
+
+export interface AnonymousChat {
+  id: string;
+  postId: number;
+  aliasId: number;
+  message: string;
+  createdAt: string;
+}

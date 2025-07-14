@@ -12,6 +12,7 @@ import { useCancelOrderMutation } from "../../hooks/mutations/order/useCancelOrd
 import Loading from "../../components/common/loading/Loding";
 import { useProductDetail } from "../../hooks/queries/useProductQuery";
 import { useEffect, useState } from "react";
+import AnonymousChatPreview from "../../components/postDetail/anonymousChatPreview/AnonymousChatPreview";
 
 const PostDetail = () => {
   const openModal = useModalStore((s) => s.openModal);
@@ -26,6 +27,7 @@ const PostDetail = () => {
     refetch,
   } = useProductDetail(Number(postId));
   const { mutate: cancelOrder } = useCancelOrderMutation(Number(postId));
+  console.log(post);
 
   const [ddayText, setDdayText] = useState<string>("");
 
@@ -189,6 +191,7 @@ const PostDetail = () => {
               <S.DetailInfo>{post.description.trimEnd()}</S.DetailInfo>
               <S.PostDate>{formatRelativeTime(post.createdAt)}</S.PostDate>
             </S.DetailPart>
+            <AnonymousChatPreview chatRoomId={post.postId} />
           </S.PostInfo>
         </>
       )}

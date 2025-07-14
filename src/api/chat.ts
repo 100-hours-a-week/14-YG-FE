@@ -3,16 +3,13 @@ import api from "./instance";
 import { ChatListParams, PrevChatParams } from "../types/chatType";
 
 /**
- * 채팅방 참가
- * @param data
+ * 익명채팅방 참가
  * @returns
  */
 
-export const enterChat = async (groupBuyId: number) => {
+export const enterAnonyChat = async () => {
   try {
-    const res = await api.post(
-      `/api/group-buys/${groupBuyId}/chat/participant`
-    );
+    const res = await api.post("/api/chat/anon");
 
     if (res.data.data) {
       return res.data.data;
@@ -147,5 +144,29 @@ export const getCurrentMessage = async (
       throw error;
     }
     throw new Error("실시간 메세지 조회 중 알 수 없는 오류가 발생했습니다.");
+  }
+};
+
+/**
+ * 믹명 메세지 조회
+ * @param data
+ * @returns
+ */
+
+export const getAnonyMessage = async (chatRoomId: number) => {
+  try {
+    const res = await api.get(`/api/chat-anon/${chatRoomId}`);
+
+    if (res.data) {
+      return res.data;
+    } else {
+      throw new Error("응답에 data가 없습니다");
+    }
+  } catch (error) {
+    console.log(error);
+    if (error instanceof AxiosError) {
+      throw error;
+    }
+    throw new Error("채팅방 참여 중 알 수 없는 오류가 발생했습니다.");
   }
 };
