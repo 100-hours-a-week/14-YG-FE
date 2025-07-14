@@ -13,6 +13,7 @@ import EditMyInfo from "./pages/editMyInfo/EditMyInfo";
 import EditPassword from "./pages/editPassword/EditPassword";
 import KakaoCallback from "./pages/KakaoCallback";
 import EditAccount from "./pages/editAccount/EditAccount";
+import Notification from "./pages/notification/Notification";
 
 const AppRouter = () => {
   return (
@@ -33,6 +34,7 @@ const AppRouter = () => {
         <Route path="/chat" element={<ChatList />} />
         <Route path="/chat/:chatRoomId" element={<ChatRoom />} />
         <Route path="/kakao/callback" element={<KakaoCallback />} />
+        <Route path="/notification" element={<Notification />} />
       </Routes>
     </>
   );

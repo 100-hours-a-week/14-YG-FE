@@ -16,6 +16,7 @@ import { SectionLine } from "./components/common/SectionLine.styled";
 import HostModal from "./components/common/modal/hostModal/HostModal";
 import Toast from "./components/common/toast/Toast";
 import MasterButton from "./components/common/masterButton/MasterButton";
+import { useNotificationSSE } from "./hooks/useNotificationSSE";
 
 const App = () => {
   const navigate = useNavigate();
@@ -26,6 +27,7 @@ const App = () => {
   const openModal = useModalStore((s) => s.openModal);
   const isModalOpen = Boolean(openedModal);
   const { data, isLoading } = useMyInfoQuery();
+  useNotificationSSE();
 
   useEffect(() => {
     const protectedPaths = ["/writePost", "/editPost", "/mypage"];
