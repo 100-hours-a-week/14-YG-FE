@@ -1,14 +1,13 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { useSendMessageMutation } from "../../hooks/mutations/chat/useSendMessageMutation";
-import * as S from "./ChatRoom.styled";
 import { useEffect, useRef, useState } from "react";
 import { useUserStore } from "../../stores/useUserStore";
-import ChatBox from "../../components/chat/ChatBox";
 import { ChatMessage } from "../../types/chatType";
 import { useCurrentMessagePolling } from "../../hooks/useCurrentMessagePolling";
 import { useInfinitePastChat } from "../../hooks/queries/useChatQuery";
 import { useInView } from "react-intersection-observer";
 import { useQueryClient } from "@tanstack/react-query";
+import ChatRoomUI from "../../components/chat/chatRoomUI/ChatRoomUI";
 
 const ChatRoom = () => {
   const queryClient = useQueryClient();
@@ -148,50 +147,16 @@ const ChatRoom = () => {
   }
 
   return (
-    <S.Container>
-      <S.Announce>
-        현재 실시간 채팅이 원활하지 못합니다😭 <br />
-        메세지가 제대로 보이지 않으면 채팅방을 나갔다가 들어와주세요
-      </S.Announce>
-      <S.ChatPart ref={chatContainerRef}>
-        <div ref={topRef} style={{ height: 1 }} />
-        {messages.map((message, idx) => {
-          const prev = messages[idx - 1];
-          const isContinuation = prev?.participantId === message.participantId;
-          return (
-            <ChatBox
-              key={message.messageId}
-              message={message}
-              isContinuation={isContinuation}
-              isMyMessage={user.nickname === message.nickname}
-            />
-          );
-        })}
-        <div ref={bottomRef} />
-      </S.ChatPart>
-      <S.MessagePart>
-        <S.MessageBox
-          value={message}
-          onChange={(e) => setMessage(e.target.value)}
-          onKeyDown={(e) => {
-            if (e.key === "Enter" && !e.shiftKey) {
-              e.preventDefault();
-              handleSend();
-            }
-          }}
-          placeholder={`${user.nickname}(으)로 대화해보세요.`}
-        />
-        <S.StyledSendButton
-          onKeyDown={(e) => {
-            if (e.key === "Enter" && !e.shiftKey) {
-              e.preventDefault();
-              handleSend();
-            }
-          }}
-          onClick={handleSend}
-        />
-      </S.MessagePart>
-    </S.Container>
+    <ChatRoomUI
+      userNickname={user.nickname}
+      messages={messages}
+      message={message}
+      setMessage={setMessage}
+      onSend={handleSend}
+      bottomRef={bottomRef}
+      chatContainerRef={chatContainerRef}
+      topRef={topRef}
+    />
   );
 };
 

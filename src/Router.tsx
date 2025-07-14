@@ -14,6 +14,7 @@ import EditPassword from "./pages/editPassword/EditPassword";
 import KakaoCallback from "./pages/KakaoCallback";
 import EditAccount from "./pages/editAccount/EditAccount";
 import Notification from "./pages/notification/Notification";
+import AnonyChatRoom from "./pages/anonyChatRoom/AnonyChatRoom";
 
 const AppRouter = () => {
   return (
@@ -33,6 +34,7 @@ const AppRouter = () => {
         <Route path="/editPost/:postId" element={<EditPost />} />
         <Route path="/chat" element={<ChatList />} />
         <Route path="/chat/:chatRoomId" element={<ChatRoom />} />
+        <Route path="/anonymousChat/:chatRoomId" element={<AnonyChatRoom />} />
         <Route path="/kakao/callback" element={<KakaoCallback />} />
         <Route path="/notification" element={<Notification />} />
       </Routes>
