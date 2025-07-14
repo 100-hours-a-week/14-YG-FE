@@ -1,9 +1,13 @@
 import axios, { AxiosError } from "axios";
 import { LoginFormData } from "../schemas/loginSchema";
 import api from "./instance";
+import {
+  ConfirmAccountParams,
+  EditProfileRequest,
+  GetMyListParams,
+} from "../types/userType";
 
 export interface SignupRequestData {
-  //imageUrl?: string;
   email: string;
   password: string;
   nickname: string;
@@ -83,6 +87,30 @@ export const confirmNickname = async (nickname: string) => {
 };
 
 /**
+ * 계좌 본인 인증
+ * @returns
+ */
+export const confirmAccount = async (params?: ConfirmAccountParams) => {
+  try {
+    const res = await api.get("/api/users/check/account", {
+      params,
+    });
+
+    if (res.data) {
+      return res.data.message;
+    } else {
+      throw new Error("응답에 data가 없습니다");
+    }
+  } catch (error) {
+    console.log(error);
+    if (error instanceof AxiosError && error.response?.data?.message) {
+      throw new Error(error.response.data.message); // 서버 메시지를 직접 전달
+    }
+    throw new Error("닉네임 확인 중 오류가 발생했습니다.");
+  }
+};
+
+/**
  * 로그인
  * @param email
  * @param password
@@ -99,6 +127,28 @@ export const login = async (data: LoginFormData) => {
     }
   } catch (error) {
     console.error("로그인 실패:", error);
+    throw error; // 🔥 다시 던지기!
+  }
+};
+
+/**
+ * 카카오로그인
+ * @param code
+ * @returns
+ */
+export const kakaoLogin = async (redirectUri: string, code: string) => {
+  try {
+    const res = await api.get("/api/oauth/kakao/callback/complete", {
+      params: { redirectUri, code },
+    });
+
+    if (res.data) {
+      return res.data;
+    } else {
+      throw new Error("응답에 data가 없습니다");
+    }
+  } catch (error) {
+    console.error("카카오로그인 실패:", error);
     throw error; // 🔥 다시 던지기!
   }
 };
@@ -123,24 +173,14 @@ export const logout = async () => {
 
 /**
  * 프로필 정보 조회
- * @returns
+ * @returns 사용자 정보
  */
-// user.ts
 export const getMyInfo = async () => {
   try {
     const res = await api.get("/api/users/profile");
     if (res.data.data) return res.data.data;
   } catch (error) {
-    if (error instanceof AxiosError) {
-      console.log("로그인 필요");
-    } else {
-      console.log("알 수 없는 에러");
-    }
-    throw new Error("회원 정보를 불러오는 데 실패했습니다.");
-  }
-};
-
-/*} // ✅ AccessToken 만료인 경우
+    // ✅ AccessToken 만료인 경우
     if (error instanceof AxiosError && error.response?.status === 403) {
       try {
         await getRefreshToken(); // ✅ 새 토큰 발급받고
@@ -149,7 +189,81 @@ export const getMyInfo = async () => {
       } catch {
         throw new Error("로그인이 만료되었습니다. 다시 로그인해주세요.");
       }
-    }*/
+    }
+
+    // ✅ 기타 에러 처리
+    if (error instanceof AxiosError) {
+      console.log("로그인 필요");
+    } else {
+      console.log("알 수 없는 에러");
+    }
+    throw new Error("회원 정보를 불러오는 데 실패했습니다.");
+  }
+};
+/**
+ * 기본정보 수정
+ * @returns
+ */
+
+export const editProfile = async (data: EditProfileRequest) => {
+  try {
+    const res = await api.patch("/api/users/profile", data);
+    return res.data.message;
+  } catch (error: unknown) {
+    if (axios.isAxiosError(error)) {
+      const errorMessage = error.response?.data?.message || error.message;
+      console.error("기본정보 수정 실패:", errorMessage);
+      throw new Error(errorMessage); // ✅ 명확한 메시지 전달
+    } else {
+      console.error("기본정보 수정 실패: 알 수 없는 에러", error);
+    }
+    throw error;
+  }
+};
+
+/**
+ * 비밀번호 수정
+ * @returns
+ */
+
+export const editPassword = async (password: string) => {
+  try {
+    const res = await api.patch("/api/users/profile/password", {
+      password: password,
+    });
+    return res.data.message;
+  } catch (error: unknown) {
+    if (axios.isAxiosError(error)) {
+      const errorMessage = error.response?.data?.message || error.message;
+      console.error("기본정보 수정 실패:", errorMessage);
+      throw new Error(errorMessage); // ✅ 명확한 메시지 전달
+    } else {
+      console.error("비밀번호 변경 실패: 알 수 없는 에러", error);
+    }
+    throw error;
+  }
+};
+
+/**
+ * 계좌정보 변경
+ * @returns
+ */
+
+export const editAccount = async (data: ConfirmAccountParams) => {
+  try {
+    const res = await api.patch("/api/users/profile/account", data);
+    return res.data.message;
+  } catch (error: unknown) {
+    if (axios.isAxiosError(error)) {
+      const errorMessage = error.response?.data?.message || error.message;
+      console.error("기본정보 수정 실패:", errorMessage);
+      throw new Error(errorMessage); // ✅ 명확한 메시지 전달
+    } else {
+      console.error("계좌정보 변경 실패: 알 수 없는 에러", error);
+    }
+    throw error;
+  }
+};
 
 /**
  * 토큰 재발행
@@ -174,6 +288,30 @@ export const getRefreshToken = async () => {
 };
 
 /**
+ * 프로필 이미지 수정
+ * @returns
+ */
+export const patchProfileImg = async (image: string) => {
+  try {
+    const res = await api.patch("/api/users/profile/image", {
+      imageKey: image,
+    });
+
+    if (res.data) {
+      return res.data;
+    } else {
+      throw new Error("응답에 data가 없습니다");
+    }
+  } catch (error) {
+    console.log(error);
+    if (error instanceof AxiosError && error.response?.data?.message) {
+      throw new Error(error.response.data.message); // 서버 메시지를 직접 전달
+    }
+    throw new Error("프로필 이미지 수정 중 오류가 발생했습니다.");
+  }
+};
+
+/**
  * 회원탈퇴
  * @returns
  */
@@ -187,6 +325,65 @@ export const deleteUser = async () => {
     }
   } catch (error) {
     console.error("탈퇴 실패:", error);
+    throw error;
+  }
+};
+
+/**
+ * 관심 공구 추가
+ * @returns
+ */
+export const postLike = async (postId: number) => {
+  try {
+    const res = await api.post(`/api/users/wish/${postId}`);
+
+    if (res.data) {
+      return res.data;
+    }
+  } catch (error) {
+    if (axios.isAxiosError(error) && error.response?.data?.message) {
+      alert(error.response.data.message); // 서버 메시지 직접 사용자에게 표시
+    } else {
+      alert("관심 등록 중 오류가 발생했습니다.");
+    }
+  }
+};
+
+/**
+ * 관심 공구 취소
+ * @returns
+ */
+export const deleteLike = async (postId: number) => {
+  try {
+    const res = await api.delete(`/api/users/wish/${postId}`);
+
+    if (res.data) {
+      return res.data;
+    }
+  } catch (error) {
+    if (axios.isAxiosError(error) && error.response?.data?.message) {
+      alert(error.response.data.message); // 서버 메시지 직접 사용자에게 표시
+    } else {
+      alert("관심 취소 중 오류가 발생했습니다.");
+    }
+  }
+};
+
+/**
+ * 관심공구 조회
+ * @returns
+ */
+export const getLikeList = async (params?: GetMyListParams) => {
+  try {
+    const res = await api.get("/api/group-buys/users/me/wishes", {
+      params,
+    });
+
+    if (res.data.data) {
+      return res.data.data;
+    }
+  } catch (error) {
+    console.error("참여목록 조회 실패:", error);
     throw error;
   }
 };

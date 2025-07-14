@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { Colors, FontStyles } from "../../../styles";
+import Arrow from "../../../assets/icons/RightArrow.svg?react";
 
 export const RowScrollSection = styled.div`
   display: flex;
@@ -8,8 +9,21 @@ export const RowScrollSection = styled.div`
   gap: 10px;
 `;
 
+export const SectionHead = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+`;
+
 export const SectionName = styled.p`
   ${FontStyles.MD1_Bold};
+`;
+
+export const StyledArrow = styled(Arrow)`
+  color: ${Colors.Main10};
+  width: 20px;
+  height: 20px;
 `;
 
 export const RowScrollContainer = styled.div`

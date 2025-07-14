@@ -3,6 +3,7 @@ import { Colors, FontStyles } from "../../styles";
 
 export const PostDetailContainer = styled.div`
   width: 100%;
+  margin-bottom: 30px;
 `;
 
 export const TopSection = styled.div`
@@ -55,7 +56,7 @@ export const TitlePart = styled.div`
 export const InfoPart = styled.div`
   display: flex;
   justify-content: space-between;
-  margin-top: 5px;
+  margin-top: 7px;
 `;
 
 export const PostTitle = styled.p`
@@ -85,8 +86,9 @@ export const ProductInfo = styled.div`
 `;
 
 export const PickupDate = styled.p`
-  ${FontStyles.XXXS_SemiBold};
+  ${FontStyles.XXS_SemiBold};
   color: ${Colors.Grayscale60};
+  white-space: nowrap; // ✅ 강제 줄바꿈 방지
 `;
 
 export const unitPrice = styled.p`
@@ -95,13 +97,14 @@ export const unitPrice = styled.p`
 `;
 
 export const unitAmount = styled.p`
-  ${FontStyles.XXXS_Medium};
+  ${FontStyles.XXS_Medium};
   color: ${Colors.Grayscale60};
 `;
 
 export const OrderInfo = styled.div`
   display: flex;
   flex-direction: column;
+  gap: 2px;
   align-items: end;
 `;
 
@@ -110,7 +113,6 @@ export const OrderButton = styled.button<{ $isCancel: boolean }>`
   padding: 3px 7px;
   border: none;
   border-radius: 5px;
-  margin-bottom: 3px;
   background-color: ${({ $isCancel }) =>
     $isCancel ? Colors.Main30 : Colors.Main10};
   color: ${Colors.Grayscale0};
@@ -130,21 +132,22 @@ export const OrderButton = styled.button<{ $isCancel: boolean }>`
 `;
 
 export const Ddate = styled.p`
-  ${FontStyles.XXXS_Regular};
+  ${FontStyles.XXS_SemiBold};
   color: ${Colors.Main10};
+  white-space: nowrap; // ✅ 강제 줄바꿈 방지
   margin-top: 3px;
 `;
 
 export const DetailPart = styled.div`
   display: flex;
   flex-direction: column;
+  margin-top: 20px;
 `;
 
 export const SectionDivider = styled.div`
   display: flex;
   width: 100%;
   align-items: center;
-  margin: 10px 0px;
   gap: 15px;
 `;
 
@@ -155,9 +158,26 @@ export const SectionName = styled.p`
   white-space: nowrap; // ✅ 강제 줄바꿈 방지
 `;
 
+export const GoChat = styled.button`
+  margin-top: 15px;
+  border: none;
+  background-color: ${Colors.Grayscale10};
+  color: ${Colors.Grayscale60};
+  ${FontStyles.SM_SemiBold};
+  padding: 5px;
+  transition: transform 0.2s all;
+  border-radius: 20px;
+  &:hover {
+    cursor: pointer;
+    background-color: ${Colors.Web10};
+    color: ${Colors.Grayscale80};
+  }
+`;
+
 export const DetailInfo = styled.div`
-  ${FontStyles.XS_Medium};
+  ${FontStyles.SM_Medium};
   white-space: pre-wrap;
+  margin-top: 10px;
 `;
 
 export const PostDate = styled.p`
@@ -165,5 +185,5 @@ export const PostDate = styled.p`
   justify-content: end;
   color: ${Colors.Grayscale60};
   ${FontStyles.XXXS_SemiBold};
-  margin-top: 20px;
+  margin-top: 30px;
 `;

@@ -9,7 +9,7 @@ import { Colors } from "../../../../styles";
 import { HelperText } from "../../HelperText.styled";
 
 interface Option {
-  value: string;
+  value: number;
   label: string;
 }
 
@@ -34,10 +34,11 @@ const customStyles: StylesConfig<Option, false> = {
   }),
   control: (provided) => ({
     ...provided,
-    borderRadius: "8px",
-    border: `1px solid ${Colors.Grayscale50}`,
+    borderRadius: "0px",
+    border: "none",
+    borderBottom: `1px solid ${Colors.Grayscale50}`,
     height: "40px",
-    padding: "0 4px",
+    //padding: "0 4px",
     boxShadow: "none",
     ":hover": {
       borderColor: Colors.Grayscale60,
@@ -118,11 +119,7 @@ const Dropdown = ({
   ...props
 }: DropdownProps) => {
   const handleChange = (option: Option | null) => {
-    if (option?.value === "") {
-      onChange?.(null); // "" → null로 변환해서 전달
-    } else {
-      onChange?.(option);
-    }
+    onChange?.(option);
   };
   return (
     <S.Container $width={width}>

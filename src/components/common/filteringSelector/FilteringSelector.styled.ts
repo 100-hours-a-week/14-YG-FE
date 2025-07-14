@@ -4,13 +4,15 @@ import { Colors, FontStyles } from "../../../styles";
 export const Container = styled.div`
   display: flex;
   gap: 10px;
-  margin: 0px 30px;
 `;
 
-export const Button = styled.button<{ $isSelected: boolean }>`
-  width: 64px;
+export const Button = styled.button<{
+  $isSelected: boolean;
+}>`
+  width: fit-content;
   height: 24px;
   border-radius: 20px;
+  padding: 0px 15px;
   border: none;
   ${FontStyles.XS_SemiBold};
   background-color: ${({ $isSelected }) =>

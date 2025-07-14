@@ -39,6 +39,8 @@ const Header = () => {
           localStorage.removeItem("signupStep1");
         },
       });
+    } else if (pathname === "/editProfile") {
+      navigate("/mypage");
     } else {
       navigate(-1);
     }
@@ -47,10 +49,14 @@ const Header = () => {
   return (
     <S.HeaderContainer>
       {pathname !== "/" && <S.GoBack onClick={handleGoBack} />}
-      <S.LogoPart onClick={handleLogoClick}>
-        <img src={Logo} alt="logo" />
-        <S.ServiceName src={Service} />
-      </S.LogoPart>
+      {pathname === "/chat" ? (
+        <S.LogoPart>채팅 리스트</S.LogoPart>
+      ) : (
+        <S.LogoPart onClick={handleLogoClick}>
+          <img src={Logo} alt="logo" />
+          <S.ServiceName src={Service} />
+        </S.LogoPart>
+      )}
       <S.SidePart>
         {/*<S.AlertIcon src={Bell} alt="alert" />*/}
         {pathname !== "/mypage" && (

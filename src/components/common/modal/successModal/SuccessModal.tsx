@@ -3,20 +3,44 @@ import Modal from "../Modal";
 import * as S from "./SuccessModal.styled";
 import Box from "../../../../assets/images/Box.png";
 import { Button } from "../../button/Button.styled";
-import { OrderResponse } from "../../../../types/orderType";
-import { useEffect, useRef, useState } from "react";
+import { useLayoutEffect, useRef, useState } from "react";
+import { useToastStore } from "../../../../stores/useToastStore";
+import { useOrderDetailQuery } from "../../../../hooks/queries/useOrderDetailQuery";
 
-const SuccessModal = () => {
+interface SuccessModalProps {
+  postId: number;
+}
+
+const SuccessModal = ({ postId }: SuccessModalProps) => {
   const closeModal = useModalStore((s) => s.closeModal);
-  const orderInfo = useModalStore((s) => s.payload) as OrderResponse;
   const [accountWidth, setAccountWidth] = useState<number>(0);
   const accountRef = useRef<HTMLDivElement>(null);
+  const { showToast } = useToastStore();
+  const { data: orderInfo } = useOrderDetailQuery(Number(postId));
 
-  useEffect(() => {
-    if (accountRef.current) {
-      setAccountWidth(accountRef.current.offsetWidth);
-    }
-  }, []);
+  useLayoutEffect(() => {
+    const id = requestAnimationFrame(() => {
+      if (accountRef.current) {
+        setAccountWidth(accountRef.current.offsetWidth);
+      }
+    });
+    return () => cancelAnimationFrame(id);
+  }, [orderInfo]);
+
+  if (!orderInfo) return null;
+
+  const handleCopy = () => {
+    if (!orderInfo) return;
+
+    navigator.clipboard
+      .writeText(orderInfo.hostAccountNumber)
+      .then(() => {
+        showToast("계좌번호가 복사되었습니다!");
+      })
+      .catch(() => {
+        alert("복사에 실패했습니다. 다시 시도해주세요.");
+      });
+  };
 
   return (
     <Modal onClose={closeModal}>
@@ -38,8 +62,10 @@ const SuccessModal = () => {
           <S.AccountPart ref={accountRef}>
             <S.AccountWrapper>
               <S.Account>
-                <span>주최자 계좌번호 : </span>
-                {orderInfo.hostAccountBank} {orderInfo.hostAccountNumber}
+                주최자 계좌번호 :{" "}
+                <span onClick={handleCopy}>
+                  {orderInfo.hostAccountBank} {orderInfo.hostAccountNumber}
+                </span>
               </S.Account>
               <S.Name>
                 <span>예금주 : </span>

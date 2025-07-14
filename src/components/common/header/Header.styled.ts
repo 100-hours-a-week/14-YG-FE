@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import User from "../../../assets/icons/User.svg?react";
 import GoBackIcon from "../../../assets/icons/GoBack.svg?react";
+import { FontStyles } from "../../../styles";
 
 export const HeaderContainer = styled.div`
   position: relative;
@@ -22,6 +23,7 @@ export const LogoPart = styled.div`
   display: flex;
   align-items: center;
   cursor: pointer;
+  ${FontStyles.MD1_SemiBold};
 `;
 
 export const ServiceName = styled.img`

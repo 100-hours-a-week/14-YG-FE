@@ -7,11 +7,9 @@ export const SearchBarContainer = styled.div`
   width: 100%;
 `;
 
-export const SearchLine = styled.hr`
+export const SearchLine = styled.div`
   flex: 1;
-  height: 1px;
-  border: none;
-  background-color: ${Colors.Main10};
+  border-top: 1px solid ${Colors.Main10};
 `;
 
 export const SearchBox = styled.div`
@@ -19,14 +17,15 @@ export const SearchBox = styled.div`
   border: 1px solid ${Colors.Main10};
   width: 240px;
   border-radius: 50px;
-  padding: 8px 15px;
+  padding: 7px 15px;
   display: flex;
   justify-content: space-between;
+  box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.1);
 `;
 
 export const SearchText = styled.input`
   width: 185px;
-  ${FontStyles.SM_Medium};
+  ${FontStyles.XS_Medium};
   border: none;
   outline: none;
 

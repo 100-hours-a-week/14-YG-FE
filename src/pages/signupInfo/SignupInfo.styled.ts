@@ -6,8 +6,8 @@ export const SignupSection = styled.div`
   flex-direction: column;
   width: 100%;
   flex: 1;
-  gap: 10px;
   margin: 15px 0px;
+  gap: 5px;
   align-items: center;
   justify-content: center;
 `;
@@ -31,23 +31,9 @@ export const SignupForm = styled.form`
   flex-direction: column;
   gap: 10px;
   align-items: center;
-  margin-top: 20px;
+  margin-top: 10px;
 
   > button {
     margin-top: 10px;
-  }
-`;
-
-export const ConfirmButton = styled.button`
-  border: none;
-  background-color: ${Colors.Grayscale0};
-  ${FontStyles.XS_Medium};
-  color: ${Colors.Grayscale60};
-  text-decoration: underline;
-  cursor: pointer;
-
-  &:disabled {
-    color: ${Colors.Grayscale50};
-    cursor: default;
   }
 `;

@@ -1,75 +1,66 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import MultiImageUploader from "../../components/writePost/multiImageUploader/MultiImageUploader";
+import { useForm, FormProvider } from "react-hook-form";
+import { useState } from "react";
 import { PostFormData, writePostSchema } from "../../schemas/writePostSchema";
-import * as S from "./WritePost.styled";
-import { Controller, FormProvider, useForm } from "react-hook-form";
-import Button from "../../components/common/button/Button";
-import Send from "../../assets/icons/LightSend.svg";
-import UnitAmountSelector from "../../components/writePost/unitAmountSelector/UnitAmountSelector";
-import InputField from "../../components/common/input/inputField/InputField";
-import DateInput from "../../components/common/input/dateInput/DateInput";
-import TextAreaField from "../../components/common/input/textAreaField/TextAreaField";
-import { HelperText } from "../../components/common/HelperText.styled";
-import { formatDateTimeForDTO } from "../../utils/date";
 import { useUserStore } from "../../stores/useUserStore";
-import { uploadImages } from "../../api/image";
-import { useEffect, useState } from "react";
-import ControlledNumberInput from "../../components/common/input/controlledNumberInput/ControlledNumberInput";
-import { useGetAIMutation } from "../../hooks/mutations/host/useGetAIMutation";
-import Loading from "../../components/common/loading/Loding";
+import { useModalStore } from "../../stores/useModalStore";
 import { usePostMutation } from "../../hooks/mutations/host/usePostMutation";
+import Loading from "../../components/common/loading/Loding";
+import * as S from "./WritePost.styled";
+import { formatDateTimeForDTO } from "../../utils/date";
+import PostForm from "../../components/writePost/postForm/PostForm";
+import { useUploadImageMutation } from "../../hooks/mutations/image/useUploadImageMutation";
+import { EditPostFormData } from "../../schemas/editPostSchema";
 
 const WritePost = () => {
   const user = useUserStore((s) => s.user);
+  const openModal = useModalStore((s) => s.openModal);
   const [imageFiles, setImageFiles] = useState<File[]>([]);
-  const [isAISubmitted, setIsAISubmitted] = useState(false);
+  const { mutateAsync: uploadImage, isPending } = useUploadImageMutation();
 
   const methods = useForm<PostFormData>({
     resolver: zodResolver(writePostSchema),
     mode: "onChange",
   });
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    setValue,
-    watch,
-  } = methods;
 
-  const url = watch("url");
-  const { mutate: getAIMutate, isPending: isGeneratingAI } = useGetAIMutation(
-    setValue,
-    setIsAISubmitted
-  );
   const { mutate: writePostMutate, isPending: isPosting } = usePostMutation();
-
-  if (isGeneratingAI) {
-    setValue("price", -1);
-  }
-
-  useEffect(() => {
-    setIsAISubmitted(false);
-  }, [url]);
 
   const handleFormSubmit = async (data: PostFormData) => {
     try {
-      // 1. 이미지 업로드 (key만 반환됨)
-      const imageKeys = await uploadImages(imageFiles); // ← File[]은 외부 상태에서 가져오는 것으로 가정
-      console.log("업로드 결과 (S3 keys):", imageKeys);
+      const urls = data.imageUrls ?? [];
 
-      // 2. 최종 payload 구성
+      // 1. 로컬 이미지 업로드
+      const localUploadResults =
+        imageFiles.length > 0 ? await uploadImage(imageFiles) : [];
+
+      // 2. imageUrls 순서 유지하면서 key 매핑
+      let localIndex = 0;
+      const imageKeys = urls.map((url) => {
+        if (url.includes("/tmp/")) {
+          // AI 이미지 → tmp 키 추출
+          const parts = url.split("/");
+          const tmpIndex = parts.findIndex((p) => p === "tmp");
+          return tmpIndex >= 0 ? `tmp/${parts[tmpIndex + 1]}` : "";
+        } else {
+          // 로컬 이미지 → 업로드 결과에서 순서대로 가져오기
+          return localUploadResults[localIndex++] ?? "";
+        }
+      });
+
+      const { imageUrls, ...rest } = data;
+      void imageUrls;
+
       const payload = {
-        ...data,
-        imageKeys: imageKeys,
+        ...rest,
+        imageKeys,
         location: "카카오테크 부트캠프장",
         dueDate: formatDateTimeForDTO(data.dueDate),
         pickupDate: formatDateTimeForDTO(data.pickupDate),
       };
-      if (payload.url === "") {
-        delete payload.url; // 명시적으로 삭제
-      }
 
-      console.log("최종 payload:", payload);
+      if (payload.url === "") {
+        delete payload.url;
+      }
 
       writePostMutate(payload);
     } catch (err) {
@@ -79,134 +70,25 @@ const WritePost = () => {
 
   const onSubmit = (data: PostFormData) => {
     if (!user) {
-      console.warn("로그인 필요");
+      alert("다시 로그인해주세요.");
+      openModal("login");
       return;
     }
     handleFormSubmit(data);
   };
 
+  if (isPending) return <Loading message="이미지 업로드중입니다" />;
   if (isPosting) return <Loading message="공구글 게시중입니다" />;
 
   return (
     <S.Container>
       <FormProvider {...methods}>
-        <S.PostForm onSubmit={handleSubmit(onSubmit)}>
-          <MultiImageUploader
-            value={watch("imageUrls")}
-            onChange={(urls, files) => {
-              setValue("imageUrls", urls);
-              setImageFiles(files);
-            }}
-            helperText={errors.imageUrls?.message}
-          />
-          <S.URL>
-            <InputField
-              label="URL (선택)"
-              styleType="post"
-              placeholder="상품 URL을 입력해주세요"
-              {...register("url")}
-            />
-            <Button
-              disabled={!url || isGeneratingAI || isAISubmitted || !!errors.url}
-              onClick={() => {
-                if (!url || errors?.url || isGeneratingAI || isAISubmitted)
-                  return;
-                getAIMutate(url);
-              }}
-              buttonStyle="square"
-            >
-              <img src={Send} />
-            </Button>
-          </S.URL>
-          <HelperText>
-            {isGeneratingAI
-              ? "AI 답변 생성은 최대 1분 소요될 수 있습니다. 다른 폼들을 채워주시면 얼른 가져다드리겠습니다 💌 (❁´◡`❁)"
-              : errors.url?.message}
-          </HelperText>
-          <InputField
-            label="공구 제목"
-            styleType="post"
-            placeholder="공구 제목을 입력해주세요"
-            disabled={isGeneratingAI}
-            {...register("title")}
-            value={isGeneratingAI ? "AI 답변 생성중..." : watch("title")}
-            helperText={errors.title?.message}
-          />
-          <InputField
-            label="상품 이름"
-            styleType="post"
-            placeholder="상품 이름을 입력해주세요"
-            disabled={isGeneratingAI}
-            {...register("name")}
-            value={isGeneratingAI ? "AI 답변 생성중..." : watch("name")}
-            helperText={errors.name?.message}
-          />
-          <S.Label>계좌번호</S.Label>
-          <S.AccountPart>
-            <Button disabled>{user?.accountBank}</Button>
-            <InputField value={user?.accountNumber} required={false} disabled />
-          </S.AccountPart>
-
-          <ControlledNumberInput
-            name="price"
-            control={methods.control}
-            label="상품 전체 가격"
-            placeholder="가격을 입력해주세요"
-            prefix="₩"
-            maxDigits={9}
-            disabled={isGeneratingAI}
-            helperText={errors.price}
-          />
-          <UnitAmountSelector disabled={isGeneratingAI} />
-          <TextAreaField
-            label="자세한 설명"
-            placeholder="공구방에 올릴 게시글 내용을 작성해주세요."
-            {...register("description")}
-            disabled={isGeneratingAI}
-            helperText={errors.description?.message}
-            value={isGeneratingAI ? "AI 답변 생성중..." : watch("description")}
-          />
-          <Controller
-            control={methods.control}
-            name="dueDate"
-            render={({ field, fieldState }) => (
-              <DateInput
-                label="공구 마감 일자"
-                value={field.value}
-                placeholder="마감 일자를 선택해주세요"
-                onChange={field.onChange}
-                helperText={fieldState.error?.message}
-              />
-            )}
-          />
-          <div>
-            <S.Pickup>
-              <Controller
-                control={methods.control}
-                name="pickupDate" // 너의 form schema 기준 name
-                render={({ field }) => (
-                  <DateInput
-                    label="픽업 일자 / 거래 장소"
-                    value={field.value}
-                    placeholder="픽업 일자를 선택해주세요"
-                    onChange={field.onChange}
-                  />
-                )}
-              />
-              <InputField
-                styleType="post"
-                placeholder="카테부 교육장"
-                disabled
-              />
-            </S.Pickup>
-            {errors.pickupDate?.message && (
-              <HelperText>{errors.pickupDate.message}</HelperText>
-            )}
-          </div>
-          <S.ButtonWrapper>
-            <Button type="submit">작성 완료</Button>
-          </S.ButtonWrapper>
-        </S.PostForm>
+        <PostForm
+          onSubmit={onSubmit as (data: PostFormData | EditPostFormData) => void}
+          setImageFiles={setImageFiles}
+          submitButtonText="작성 완료"
+          mode="write"
+        />
       </FormProvider>
     </S.Container>
   );

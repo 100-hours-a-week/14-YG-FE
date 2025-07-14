@@ -4,13 +4,13 @@ import { useModalStore } from "../../../../stores/useModalStore";
 import SelectButtonInput from "../../input/selectButtonInput/SelectButtonInput";
 import InputField from "../../input/inputField/InputField";
 import AgreeCheckBox from "../../agreeCheckbox/AgreeCheckBox";
-import { DotIcon } from "../../DotIcon.styled";
 import Button from "../../button/Button";
 import { SectionLine } from "../../SectionLine.styled";
 import { useOrderStore } from "../../../../stores/useOrderStore";
 import { useUserStore } from "../../../../stores/useUserStore";
 import { useOrderMutation } from "../../../../hooks/mutations/order/useOrderMutation";
 import { useState } from "react";
+import DotText from "../../dotText/DotText";
 
 const OrderModal = () => {
   const closeModal = useModalStore((s) => s.closeModal);
@@ -108,12 +108,21 @@ const OrderModal = () => {
               placeholder="입금자명을 입력해주세요."
             />
             <S.Guide>
-              <DotIcon />
-              입금자명은 수령 시 확인 가능한 본인 이름으로 입력해주세요. <br />
-              <DotIcon />
-              주최자 계좌번호로 입금이 완료되어야 공구 참여자로 진행되며 1일
-              이내에 결제되지 <br />
-              않으면 주문이 취소됩니다.
+              <DotText
+                text={
+                  <S.StyledText>
+                    입금자명은 수령 시 확인 가능한 본인 이름으로 입력해주세요.
+                  </S.StyledText>
+                }
+              />
+              <DotText
+                text={
+                  <S.StyledText>
+                    주최자 계좌번호로 입금이 완료되어야 공구 참여자로 진행되며
+                    1일 이내에 결제되지 않으면 주문이 취소됩니다.
+                  </S.StyledText>
+                }
+              />
             </S.Guide>
             <AgreeCheckBox
               label="환불 방법"

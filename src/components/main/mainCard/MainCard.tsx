@@ -3,6 +3,7 @@ import * as S from "./MainCard.styled";
 import { getImageUrl } from "./../../../utils/image";
 
 interface MainCardProps {
+  postId: number;
   imageKey: string;
   title: string;
   unitPrice: string;
@@ -11,6 +12,7 @@ interface MainCardProps {
 }
 
 const MainCard = ({
+  postId,
   imageKey,
   title,
   unitPrice,
@@ -19,7 +21,7 @@ const MainCard = ({
 }: MainCardProps) => {
   return (
     <S.MainCardContainer onClick={onClick}>
-      <ImageContainer imageUrl={getImageUrl(imageKey)} />
+      <ImageContainer imageUrl={getImageUrl(imageKey)} postId={postId} />
       <S.CardInfo>
         <S.CardTitle>{title}</S.CardTitle>
         <S.UnitInfo>

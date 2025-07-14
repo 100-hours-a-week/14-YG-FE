@@ -8,38 +8,87 @@ interface ImageData {
   file: File;
   preview: string;
   isMain: boolean;
+  fromAI?: boolean;
 }
 
 interface MultiImageUploaderProps {
-  value: string[]; // 이미지 URL 목록 (예: preview 또는 S3 URL)
   onChange: (urls: string[], files: File[]) => void;
+  defaultPreviewUrls?: string[];
   helperText?: string;
 }
 
 const MultiImageUploader = ({
-  value,
   onChange,
+  defaultPreviewUrls,
   helperText,
 }: MultiImageUploaderProps) => {
   const [images, setImages] = useState<ImageData[]>([]);
   const inputRef = useRef<HTMLInputElement>(null);
+  const initialized = useRef(false);
+
+  useEffect(() => {
+    if (
+      defaultPreviewUrls &&
+      defaultPreviewUrls.length > 0 &&
+      !initialized.current
+    ) {
+      const defaults: ImageData[] = defaultPreviewUrls
+        .filter((url) => url !== "") // 빈 값 필터링
+        .map((url, i) => ({
+          id: crypto.randomUUID(),
+          file: new File([], "server-image.jpg"), // ❗ 이건 edit 용도에만 있어야 함
+          preview: url,
+          isMain: i === 0,
+          fromAI: true,
+        }));
+
+      if (defaults.length > 0) {
+        setImages(defaults);
+        initialized.current = true;
+      }
+    }
+  }, [defaultPreviewUrls]);
 
   const handleUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file || images.length >= 5) return;
+    const files = e.target.files;
+    if (!files || images.length >= 5) return;
 
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      const newImage: ImageData = {
-        id: crypto.randomUUID(),
-        file,
-        preview: reader.result as string,
-        isMain: images.length === 0,
-      };
-      setImages((prev) => [...prev, newImage]);
-      e.target.value = ""; // 같은 파일 재선택 가능
-    };
-    reader.readAsDataURL(file);
+    const filesArray = Array.from(files);
+    const readers = filesArray.map((file) => {
+      return new Promise<ImageData>((resolve) => {
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          resolve({
+            id: crypto.randomUUID(),
+            file,
+            preview: reader.result as string,
+            isMain: false, // 대표 사진은 후처리로 지정
+          });
+        };
+        reader.readAsDataURL(file);
+      });
+    });
+
+    Promise.all(readers).then((newImages) => {
+      setImages((prev) => {
+        const merged = [...prev, ...newImages].slice(0, 5); // ✅ 여기서 자르기
+        if (!merged.some((img) => img.isMain) && merged.length > 0) {
+          merged[0].isMain = true;
+        }
+
+        const updatedUrls = merged.map((img) => img.preview);
+        const updatedFiles = [...merged] // 전체 이미지에서
+          .filter((img) => !img.fromAI && img.file.name !== "server-image.jpg")
+          .map((img) => img.file);
+        console.log("🧪 merged", merged);
+        console.log("🧪 updatedFiles", updatedFiles);
+
+        onChange(updatedUrls, updatedFiles);
+        return merged;
+      });
+    });
+
+    e.target.value = ""; // 같은 파일 재선택 가능하게 초기화
   };
 
   const handleDelete = (id: string) => {
@@ -48,18 +97,18 @@ const MultiImageUploader = ({
       if (!updated.some((img) => img.isMain) && updated.length > 0) {
         updated[0].isMain = true;
       }
+
+      // ✅ 이미지 삭제 후 onChange 재호출
+      const updatedUrls = updated.map((img) => img.preview);
+      const updatedFiles = updated
+        .filter((img) => !img.fromAI)
+        .map((img) => img.file);
+
+      onChange(updatedUrls, updatedFiles);
+
       return updated;
     });
   };
-
-  useEffect(() => {
-    const urls = images.map((img) => img.preview);
-    if (JSON.stringify(urls) !== JSON.stringify(value)) {
-      const urls = images.map((img) => img.preview);
-      const files = images.map((img) => img.file);
-      onChange(urls, files); // ✅ 파일도 같이 전달
-    }
-  }, [images]);
 
   return (
     <S.Container>
@@ -84,6 +133,7 @@ const MultiImageUploader = ({
       <input
         type="file"
         accept="image/*"
+        multiple
         ref={inputRef}
         style={{ display: "none" }}
         onChange={handleUpload}

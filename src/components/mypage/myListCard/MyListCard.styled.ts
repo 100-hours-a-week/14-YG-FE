@@ -1,16 +1,17 @@
 import styled from "styled-components";
-import { Colors, FontStyles } from "../../../../styles";
+import { Colors, FontStyles } from "../../../styles";
 
 export const CardContainer = styled.div`
   display: flex;
   flex-direction: column;
+  gap: 15px;
+  margin: 20px 30px;
 `;
 
 export const CommonSection = styled.div`
   display: flex;
   gap: 10px;
   align-items: center;
-  margin: 20px 30px;
   cursor: pointer;
 `;
 
@@ -22,25 +23,25 @@ export const CardInfo = styled.div`
   min-width: 0; // 💡 텍스트 줄바꿈/말줄임과 flex-item 크기 충돌 방지
 `;
 
-export const OrderState = styled.p`
-  ${FontStyles.XXS_SemiBold};
-  color: ${Colors.Grayscale80};
+export const OrderState = styled.p<{ $status: boolean }>`
+  ${FontStyles.XS_Bold};
+  color: ${({ $status }) => ($status ? Colors.Main30 : Colors.Grayscale80)};
 `;
 
-export const productInfo = styled.div`
+export const ProductInfo = styled.div`
   width: 100%;
 `;
 
-export const pickupPlace = styled.p`
+export const PickupPlace = styled.p`
   ${FontStyles.XXXS_SemiBold}
   color: ${Colors.Grayscale60};
 `;
 
-export const unitPrice = styled.p`
+export const UnitPrice = styled.p`
   ${FontStyles.XS_SemiBold}
 `;
 
-export const postTitle = styled.p`
+export const PostTitle = styled.p`
   ${FontStyles.XS_Regular};
   color: ${Colors.Grayscale60};
   overflow: hidden; // 넘친 내용 숨기기
@@ -70,4 +71,9 @@ export const TotalAmount = styled.p`
   ${FontStyles.XXS_Bold}
 `;
 
-export const ButtonSection = styled.div``;
+export const ButtonSection = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-self: center;
+`;

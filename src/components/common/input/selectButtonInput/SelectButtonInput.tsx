@@ -8,6 +8,7 @@ interface SelectButtonInputProps {
   max: number;
   initial?: number;
   onChange?: (value: number) => void;
+  mode?: "write" | "edit";
 }
 
 const SelectButtonInput = ({
@@ -16,6 +17,7 @@ const SelectButtonInput = ({
   max,
   initial = unit,
   onChange,
+  mode = "write",
 }: SelectButtonInputProps) => {
   const [amount, setAmount] = useState(initial);
   const [helperText, setHelperText] = useState("");
@@ -43,8 +45,10 @@ const SelectButtonInput = ({
   };
 
   useEffect(() => {
-    setAmount(unit); // 또는 setAmount(unit)도 가능
-  }, [unit]);
+    if (mode !== "edit") {
+      setAmount(unit); // ✅ write 모드일 때만 초기화
+    }
+  }, [unit, mode]);
 
   return (
     <S.Container>

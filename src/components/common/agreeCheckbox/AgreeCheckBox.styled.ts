@@ -1,11 +1,14 @@
 import styled from "styled-components";
 import CheckCircle from "../../../assets/icons/CheckCircle.svg?react";
 import NonCheckCircle from "../../../assets/icons/NonCheckCircle.svg?react";
+import CheckBox from "../../../assets/icons/CheckBox.svg?react";
+import NonCheckBox from "../../../assets/icons/NonCheckBox.svg?react";
 import { Colors, FontStyles } from "../../../styles";
 
-export const Wrapper = styled.div`
+export const Wrapper = styled.div<{ $boxStyle?: "circle" | "box" }>`
   display: flex;
   flex-direction: column;
+  align-items: ${({ $boxStyle }) => ($boxStyle === "box" ? "center" : "none")};
   gap: 3px;
   width: 100%;
 `;
@@ -23,8 +26,8 @@ export const Info = styled.p`
   margin-bottom: 3px;
 `;
 
-export const Row = styled.div`
-  margin-top: 2px;
+export const Row = styled.div<{ $boxStyle?: "circle" | "box" }>`
+  margin-top: ${({ $boxStyle }) => ($boxStyle === "box" ? "0px" : "2px")};
   display: flex;
   gap: 10px;
 `;
@@ -48,6 +51,18 @@ export const StyledCheckCircle = styled(CheckCircle)`
 
 export const StyledNonCheckCircle = styled(NonCheckCircle)`
   width: 15px;
+  color: ${Colors.Grayscale50};
+`;
+
+export const StyledCheckBox = styled(CheckBox)`
+  width: 35px;
+  height: 35px;
+  color: ${Colors.Main30};
+`;
+
+export const StyledNonCheckBox = styled(NonCheckBox)`
+  width: 35px;
+  height: 35px;
   color: ${Colors.Grayscale50};
 `;
 

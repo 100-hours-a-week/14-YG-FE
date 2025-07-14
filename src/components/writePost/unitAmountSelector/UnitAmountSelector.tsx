@@ -1,27 +1,32 @@
-import { useEffect, useState } from "react";
-import { Controller, useFormContext } from "react-hook-form";
+import { useCallback, useEffect, useState } from "react";
+import { Controller, useFormContext, useWatch } from "react-hook-form";
 import * as S from "./UnitAmountSelector.styled";
 import Dropdown from "../../common/input/dropdown/Dropdown";
 import SelectButtonInput from "../../common/input/selectButtonInput/SelectButtonInput";
 import ControlledNumberInput from "../../common/input/controlledNumberInput/ControlledNumberInput";
 
 interface UnitAmountSelectorProps {
-  disabled?: boolean;
+  disabledFields?: ("totalAmount" | "unitAmount" | "hostQuantity")[];
+  mode?: "write" | "edit";
+  hostMaxQuantity?: number;
 }
 
-const UnitAmountSelector = ({ disabled = false }: UnitAmountSelectorProps) => {
+const UnitAmountSelector = ({
+  disabledFields = [],
+  mode = "write",
+  hostMaxQuantity,
+}: UnitAmountSelectorProps) => {
   const {
-    watch,
     control,
     setValue,
     formState: { errors },
   } = useFormContext();
 
-  const totalAmount = watch("totalAmount"); // 상품 전체 수량
-  const unitAmount = watch("unitAmount"); // 선택한 주문 단위
+  const totalAmount = useWatch({ name: "totalAmount" });
+  const unitAmount = useWatch({ name: "unitAmount" });
 
   const [unitOptions, setUnitOptions] = useState<
-    { value: string; label: string }[]
+    { value: number; label: string }[]
   >([]);
   const [unit, setUnit] = useState(1); // SelectButton용 내부 단위
 
@@ -41,28 +46,45 @@ const UnitAmountSelector = ({ disabled = false }: UnitAmountSelectorProps) => {
 
     setUnitOptions(
       divisors.map((d) => ({
-        value: String(d),
+        value: d,
         label: `${d}개`,
       }))
     );
   }, [totalAmount]);
+
+  useEffect(() => {
+    if (unitOptions.length > 0 && unitAmount) {
+      const matched = unitOptions.find((opt) => opt.value === unitAmount);
+      if (matched && unitAmount !== matched.value) {
+        setValue("unitAmount", matched.value);
+      }
+    }
+  }, [unitOptions, unitAmount, setValue]);
 
   // unitAmount 값이 변경되면 SelectButton에 반영
   useEffect(() => {
     const unitNum = Number(unitAmount);
     if (!isNaN(unitNum)) {
       setUnit(unitNum);
-      setValue("hostQuantity", unitNum);
+      if (mode === "write") {
+        setValue("hostQuantity", unitNum);
+      }
     }
-  }, [unitAmount, setValue]);
+  }, [unitAmount, setValue, mode]);
+
+  const isDisabled = useCallback(
+    (field: "totalAmount" | "unitAmount" | "hostQuantity") =>
+      disabledFields?.includes(field),
+    [disabledFields]
+  );
 
   useEffect(() => {
-    if (disabled) {
-      setValue("totalAmount", -1);
-      setValue("unitAmount", "");
-      setValue("hostQuantity", 0);
-    }
-  }, [disabled, setValue]);
+    if (mode !== "write") return; // ✅ edit 모드일 땐 아무 것도 하지 않음
+
+    if (isDisabled("totalAmount")) setValue("totalAmount", -1);
+    if (isDisabled("unitAmount")) setValue("unitAmount", "");
+    if (isDisabled("hostQuantity")) setValue("hostQuantity", 0);
+  }, [disabledFields, setValue, isDisabled, mode]);
 
   return (
     <div>
@@ -73,7 +95,7 @@ const UnitAmountSelector = ({ disabled = false }: UnitAmountSelectorProps) => {
           label="상품 전체 수량"
           placeholder="상품 전체 수량을 입력해주세요."
           maxDigits={3}
-          disabled={disabled}
+          disabled={isDisabled("totalAmount")}
         />
         <Controller
           name="unitAmount"
@@ -81,44 +103,48 @@ const UnitAmountSelector = ({ disabled = false }: UnitAmountSelectorProps) => {
           render={({ field }) => {
             const selectedOption = unitOptions.find(
               (opt) => opt.value === field.value
-            ) ?? { value: "", label: "주문단위" };
+            ) ?? { value: 0, label: "주문단위" };
             return (
               <Dropdown
                 width="170px"
-                options={[{ value: "", label: "주문단위" }, ...unitOptions]}
+                options={[{ value: 0, label: "주문단위" }, ...unitOptions]}
                 value={selectedOption}
                 onChange={(selected) => {
-                  field.onChange(selected?.value ?? ""); // RHF에 string으로 전달
+                  field.onChange(selected?.value ?? 0); // RHF에 string으로 전달
                 }}
-                disabled={disabled}
+                disabled={isDisabled("unitAmount")}
               />
             );
           }}
         />
       </S.TotalAmount>
-      {(errors.totalAmount || unitAmount === "") && (
-        <S.HelperText>
-          {typeof errors.totalAmount?.message === "string"
-            ? errors.totalAmount.message
-            : unitAmount === "" && !disabled
-              ? "주문 단위를 선택해주세요."
-              : ""}
-        </S.HelperText>
-      )}
-      {unitAmount && (
+      {!isDisabled("totalAmount") &&
+        !isDisabled("unitAmount") &&
+        (errors.totalAmount || unitAmount === 0) && (
+          <S.HelperText>
+            {typeof errors.totalAmount?.message === "string"
+              ? errors.totalAmount.message
+              : unitAmount === 0
+                ? "주문 단위를 선택해주세요."
+                : ""}
+          </S.HelperText>
+        )}
+
+      {unitAmount > 0 && (
         <S.MyParti>
           <S.Label>공구 참여 수량</S.Label>
           <Controller
             name="hostQuantity"
             control={control}
-            defaultValue={unit}
+            // defaultValue={unit}
             render={({ field }) => (
               <SelectButtonInput
                 unit={unit}
-                max={totalAmount}
-                min={0}
+                max={hostMaxQuantity ?? totalAmount}
+                min={unit}
                 initial={field.value}
                 onChange={field.onChange}
+                mode={mode}
               />
             )}
           />

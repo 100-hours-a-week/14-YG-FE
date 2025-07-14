@@ -1,10 +1,5 @@
 import MainCard from "../mainCard/MainCard";
 import * as S from "./SubSection.styled";
-//import 참치1 from "../../../assets/images/참치1.png";
-//import 참치2 from "../../../assets/images/참치2.png";
-//import tomato from "../../../assets/images/Tomato.png";
-//import 샤프란 from "../../../assets/images/샤프란.png";
-//import yummy from "../../../assets/images/Yummy.png";
 import { useNavigate } from "react-router-dom";
 import { useGroupBuysList } from "../../../hooks/queries/useProductQuery";
 import EmptySection from "../../common/emptySection/EmptySection";
@@ -12,10 +7,16 @@ import EmptySection from "../../common/emptySection/EmptySection";
 interface SubSectionProps {
   title: string;
   orderBy: "latest" | "price_asc" | "ending_soon" | "due_soon_only";
+  category?: string;
   categoryId?: number;
 }
 
-const SubSection = ({ title, orderBy, categoryId }: SubSectionProps) => {
+const SubSection = ({
+  title,
+  orderBy,
+  category,
+  categoryId,
+}: SubSectionProps) => {
   const { data: groupBuys, isError } = useGroupBuysList({
     orderBy: orderBy,
     category: categoryId,
@@ -24,12 +25,24 @@ const SubSection = ({ title, orderBy, categoryId }: SubSectionProps) => {
 
   return (
     <S.RowScrollSection>
-      <S.SectionName>{title}</S.SectionName>
-      {isError || !groupBuys || groupBuys.length === 0 ? (
+      {title === "마감임박" ? (
+        <S.SectionName>{title}</S.SectionName>
+      ) : (
+        <S.SectionHead
+          onClick={() => {
+            navigate(category ? `/products/category/${category}` : "/products");
+          }}
+        >
+          <S.SectionName>{title}</S.SectionName>
+          <S.StyledArrow />
+        </S.SectionHead>
+      )}
+
+      {isError || !groupBuys?.posts || groupBuys.posts.length === 0 ? (
         <EmptySection category={title} />
       ) : (
         <S.RowScrollContainer>
-          {groupBuys.map((item) => (
+          {groupBuys.posts.map((item) => (
             <MainCard
               onClick={() => {
                 navigate(`/products/${item.postId}`);
@@ -39,6 +52,7 @@ const SubSection = ({ title, orderBy, categoryId }: SubSectionProps) => {
               title={item.title}
               unitPrice={item.unitPrice.toLocaleString()}
               unitAmount={item.unitAmount}
+              postId={item.postId}
             />
           ))}
         </S.RowScrollContainer>

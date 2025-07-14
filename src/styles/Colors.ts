@@ -1,7 +1,7 @@
 const Colors = {
   // Main Colors
   Main10: "#F25217", // 메인 오렌지
-  Main20: "#FF3333", // 밝은 레드
+  Main20: "#FF3333", // 밝은 레드, 알림 색
   Main30: "#B91C1C", // 글자3
   Main40: "#F0AF97", // 살구색
   Main50: "#FEEEE8", // 환불메세지 고정색

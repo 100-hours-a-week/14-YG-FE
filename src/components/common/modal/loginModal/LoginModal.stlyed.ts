@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import { Colors, FontStyles } from "../../../../styles";
 import XIcon from "../../../../assets/icons/XIcon.svg?react";
+import Kakao from "../../../../assets/icons/Kakao.svg?react";
 
 export const Container = styled.div`
   background-color: ${Colors.Grayscale0};
@@ -57,3 +58,20 @@ export const NaviSignup = styled.div`
   text-decoration: underline;
   cursor: pointer;
 `;
+
+export const KakaoLoginButton = styled.button`
+  background-color: #fddc3f;
+  border: none;
+  height: 34px;
+  padding: 0px 30px 0px 20px;
+  width: 230px;
+  border-radius: 20px;
+  ${FontStyles.SM_SemiBold};
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  cursor: pointer;
+`;
+
+export const KakaoLogo = styled(Kakao)``;

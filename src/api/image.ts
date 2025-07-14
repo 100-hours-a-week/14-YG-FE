@@ -13,6 +13,7 @@ export const uploadImages = async (files: File[]) => {
     const res = await api.get(`/api/image/presign`);
     const { key, url } = res.data;
     console.log(key);
+    console.log("uploading", file.name, "to", key);
 
     // 2. S3에 직접 업로드
     await fetch(url, {

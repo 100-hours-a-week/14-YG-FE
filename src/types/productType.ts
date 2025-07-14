@@ -2,12 +2,13 @@ import { UserInfo } from "./userType";
 
 export interface GetGroupBuysParams {
   orderBy?: "latest" | "price_asc" | "ending_soon" | "due_soon_only";
-  postStatus?: "open" | "closed" | "ended";
   category?: number;
   cursorId?: number;
   cursorPrice?: number;
   cursorCreatedAt?: string;
   limit?: number;
+  keyword?: string;
+  openOnly?: boolean;
 }
 
 export interface GroupBuyImage {
@@ -16,12 +17,29 @@ export interface GroupBuyImage {
   orderIndex: number;
 }
 
+export interface GroupBuyList {
+  count: number;
+  posts: GroupBuyItem[];
+  nextCursor: number;
+  nextCreatedAt: string;
+  nextCursorPrice: number;
+  nextSoldRatio: number;
+  hasMore: boolean;
+}
+
 export interface GroupBuyItem {
   postId: number;
   title: string;
+  name: string;
   imageKeys: GroupBuyImage[];
   unitPrice: number;
   unitAmount: number;
+  soldAmount: number;
+  totalAmount: number;
+  participantCount: number;
+  dueSoon: boolean;
+  isWish: boolean;
+  createdAt: string;
 }
 
 export interface PostRequestData {
@@ -40,6 +58,7 @@ export interface PostRequestData {
 }
 
 export interface PostProps {
+  chatRoomId: number;
   postId: number;
   title: string;
   name: string;
@@ -61,4 +80,31 @@ export interface PostProps {
   isWish: boolean;
   createdAt: string;
   userProfileResponse: UserInfo;
+}
+
+export interface EditPostRequest {
+  postId: number;
+  title: string;
+  name: string;
+  description: string;
+  hostQuantity: number;
+  dueDate: string;
+  pickupDate?: string;
+  dateModificationReason?: string;
+  imageKeys: string[];
+}
+
+export interface EditPostData {
+  title: string;
+  name: string;
+  description: string;
+  imageKeys: GroupBuyImage[];
+  dueDate: string;
+  location: string;
+  pickupDate: string;
+  price: number;
+  unitAmount: number;
+  totalAmount: number;
+  leftAmount: number;
+  hostQuantity: number;
 }

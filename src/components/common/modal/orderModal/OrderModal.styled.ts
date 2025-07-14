@@ -112,6 +112,9 @@ export const TotalPrice = styled(Price)`
 
 export const AccountInfo = styled(SelectAmount)`
   border-top: none;
+  > input {
+    border-radius: 0px;
+  }
 `;
 
 export const Account = styled.p`
@@ -124,6 +127,10 @@ export const Guide = styled.p`
   margin: 5px 0px;
   ${FontStyles.XXXS_Regular};
   color: ${Colors.Grayscale60};
+`;
+
+export const StyledText = styled.p`
+  ${FontStyles.XXXS_Regular};
+  color: ${Colors.Grayscale60};
   line-height: 15px;
-  white-space: pre-line;
 `;

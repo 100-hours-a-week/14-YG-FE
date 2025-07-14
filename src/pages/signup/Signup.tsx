@@ -13,21 +13,22 @@ const Signup = () => {
   const [isEmailChecked, setIsEmailChecked] = useState(false);
   const [isEmailDuplicated, setIsEmailDuplicated] = useState(false);
 
-  const { mutate: checkEmail } = useEmailCheckMutation({
-    onSuccess: (data) => {
-      if (data.isDuplication === "NO") {
-        setIsEmailChecked(true);
-        setIsEmailDuplicated(false);
-      } else {
+  const { mutate: checkEmail, isPending: checkingEmail } =
+    useEmailCheckMutation({
+      onSuccess: (data) => {
+        if (data.isDuplication === "NO") {
+          setIsEmailChecked(true);
+          setIsEmailDuplicated(false);
+        } else {
+          setIsEmailChecked(false);
+          setIsEmailDuplicated(true);
+        }
+      },
+      onError: () => {
         setIsEmailChecked(false);
-        setIsEmailDuplicated(true);
-      }
-    },
-    onError: () => {
-      setIsEmailChecked(false);
-      setIsEmailDuplicated(false);
-    },
-  });
+        setIsEmailDuplicated(false);
+      },
+    });
 
   const {
     register,
@@ -74,7 +75,9 @@ const Signup = () => {
               ? "이미 사용 중인 이메일입니다. 다시 입력해주세요."
               : email.length > 5 && isEmailValid && !isEmailChecked
                 ? "이메일 중복 확인을 해주세요"
-                : "")
+                : checkingEmail
+                  ? "이메일 중복 확인중입니다..."
+                  : "")
           }
           suffix={
             !isEmailChecked && ( // ✅ 중복 확인 완료되면 버튼 숨김

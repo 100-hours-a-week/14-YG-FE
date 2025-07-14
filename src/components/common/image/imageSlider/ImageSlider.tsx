@@ -1,26 +1,27 @@
 import { getImageUrl } from "../../../../utils/image";
+import LikeToggle from "../../likeToggle/LikeToggle";
 import * as S from "./ImageSlider.styled";
-//import 참치1 from "../../../../assets/images/참치1.png";
-//import 참치2 from "../../../../assets/images/참치2.png";
 import { useState } from "react";
-//import { GroupBuyImage } from "../../../main/subSection/SubSection";
 
 //const images = [참치1, 참치2];
 
 interface ImageSliderProps {
+  postId: number;
   images: string[];
 }
 
-const ImageSlider = ({ images }: ImageSliderProps) => {
+const ImageSlider = ({ postId, images }: ImageSliderProps) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [touchStartX, setTouchStartX] = useState<number | null>(null);
   const [touchEndX, setTouchEndX] = useState<number | null>(null);
 
-  const handleNext = () => {
+  const handleNext = (e: React.MouseEvent) => {
+    e.stopPropagation();
     setCurrentIndex((prev) => (prev + 1) % images.length);
   };
 
-  const handlePrev = () => {
+  const handlePrev = (e: React.MouseEvent) => {
+    e.stopPropagation();
     setCurrentIndex((prev) => (prev - 1 + images.length) % images.length);
   };
 
@@ -34,19 +35,17 @@ const ImageSlider = ({ images }: ImageSliderProps) => {
     setTouchEndX(e.targetTouches[0].clientX);
   };
 
+  const goToNext = () => setCurrentIndex((prev) => (prev + 1) % images.length);
+  const goToPrev = () =>
+    setCurrentIndex((prev) => (prev - 1 + images.length) % images.length);
+
   // 터치 끝났을 때
   const handleTouchEnd = () => {
     if (touchStartX !== null && touchEndX !== null) {
       const diff = touchStartX - touchEndX;
 
-      if (diff > 50) {
-        // 오른쪽으로 넘김 (다음 슬라이드)
-        handleNext();
-      }
-      if (diff < -50) {
-        // 왼쪽으로 넘김 (이전 슬라이드)
-        handlePrev();
-      }
+      if (diff > 50) goToNext();
+      if (diff < -50) goToPrev();
     }
 
     // 초기화
@@ -74,6 +73,7 @@ const ImageSlider = ({ images }: ImageSliderProps) => {
           <S.Indicator key={index} $isSelected={currentIndex === index} />
         ))}
       </S.SlideIcon>
+      <LikeToggle postId={postId} imageType="full" />
     </S.ImageSliderContainer>
   );
 };

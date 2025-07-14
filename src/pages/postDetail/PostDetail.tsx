@@ -4,7 +4,7 @@ import { SectionLine } from "../../components/common/SectionLine.styled";
 import Profile from "../../components/common/profile/Profile";
 import ImageSlider from "../../components/common/image/imageSlider/ImageSlider";
 import { useModalStore } from "../../stores/useModalStore";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { formatDateTime, formatRelativeTime, getDday } from "../../utils/date";
 import { useOrderStore } from "../../stores/useOrderStore";
 import { useUserStore } from "../../stores/useUserStore";
@@ -16,6 +16,7 @@ import { useEffect, useState } from "react";
 const PostDetail = () => {
   const openModal = useModalStore((s) => s.openModal);
   const setOrderInfo = useOrderStore((s) => s.setOrderInfo);
+  const navigate = useNavigate();
   const { postId } = useParams();
   const user = useUserStore((s) => s.user);
   const {
@@ -24,12 +25,12 @@ const PostDetail = () => {
     isError,
     refetch,
   } = useProductDetail(Number(postId));
-  const { mutate: cancelOrder } = useCancelOrderMutation();
+  const { mutate: cancelOrder } = useCancelOrderMutation(Number(postId));
 
   const [ddayText, setDdayText] = useState<string>("");
 
   useEffect(() => {
-    if (!post?.dueDate) return; // post 또는 dueDate가 없으면 아무것도 하지 않음
+    if (!post?.dueDate) return;
 
     const updateDday = () => {
       setDdayText(getDday(post.dueDate));
@@ -42,6 +43,8 @@ const PostDetail = () => {
 
     updateDday(); // 초기값 바로 설정
 
+    if (ddayText === "마감 종료") return;
+
     const timer = setInterval(updateDday, 1000); // 1초마다 갱신
 
     return () => clearInterval(timer); // 언마운트 시 클리어
@@ -51,6 +54,7 @@ const PostDetail = () => {
     if (!post) return;
 
     if (!user) {
+      alert("로그인이 필요한 기능입니다");
       openModal("login");
       return;
     }
@@ -76,7 +80,7 @@ const PostDetail = () => {
       confirmText: "참여취소",
       cancelText: "돌아가기",
       onConfirm: () => {
-        if (post) cancelOrder(post.postId);
+        if (post) cancelOrder();
       },
     });
   };
@@ -99,8 +103,17 @@ const PostDetail = () => {
       {post && (
         <>
           <S.TopSection>
-            <ImageSlider images={post.imageKeys?.map((img) => img.imageKey)} />
-            <Profile type="post" user={post.userProfileResponse} />
+            <ImageSlider
+              postId={post.postId}
+              images={post.imageKeys?.map((img) => img.imageKey)}
+            />
+            <Profile
+              type="post"
+              postId={post.postId}
+              user={post.userProfileResponse}
+              isParticipant={post.isParticipant}
+              isHidden={post.postStatus !== "OPEN"}
+            />
           </S.TopSection>
           <SectionLine />
           <S.PostInfo>
@@ -124,7 +137,9 @@ const PostDetail = () => {
                 <S.PickupDate>
                   픽업 {formatDateTime(post.pickupDate)} / {post.location}
                 </S.PickupDate>
-                <S.unitPrice>{post.unitPrice.toLocaleString()}원</S.unitPrice>
+                <S.unitPrice>
+                  개당 {post.unitPrice.toLocaleString()}원
+                </S.unitPrice>
                 <S.unitAmount>(주문 단위: {post.unitAmount})</S.unitAmount>
               </S.ProductInfo>
               <S.OrderInfo>
@@ -154,19 +169,24 @@ const PostDetail = () => {
                       {post.postStatus === "OPEN"
                         ? `⏰ ${ddayText}`
                         : post.leftAmount === 0
-                          ? "🛒 품절! 수량이 모두 매진되었어요"
+                          ? "🛒 품절! 매진되었어요"
                           : "⏰ 마감기간이 지났어요"}
                     </S.Ddate>
                   </>
                 )}
               </S.OrderInfo>
             </S.InfoPart>
+            {post.isParticipant && (
+              <S.GoChat onClick={() => navigate(`/chat/${post.chatRoomId}`)}>
+                채팅방 참여해보기
+              </S.GoChat>
+            )}
             <S.DetailPart>
               <S.SectionDivider>
                 <S.SectionName>상품 설명</S.SectionName>
                 <SectionLine />
               </S.SectionDivider>
-              <S.DetailInfo>{post.description}</S.DetailInfo>
+              <S.DetailInfo>{post.description.trimEnd()}</S.DetailInfo>
               <S.PostDate>{formatRelativeTime(post.createdAt)}</S.PostDate>
             </S.DetailPart>
           </S.PostInfo>

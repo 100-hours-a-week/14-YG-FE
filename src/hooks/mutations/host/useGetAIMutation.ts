@@ -2,11 +2,12 @@ import { useMutation } from "@tanstack/react-query";
 import { getAI } from "../../../api/host";
 import { AIResponse } from "../../../types/hostType";
 import { UseFormSetValue } from "react-hook-form";
-import { PostFormData } from "../../../schemas/writePostSchema";
 import { AxiosError } from "axios";
+import { EditPostFormData } from "../../../schemas/editPostSchema";
+import { getImageUrl } from "../../../utils/image";
 
 export const useGetAIMutation = (
-  setValue: UseFormSetValue<PostFormData>, // ✅ 타입 안전하게 정의
+  setValue: UseFormSetValue<EditPostFormData>, // ✅ 타입 안전하게 정의
   setIsAISubmitted: (v: boolean) => void
 ) => {
   return useMutation<AIResponse, Error, string>({
@@ -18,6 +19,13 @@ export const useGetAIMutation = (
       setValue("name", data.product_name, { shouldValidate: true });
       setValue("price", data.total_price, { shouldValidate: true });
       setValue("totalAmount", data.count, { shouldValidate: true });
+      setValue("imageUrls", [getImageUrl(data.upload_image_key)], {
+        shouldValidate: true,
+      });
+      setValue("dueDate", new Date(data.due_date), { shouldValidate: true });
+      setValue("pickupDate", new Date(data.pickup_date), {
+        shouldValidate: true,
+      });
       setIsAISubmitted(true);
       console.log(data);
     },

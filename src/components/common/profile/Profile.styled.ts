@@ -7,9 +7,9 @@ export const ProfilePart = styled.div<{ $type: "mypage" | "post" }>`
   gap: ${({ $type }) => ($type === "mypage" ? "15px" : "10px")};
 `;
 
-export const ProfileImg = styled.img<{ $type: "mypage" | "post" }>`
-  width: ${({ $type }) => ($type === "mypage" ? "80px" : "36px")};
-  height: ${({ $type }) => ($type === "mypage" ? "80px" : "36px")};
+export const ProfileImg = styled.img`
+  width: 36px;
+  height: 36px;
   border-radius: 50%;
   object-fit: cover;
 `;
@@ -40,7 +40,7 @@ export const LogoutButton = styled.button`
 
 export const NameInfo = styled.p<{ $type: "mypage" | "post" }>`
   ${({ $type }) =>
-    $type === "mypage" ? FontStyles.SM_SemiBold : FontStyles.XXS_SemiBold};
+    $type === "mypage" ? FontStyles.SM_Bold : FontStyles.XXS_Bold};
 `;
 
 const SubText = styled.p`
@@ -52,8 +52,38 @@ export const RealName = styled(SubText)``;
 export const Email = styled(SubText)``;
 export const PhoneNumber = styled(SubText)``;
 
-export const AccountInfo = styled.p<{ $type: "mypage" | "post" }>`
-  ${({ $type }) =>
-    $type === "mypage" ? FontStyles.XXS_SemiBold : FontStyles.XXXS_SemiBold};
+export const AccountInfo = styled.div<{ $type: "mypage" | "post" }>`
+  ${FontStyles.XXS_SemiBold};
   color: ${Colors.Grayscale60};
+  display: flex;
+  align-items: center;
+`;
+
+export const SecretBox = styled.div`
+  background-color: ${Colors.Grayscale10};
+  width: 150px;
+  margin-left: 5px;
+  padding: 3px;
+`;
+
+export const Ment = styled.p`
+  text-align: center;
+  color: ${Colors.Grayscale50};
+`;
+
+export const CopyButton = styled.button`
+  ${FontStyles.XXXS_SemiBold};
+  margin-left: 5px;
+  border-radius: 10px;
+  border: 1px solid ${Colors.Main10};
+  color: ${Colors.Main10};
+  padding: 1px 4px;
+  background-color: ${Colors.Grayscale0};
+  cursor: pointer;
+
+  &:disabled {
+    border: 1px solid ${Colors.Grayscale40};
+    color: ${Colors.Grayscale50};
+    cursor: default;
+  }
 `;
