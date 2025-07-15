@@ -40,6 +40,13 @@ const MasterButton = () => {
               navigate("/writePost");
             }}
           >
+            뭉챗봇
+          </li>
+          <li
+            onClick={() => {
+              navigate("/writePost");
+            }}
+          >
             공구글 작성하기
           </li>
           <li
