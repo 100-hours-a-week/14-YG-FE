@@ -33,11 +33,11 @@
 
 ## ⚙️ 기술 스택
 
-- **React 18** + **TypeScript**
+- **React** + **TypeScript**
 - **Vite** – 빠른 번들링 및 개발 서버
 - **Zustand** – 클라이언트 상태 (모달, 주문, 유저 등)
 - **React Hook Form + Zod** – 모든 폼의 타입 기반 유효성 검증
-- **Tanstack Query** – 서버 상태 캐싱 및 refetch 관리
+- **React Query(Tanstack Query)** – 서버 상태 캐싱 및 refetch 관리
 - **Styled-components** – 스타일 모듈화
 
 ---
@@ -47,10 +47,13 @@
 ```bash
 src/
 ├── api/               # axios wrapper 및 API 모듈
+├── assets/            # 이미지, 아이콘 등 정적 리소스
 ├── components/        # 공통 UI (입력창, 버튼, 이미지 업로더 등)
 ├── hooks/             # 커스텀 훅 및 React Query 정의
 ├── pages/             # 페이지 컴포넌트 (메인, 상세, 마이페이지 등)
+├── schemas/           # Zod로 정의한 유효성 검사 스키마
 ├── stores/            # Zustand 상태 (모달, 주문, 유저 등)
+├── styles/           # 글로벌 스타일, theme 정의
 ├── types/             # 공통 타입 정의
 ├── utils/             # 날짜, 금액 포맷 등 유틸 함수
 └── App.tsx            # 앱 엔트리 포인트
