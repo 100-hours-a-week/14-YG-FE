@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
-import { Client, Stomp } from "@stomp/stompjs";
+import { Stomp } from "@stomp/stompjs";
+import SockJS from "sockjs-client/dist/sockjs";
 import { ChatMessage } from "../types/chatType";
 
 interface UseChatSocketProps {
@@ -12,13 +13,14 @@ export const useChatSocket = ({
   participantId,
 }: UseChatSocketProps) => {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
-  const clientRef = useRef<Client | null>(null);
+  const clientRef = useRef<ReturnType<typeof Stomp.over> | null>(null);
 
   useEffect(() => {
-    const client = Stomp.over(
-      () => new WebSocket("ws://localhost:8080/ws/chat")
-    );
-    client.debug = () => {};
+    const socket = new SockJS("https://dev.moongsan.com/ws/chat") as WebSocket; // ✅ SockJS로 연결
+    const client = Stomp.over(socket);
+
+    client.debug = () => {}; // 로그 끄기
+    client.reconnectDelay = 5000; // 자동 재연결
 
     const topic = `/topic/chat-anon/${postId}`;
 
@@ -37,14 +39,22 @@ export const useChatSocket = ({
   }, [postId]);
 
   const sendMessage = (content: string) => {
+    if (!clientRef.current?.connected) {
+      console.warn("WebSocket 연결 안 됨");
+      return;
+    }
+
     const payload = {
       postId,
       participantId,
-      messageContent: content,
+      message: content,
     };
 
-    const destination = "/pub/chat-anon/message";
-    clientRef.current?.send(destination, {}, JSON.stringify(payload));
+    clientRef.current.send(
+      "/pub/chat-anon/message",
+      {},
+      JSON.stringify(payload)
+    );
   };
 
   return { messages, sendMessage };
