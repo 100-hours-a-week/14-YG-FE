@@ -19,6 +19,7 @@ declare module "@stomp/stompjs" {
 
   export interface Client {
     debug?: (msg: string) => void;
+    reconnectDelay?: number;
     connect: (
       headers: Record<string, string>,
       onConnect: (frame: IFrame) => void,
