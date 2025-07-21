@@ -1,4 +1,4 @@
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import * as S from "./App.styled";
 import Header from "./components/common/header/Header";
 import ConfirmModal from "./components/common/modal/confirmModal/ConfirmModal";
@@ -19,15 +19,16 @@ import MasterButton from "./components/common/masterButton/MasterButton";
 import { useNotificationSSE } from "./hooks/useNotificationSSE";
 
 const App = () => {
-  const navigate = useNavigate();
+  //const navigate = useNavigate();
   const { pathname } = useLocation();
   const user = useUserStore((s) => s.user);
   const openedModal = useModalStore((s) => s.openedModal);
   const payload = useModalStore((s) => s.payload);
   const openModal = useModalStore((s) => s.openModal);
   const isModalOpen = Boolean(openedModal);
-  const { data, isLoading } = useMyInfoQuery();
   useNotificationSSE();
+
+  const { data, isLoading, isSuccess } = useMyInfoQuery(); // ✅ 그냥 호출만 하면 됨
 
   useEffect(() => {
     const protectedPaths = ["/writePost", "/editPost", "/mypage"];
@@ -35,16 +36,14 @@ const App = () => {
       pathname.startsWith(path)
     );
 
-    // ✅ 쿼리 로딩 중엔 아무것도 하지 않음
     if (isLoading) return;
 
-    // ✅ 쿼리 끝났고 user가 없으면 리다이렉트
-    if ((!data || !user) && isProtected) {
-      alert("다시 로그인 해주세요.");
+    if (!isLoading && isSuccess && !user && isProtected) {
       openModal("login");
     }
-    console.log(user?.nickname);
-  }, [data, pathname, isLoading, navigate, user, openModal]);
+
+    console.log(user);
+  }, [data, pathname, isLoading, isSuccess, user, openModal]);
 
   return (
     <S.Whole>

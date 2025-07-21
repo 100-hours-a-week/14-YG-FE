@@ -1,24 +1,35 @@
 import Profile from "../../components/common/profile/Profile";
 import * as S from "./Mypage.styled";
 import { useDeleteUserMutation } from "../../hooks/mutations/user/useDeleteUserMutation";
-import { useMyInfoQuery } from "../../hooks/queries/useMyInfoQuery";
 import { useModalStore } from "../../stores/useModalStore";
-import Loading from "../../components/common/loading/Loding";
 import FilteringTab from "../../components/mypage/filteringTab/FilteringTab";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "../../components/common/button/Button.styled";
 import MyList from "../../components/mypage/myList/MyList";
 import { useNavigate } from "react-router-dom";
+import { useUserStore } from "../../stores/useUserStore";
 
 const Mypage = () => {
   const navigate = useNavigate();
   const { mutate: deleteUser } = useDeleteUserMutation();
-  const { data: user, isLoading } = useMyInfoQuery();
+  const user = useUserStore((s) => s.user);
   const openModal = useModalStore((s) => s.openModal);
   const tabOptions = ["참여목록", "주최목록", "관심목록"] as const;
   type TabType = (typeof tabOptions)[number];
 
   const [activeTab, setActiveTab] = useState<TabType>("참여목록");
+
+  // ✅ 렌더 중이 아니라 useEffect에서 navigate + openModal
+  useEffect(() => {
+    if (!user) {
+      alert("로그인이 만료되었습니다. 다시 로그인해주세요.");
+      openModal("login");
+      navigate("/", { replace: true }); // replace하면 history에 안 남음
+    }
+  }, [user, navigate, openModal]);
+
+  // ✅ 조건만으로는 return 막지 말고, 실제 컴포넌트는 렌더하지 않음
+  if (!user) return null;
 
   const handleDeleteUser = () => {
     openModal("confirm", {
@@ -31,8 +42,6 @@ const Mypage = () => {
       },
     });
   };
-
-  if (isLoading) return <Loading message="탈퇴 처리중입니다" />;
 
   return (
     <S.MypageContainer>

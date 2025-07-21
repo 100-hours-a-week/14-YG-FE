@@ -1,13 +1,5 @@
 import { create } from "zustand";
-
-export interface UserInfo {
-  imageUrl: string | null;
-  name: string;
-  nickname: string;
-  accountBank: string;
-  accountNumber: string;
-  type: "USER" | "ADMIN";
-}
+import { UserInfo } from "../types/userType";
 
 interface UserStore {
   user: UserInfo | null;
