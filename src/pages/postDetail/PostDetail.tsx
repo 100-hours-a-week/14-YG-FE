@@ -191,7 +191,10 @@ const PostDetail = () => {
               <S.DetailInfo>{post.description.trimEnd()}</S.DetailInfo>
               <S.PostDate>{formatRelativeTime(post.createdAt)}</S.PostDate>
             </S.DetailPart>
-            <AnonymousChatPreview chatRoomId={post.postId} />
+            <AnonymousChatPreview
+              chatRoomId={post.postId}
+              aliasId={post.aliasId}
+            />
           </S.PostInfo>
         </>
       )}
