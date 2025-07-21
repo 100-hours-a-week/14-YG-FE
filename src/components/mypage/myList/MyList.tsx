@@ -67,9 +67,9 @@ const MyList = ({ activeTab }: MyListProps) => {
           }
         />
       ) : (
-        items.map((item) => (
+        items.map((item, idx) => (
           <MyListCard
-            key={item.postId}
+            key={`${activeTab}-${status}-${item.postId}-${idx}`}
             params={commonParams}
             item={item}
             renderActions={() => {

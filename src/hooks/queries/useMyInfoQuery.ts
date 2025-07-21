@@ -1,32 +1,41 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect } from "react";
-import { getMyInfo } from "../../api/user";
+import { getMyInfo, HaltQueryError } from "../../api/user";
 import { useUserStore } from "../../stores/useUserStore";
+import { useModalStore } from "../../stores/useModalStore";
 
 export const useMyInfoQuery = () => {
-  const { setUser, clearUser, user } = useUserStore();
+  const { setUser, clearUser } = useUserStore();
+  const openModal = useModalStore((s) => s.openModal);
   const queryClient = useQueryClient();
 
-  const { data, isSuccess, isLoading, isError } = useQuery({
+  const query = useQuery({
     queryKey: ["myInfo"],
-    queryFn: getMyInfo,
+    queryFn: async () => {
+      try {
+        const res = await getMyInfo();
+        setUser(res);
+        console.log(res);
+        return res;
+      } catch (err) {
+        if (err instanceof HaltQueryError) {
+          clearUser();
+          throw err;
+        }
+        throw err;
+      }
+    },
     staleTime: 1000 * 60 * 5,
-    retry: false,
-    enabled: user !== null,
+    retry: (count, error) => {
+      return !(error instanceof HaltQueryError) && count < 1;
+    },
   });
 
   useEffect(() => {
-    if (isSuccess && data) {
-      console.log(data);
-      console.log("로그인");
-      setUser(data);
-    } else if (isError) {
-      queryClient.removeQueries({ queryKey: ["myInfo"] });
+    if (query.error instanceof HaltQueryError) {
       queryClient.removeQueries({ queryKey: ["hostAccount"] });
-      console.log("로그아웃");
-      clearUser(); // 실패 시 로그아웃 처리
     }
-  }, [isSuccess, isError, data, setUser, clearUser, queryClient]);
+  }, [query.error, queryClient, openModal]);
 
-  return { data, isSuccess, isLoading }; // ✅ isLoading도 추가
+  return query;
 };

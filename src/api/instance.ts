@@ -1,5 +1,4 @@
 import axios from "axios";
-import { useUserStore } from "../stores/useUserStore";
 import { deepDecodeHtml } from "../utils/deepDecodeHtml";
 
 const api = axios.create({
@@ -18,10 +17,6 @@ api.interceptors.response.use(
     return res;
   },
   (err) => {
-    if (err.response?.status === 401) {
-      const { clearUser } = useUserStore.getState();
-      clearUser();
-    }
     return Promise.reject(err);
   }
 );

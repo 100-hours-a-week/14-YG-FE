@@ -6,6 +6,7 @@ import {
   EditProfileRequest,
   GetMyListParams,
 } from "../types/userType";
+import { useUserStore } from "../stores/useUserStore";
 
 export interface SignupRequestData {
   email: string;
@@ -175,31 +176,43 @@ export const logout = async () => {
  * 프로필 정보 조회
  * @returns 사용자 정보
  */
+export class HaltQueryError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = "HaltQueryError";
+  }
+}
+
 export const getMyInfo = async () => {
+  console.trace("🔥 getMyInfo 호출");
   try {
     const res = await api.get("/api/users/profile");
-    if (res.data.data) return res.data.data;
+    return res.data.data;
   } catch (error) {
-    // ✅ AccessToken 만료인 경우
-    if (error instanceof AxiosError && error.response?.status === 403) {
+    const axiosError = error as AxiosError;
+
+    if (
+      axiosError.response?.status === 401 ||
+      axiosError.response?.status === 403
+    ) {
       try {
-        await getRefreshToken(); // ✅ 새 토큰 발급받고
-        const retry = await api.get("/api/users/profile"); // ✅ 재요청
+        await getRefreshToken();
+        const retry = await api.get("/api/users/profile");
         return retry.data.data;
       } catch {
-        throw new Error("로그인이 만료되었습니다. 다시 로그인해주세요.");
+        const { clearUser } = useUserStore.getState();
+        clearUser();
+
+        // ❗️무한 재시도 방지를 위한 명확한 커스텀 에러
+        throw new HaltQueryError("Refresh token expired");
       }
     }
 
-    // ✅ 기타 에러 처리
-    if (error instanceof AxiosError) {
-      console.log("로그인 필요");
-    } else {
-      console.log("알 수 없는 에러");
-    }
-    throw new Error("회원 정보를 불러오는 데 실패했습니다.");
+    // 나머지 에러는 그대로 throw
+    throw axiosError;
   }
 };
+
 /**
  * 기본정보 수정
  * @returns

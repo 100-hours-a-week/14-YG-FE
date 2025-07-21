@@ -11,7 +11,6 @@ export const getGroupBuyList = async (params?: GetGroupBuysParams) => {
     const res = await api.get("/api/group-buys", { params });
 
     if (res.data.data) {
-      console.log(res.data.data);
       return res.data.data; // 백엔드 응답 구조에 따라 수정
     }
   } catch (error) {
