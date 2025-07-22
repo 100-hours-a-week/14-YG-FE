@@ -67,17 +67,19 @@ const Header = () => {
         </S.LogoPart>
       )}
       <S.SidePart>
-        <S.AlertIcon
-          src={unreadCount > 0 ? AlertBell : Bell}
-          alt="alert"
-          onClick={() => {
-            if (!user) {
-              openModal("login"); // 로그인 안 한 경우
-            } else {
-              navigate("/notification"); // 로그인 한 경우
-            }
-          }}
-        />
+        {pathname !== "/notification" && (
+          <S.AlertIcon
+            src={unreadCount > 0 ? AlertBell : Bell}
+            alt="alert"
+            onClick={() => {
+              if (!user) {
+                openModal("login"); // 로그인 안 한 경우
+              } else {
+                navigate("/notification"); // 로그인 한 경우
+              }
+            }}
+          />
+        )}
         {pathname !== "/mypage" && (
           <S.ProfileIcon
             onClick={() => {

@@ -20,7 +20,8 @@ export type NotificationType =
   | "ORDER_REFUNDED"
   | "GROUPBUY_STATUS_CLOSED"
   | "GROUPBUY_STATUS_FINALIZED"
-  | "GROUPBUY_STATUS_ENDED";
+  | "GROUPBUY_STATUS_ENDED"
+  | "GROUPBUY_PICKUP_UPDATED";
 
 export interface Notification {
   id: number;
@@ -30,4 +31,15 @@ export interface Notification {
   payload: NotificationPayload;
   createdAt: string;
   read: boolean;
+}
+
+export interface PrevNoticeParams {
+  cursorId?: number;
+  size?: number;
+}
+
+export interface PrevNoticeResponse {
+  items: Notification[];
+  nextCursor?: number;
+  hasNext: boolean;
 }
