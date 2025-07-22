@@ -36,10 +36,14 @@ export interface PrevChatList {
 export interface ChatMessage {
   messageId: string;
   participantId: number;
-  nickname: string;
+  nickname?: string;
   profileImageKey?: string;
   messageContent: string;
   createdAt: string;
+
+  postId?: number;
+  isSafe?: boolean;
+  blurReason?: string;
 }
 
 export interface AnonymousChat {

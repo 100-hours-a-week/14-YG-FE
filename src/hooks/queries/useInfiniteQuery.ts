@@ -1,6 +1,9 @@
 import { InfiniteData, useInfiniteQuery } from "@tanstack/react-query";
 import { getGroupBuyList } from "../../api/product";
 import { GetGroupBuysParams, GroupBuyList } from "../../types/productType";
+import { useEffect, useMemo, useState } from "react";
+import { Notification, PrevNoticeParams } from "../../types/notificationType";
+import { usePrevNoticeQuery } from "./usePrevNoticeQuery";
 
 interface CursorParam {
   cursorId?: number;
@@ -64,4 +67,57 @@ export const useInfiniteGroupBuys = (baseParams: GetGroupBuysParams) => {
     refetchOnMount: false,
     refetchOnWindowFocus: false,
   });
+};
+
+export const useInfinitePrevNotices = () => {
+  const [notices, setNotices] = useState<Notification[]>([]);
+  const [cursor, setCursor] = useState<number | undefined>(undefined);
+  const [hasNext, setHasNext] = useState(true);
+  const [hasEntered, setHasEntered] = useState(false);
+
+  const params: PrevNoticeParams = useMemo(
+    () => ({
+      cursorId: cursor,
+      size: 10,
+    }),
+    [cursor]
+  );
+
+  const { data, isLoading, isFetching } = usePrevNoticeQuery(params, {
+    enabled: hasEntered,
+  });
+
+  useEffect(() => {
+    // 최초 진입 시 1회 실행
+    setHasEntered(true);
+  }, []);
+
+  useEffect(() => {
+    if (data) {
+      setNotices((prev) => {
+        const existingIds = new Set(prev.map((n) => n.id));
+        const newItems = data.items.filter((n) => !existingIds.has(n.id));
+        return [...prev, ...newItems];
+      });
+
+      setHasNext(data.hasNext);
+      if (data.hasNext) {
+        setCursor(data.nextCursor);
+      }
+    }
+  }, [data]);
+
+  const fetchNext = () => {
+    if (!isFetching && !isLoading && hasNext && data?.nextCursor != null) {
+      setCursor(data.nextCursor);
+    }
+  };
+
+  return {
+    notices, // 리스트
+    hasNext, // 다음 페이지 여부
+    isLoading, // 최초 로딩
+    isFetching, // 다음 페이지 가져오는 중인지
+    fetchNext, // 관측됐을 때 호출할 함수
+  };
 };

@@ -41,7 +41,7 @@ export const Dropdown = styled.ul`
     width: 100%;
 
     &:hover {
-      background: #f2f2f2;
+      background: ${Colors.Main40};
       color: ${Colors.Grayscale90};
     }
   }
