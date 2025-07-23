@@ -17,6 +17,7 @@ import HostModal from "./components/common/modal/hostModal/HostModal";
 import Toast from "./components/common/toast/Toast";
 import MasterButton from "./components/common/masterButton/MasterButton";
 import { useNotificationSSE } from "./hooks/useNotificationSSE";
+import RefundNoticeModal from "./components/common/modal/refundNoticeModal/RefundNoticeModal";
 
 const App = () => {
   //const navigate = useNavigate();
@@ -66,6 +67,7 @@ const App = () => {
           <SuccessModal postId={(payload as { postId: number })?.postId} />
         )}
         {openedModal === "host" && <HostModal />}
+        {openedModal === "refundNotice" && <RefundNoticeModal />}
         <Toast />
       </S.MainContainer>
     </S.Whole>

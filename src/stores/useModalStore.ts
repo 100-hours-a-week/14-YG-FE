@@ -1,6 +1,12 @@
 import { create } from "zustand";
 
-export type ModalType = "login" | "confirm" | "order" | "success" | "host";
+export type ModalType =
+  | "login"
+  | "confirm"
+  | "order"
+  | "success"
+  | "host"
+  | "refundNotice";
 
 export type ConfirmPayload = {
   confirmTitle?: string;
@@ -18,6 +24,7 @@ export type ModalPayloadMap = {
   login: undefined;
   order: undefined;
   host: { postId: number };
+  refundNotice: undefined;
   null: undefined;
 };
 

@@ -13,7 +13,7 @@ const MasterButton = () => {
 
   const handleToggle = () => {
     if (!user) {
-      openModal("login");
+      openModal("refundNotice");
       return;
     }
     setIsOpen((prev) => !prev);
