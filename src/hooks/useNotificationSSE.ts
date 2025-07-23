@@ -11,12 +11,16 @@ export const useNotificationSSE = () => {
 
     const url = "/api/notifications/sse";
 
+    const isLocal = window.location.hostname === "localhost";
+
     const eventSource = new EventSourcePolyfill(url, {
-      headers: {
-        // 강제로 쿠키 붙이려면 필요 시 Authorization 헤더도 사용 가능
-        // "Authorization": `Bearer ${yourToken}`,
-      },
-      withCredentials: true, // ✅ 꼭 필요
+      headers: isLocal
+        ? {
+            // 로컬에서만 Authorization 헤더 수동 추가
+            Authorization: `Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI0IiwiaWF0IjoxNzUzMjU2OTYxLCJleHAiOjE3NTMyNjA1NjF9.z0IaKBavNu_hrViSvbn3Mr0lsxPb8A8pnnQZAqon8cM`,
+          }
+        : undefined,
+      withCredentials: !isLocal, // ✅ 꼭 필요
       // 내부적으로 fetch를 사용하기 때문에 credentials 포함 필요
       fetch: (input, init = {}) => {
         return fetch(input, {
@@ -28,6 +32,7 @@ export const useNotificationSSE = () => {
 
     eventSource.onmessage = (event) => {
       const data = JSON.parse(event.data);
+      console.log("📨 SSE 수신:", data);
       useNotificationStore.getState().add(data);
     };
 
