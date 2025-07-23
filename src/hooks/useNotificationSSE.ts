@@ -3,13 +3,13 @@ import { useNotificationStore } from "../stores/useNotificationStore";
 import { useUserStore } from "../stores/useUserStore";
 import { EventSourcePolyfill } from "event-source-polyfill";
 
-export const useNotificationSSE = (lastEventId?: number) => {
+export const useNotificationSSE = () => {
   const user = useUserStore((s) => s.user);
 
   useEffect(() => {
     if (!user) return;
 
-    const url = `/api/sse/notifications${lastEventId ? `?lastEventId=${lastEventId}` : ""}`;
+    const url = "/api/notifications/sse";
 
     const eventSource = new EventSourcePolyfill(url, {
       headers: {
@@ -38,5 +38,5 @@ export const useNotificationSSE = (lastEventId?: number) => {
     return () => {
       eventSource.close();
     };
-  }, [user, lastEventId]);
+  }, [user]);
 };
