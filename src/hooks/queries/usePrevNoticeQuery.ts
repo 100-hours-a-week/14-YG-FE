@@ -10,7 +10,7 @@ export const usePrevNoticeQuery = (
   options?: { enabled?: boolean }
 ) => {
   return useQuery<PrevNoticeResponse>({
-    queryKey: ["prevNotice", params],
+    queryKey: ["prevNotice", params?.cursorId],
     queryFn: () => getPrevNotice(params),
     enabled: options?.enabled ?? true,
   });

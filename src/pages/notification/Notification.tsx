@@ -22,7 +22,8 @@ const notificationEmojiMap: Record<NotificationType, string> = {
 const Notification = () => {
   const navigate = useNavigate();
   const { ref, inView } = useInView({ threshold: 0 });
-  const { notices, fetchNext, hasNext, isLoading } = useInfinitePrevNotices();
+  const { notices, fetchNext, hasNext, isLoading, isFetching } =
+    useInfinitePrevNotices();
   console.log(notices);
 
   useEffect(() => {
@@ -33,8 +34,10 @@ const Notification = () => {
   }, [notices]);
 
   useEffect(() => {
-    if (inView) fetchNext();
-  }, [inView, fetchNext]);
+    if (inView && !isFetching) {
+      fetchNext();
+    }
+  }, [inView, fetchNext, isFetching]);
 
   if (isLoading) return <Loading />;
 
@@ -59,7 +62,10 @@ const Notification = () => {
           </div>
         ))}
       </div>
-      {hasNext && <div ref={ref} style={{ height: 30 }} />}
+      <div
+        ref={hasNext ? ref : undefined}
+        style={{ height: hasNext ? 30 : 0 }}
+      />
     </>
   );
 };
