@@ -3,6 +3,7 @@ import { useSendMessageMutation } from "../../hooks/mutations/chat/useSendMessag
 import * as S from "./ChatBot.styled";
 import { useState } from "react";
 import Moong from "../../assets/images/AdminMoong.png";
+import RecommendCard from "../../components/chatBot/recommendCard/RecommendCard";
 //import { useUserStore } from "../../stores/useUserStore";
 
 const ChatRoom = () => {
@@ -24,7 +25,12 @@ const ChatRoom = () => {
     <S.Container>
       <S.ChatPart>
         <S.StyledMoong src={Moong} />
-        람람
+        <S.RowScrollContainer>
+          <RecommendCard />
+          <RecommendCard />
+          <RecommendCard />
+          <RecommendCard />
+        </S.RowScrollContainer>
       </S.ChatPart>
       <S.MessagePart>
         <S.MessageBox

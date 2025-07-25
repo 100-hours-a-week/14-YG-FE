@@ -15,6 +15,12 @@ export const ChatPart = styled.div`
   margin: 15px;
 `;
 
+export const RowScrollContainer = styled.div`
+  display: flex;
+  overflow-x: auto;
+  gap: 30px;
+`;
+
 export const StyledMoong = styled.img``;
 
 export const MessagePart = styled.div`
