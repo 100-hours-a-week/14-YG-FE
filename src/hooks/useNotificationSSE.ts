@@ -17,7 +17,7 @@ export const useNotificationSSE = () => {
       headers: isLocal
         ? {
             // 로컬에서만 Authorization 헤더 수동 추가
-            Authorization: `Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI0IiwiaWF0IjoxNzUzMjU2OTYxLCJleHAiOjE3NTMyNjA1NjF9.z0IaKBavNu_hrViSvbn3Mr0lsxPb8A8pnnQZAqon8cM`,
+            Authorization: `Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI0IiwiaWF0IjoxNzUzNDIwNzgzLCJleHAiOjE3NTM0MjQzODN9.ntPzBpwyoFns70GhJTILXaXyQjbVCXw_O3Ldf4NMTh8`,
           }
         : undefined,
       withCredentials: !isLocal, // ✅ 꼭 필요

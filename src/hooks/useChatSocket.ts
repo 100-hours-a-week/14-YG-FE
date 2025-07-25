@@ -16,8 +16,10 @@ export const useChatSocket = ({
   const clientRef = useRef<ReturnType<typeof Stomp.over> | null>(null);
 
   useEffect(() => {
-    const socket = new SockJS("https://dev.moongsan.com/ws/chat") as WebSocket; // ✅ SockJS로 연결
-    const client = Stomp.over(socket);
+    const client = Stomp.over(
+      () =>
+        new SockJS("https://dev.moongsan.com/ws/chat") as unknown as WebSocket
+    );
 
     client.debug = () => {}; // 로그 끄기
     client.reconnectDelay = 5000; // 자동 재연결
