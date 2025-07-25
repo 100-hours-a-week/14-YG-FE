@@ -37,7 +37,7 @@ const MasterButton = () => {
         <S.Dropdown>
           <li
             onClick={() => {
-              navigate("/writePost");
+              navigate("/chatBot");
             }}
           >
             뭉챗봇
