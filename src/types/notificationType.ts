@@ -3,7 +3,7 @@ export interface NotificationPayload {
   orderId?: number;
   groupBuyId?: number;
   hostId?: number;
-  groupBuyTitle?: string;
+  title?: string;
   quantity?: number;
   participantCount?: number;
   totalQty?: number | null;

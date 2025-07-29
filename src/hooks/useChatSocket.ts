@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from "react";
 import { Stomp } from "@stomp/stompjs";
-import SockJS from "sockjs-client/dist/sockjs";
 import { ChatMessage } from "../types/chatType";
 
 interface UseChatSocketProps {
@@ -16,10 +15,8 @@ export const useChatSocket = ({
   const clientRef = useRef<ReturnType<typeof Stomp.over> | null>(null);
 
   useEffect(() => {
-    const client = Stomp.over(
-      () =>
-        new SockJS("https://dev.moongsan.com/ws/chat") as unknown as WebSocket
-    );
+    const socket = new WebSocket("ws://dev.moongsan.com/ws/chat");
+    const client = Stomp.over(socket);
 
     client.debug = () => {}; // 로그 끄기
     client.reconnectDelay = 5000; // 자동 재연결
@@ -49,7 +46,7 @@ export const useChatSocket = ({
     const payload = {
       postId,
       participantId,
-      message: content,
+      messageContent: content,
     };
 
     clientRef.current.send(
