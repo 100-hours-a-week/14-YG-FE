@@ -17,7 +17,7 @@ export const useNotificationSSE = () => {
       headers: isLocal
         ? {
             // 로컬에서만 Authorization 헤더 수동 추가
-            Authorization: `Bearer`,
+            Authorization: `Bearer `,
           }
         : undefined,
       withCredentials: !isLocal, // ✅ 꼭 필요

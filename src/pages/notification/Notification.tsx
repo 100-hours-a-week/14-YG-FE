@@ -54,8 +54,8 @@ const Notification = () => {
             >
               <S.StyledIcon />
               <S.Text>
-                {notificationEmojiMap[notice.type]} [
-                {notice.payload.groupBuyTitle}] {notice.body.trimEnd()}
+                {notificationEmojiMap[notice.type]} [{notice.payload.title}]{" "}
+                {notice.body.trimEnd()}
               </S.Text>
             </S.unitNotice>
             <SectionLine />
