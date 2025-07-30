@@ -4,26 +4,22 @@ import { ChatBotResponse, SendMessageParams } from "../types/chatBotType";
 export const useChatBotSSE = () => {
   const [messages, setMessages] = useState<ChatBotResponse[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [sessionId, setSessionId] = useState<string | null>(null);
 
-  const sendBotMessage = async ({
-    message,
-    sessionId,
-    nickname,
-  }: SendMessageParams) => {
+  const sendBotMessage = async ({ message, nickname }: SendMessageParams) => {
     setIsLoading(true);
-    setMessages([]);
 
-    const response = await fetch("http://localhost:8000/chat/stream", {
+    const response = await fetch("http://172.20.4.252:8101/chat/stream", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         Accept: "text/event-stream",
       },
-      credentials: "include", // ✅ 쿠키 포함
+      //credentials: "include", // ✅ 쿠키 포함
       body: JSON.stringify({
         message,
         session_id: sessionId,
-        user_name: nickname,
+        nickname: nickname,
       }),
     });
 
@@ -54,8 +50,12 @@ export const useChatBotSSE = () => {
               const json = JSON.parse(line.replace("data: ", ""));
               setMessages((prev) => [...prev, json]);
 
-              if (json.type === "completion") {
-                setIsLoading(false);
+              if (json.type === "ai_response") {
+                // 🔥 session_id 저장
+                if (json.session_id) {
+                  setSessionId(json.session_id);
+                }
+                setIsLoading(false); // ✅ ai_response가 오면 로딩 해제
               }
             } catch (err) {
               console.error("JSON 파싱 오류:", err, line);
@@ -70,6 +70,30 @@ export const useChatBotSSE = () => {
       setIsLoading(false);
     });
   };
+  // ✅ 사용자가 직접 메시지 추가
+  const addUserMessage = (message: string) => {
+    setMessages((prev) => [
+      ...prev,
+      {
+        type: "user_message",
+        content: message,
+        agent: "user",
+        timestamp: new Date().toISOString(),
+      },
+    ]);
+  };
 
-  return { messages, isLoading, sendBotMessage };
+  const addBotMessage = (content: string) => {
+    setMessages((prev) => [
+      ...prev,
+      {
+        type: "bot_message",
+        content,
+        agent: "chat",
+        timestamp: new Date().toISOString(),
+      },
+    ]);
+  };
+
+  return { messages, isLoading, sendBotMessage, addBotMessage, addUserMessage };
 };
