@@ -15,7 +15,7 @@ export const useChatSocket = ({
   const clientRef = useRef<ReturnType<typeof Stomp.over> | null>(null);
 
   useEffect(() => {
-    const socket = new WebSocket("ws://dev.moongsan.com/ws/chat");
+    const socket = new WebSocket("wss://dev.moongsan.com/ws/chat");
     const client = Stomp.over(socket);
 
     client.debug = () => {}; // 로그 끄기
