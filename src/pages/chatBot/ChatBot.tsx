@@ -7,7 +7,7 @@ import { useUserStore } from "../../stores/useUserStore";
 
 const ChatBot = () => {
   const [input, setInput] = useState("");
-  const { messages, isLoading, sendBotMessage } = useChatBotSSE();
+  const { messages, sendBotMessage } = useChatBotSSE();
   const user = useUserStore((s) => s.user);
   const bottomRef = useRef<HTMLDivElement>(null);
 
