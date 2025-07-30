@@ -1,6 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, FormProvider } from "react-hook-form";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { PostFormData, writePostSchema } from "../../schemas/writePostSchema";
 import { useUserStore } from "../../stores/useUserStore";
 import { useModalStore } from "../../stores/useModalStore";
@@ -11,17 +11,44 @@ import { formatDateTimeForDTO } from "../../utils/date";
 import PostForm from "../../components/writePost/postForm/PostForm";
 import { useUploadImageMutation } from "../../hooks/mutations/image/useUploadImageMutation";
 import { EditPostFormData } from "../../schemas/editPostSchema";
+import { useLocation } from "react-router-dom";
+import { AIResponse } from "../../types/hostType";
+import { getImageUrl } from "../../utils/image";
 
 const WritePost = () => {
   const user = useUserStore((s) => s.user);
   const openModal = useModalStore((s) => s.openModal);
   const [imageFiles, setImageFiles] = useState<File[]>([]);
   const { mutateAsync: uploadImage, isPending } = useUploadImageMutation();
+  const location = useLocation();
+  const aiResponse = (location.state as { data?: AIResponse } | null)?.data;
+  console.log(aiResponse);
 
   const methods = useForm<PostFormData>({
     resolver: zodResolver(writePostSchema),
     mode: "onChange",
   });
+
+  const { setValue } = methods; // ✅ setValue 추출
+
+  useEffect(() => {
+    if (aiResponse) {
+      setValue("description", aiResponse.summary, { shouldValidate: true });
+      setValue("title", aiResponse.title, { shouldValidate: true });
+      setValue("name", aiResponse.product_name, { shouldValidate: true });
+      setValue("price", aiResponse.total_price, { shouldValidate: true });
+      setValue("totalAmount", aiResponse.count, { shouldValidate: true });
+      setValue("imageUrls", [getImageUrl(aiResponse.upload_image_key)], {
+        shouldValidate: true,
+      });
+      setValue("dueDate", new Date(aiResponse.due_date), {
+        shouldValidate: true,
+      });
+      setValue("pickupDate", new Date(aiResponse.pickup_date), {
+        shouldValidate: true,
+      });
+    }
+  }, [aiResponse, setValue]);
 
   const { mutate: writePostMutate, isPending: isPosting } = usePostMutation();
 
