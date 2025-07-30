@@ -1,25 +1,29 @@
 import ProgressBar from "../../common/progressBar/ProgressBar";
 import * as S from "./RecommendCard.styled";
 import 토마토 from "../../../assets/images/Tomato.png";
+import { RecommendCardProps } from "../../../types/chatBotType";
 
-const RecommendCard = () => {
+const RecommendCard = ({ item }: { item: RecommendCardProps }) => {
   return (
     <S.Container>
       <S.FixedButton>진행중</S.FixedButton>
       <S.Image src={토마토} />
       <S.Info>
-        <S.Title>제목제목</S.Title>
-        <S.Name>이름이름</S.Name>
+        <S.Title>{item.title}</S.Title>
+        <S.Name>{item.product_name}</S.Name>
         <S.Price>
-          개당 <span>523원</span>
+          개당 <span>{item.unit_price}원</span>
         </S.Price>
-        <ProgressBar current={12} total={20} />
+        <ProgressBar
+          current={item.total_amount - item.left_amount}
+          total={item.total_amount}
+        />
         <S.OrderInfo>
           <S.Component>
-            주문 단위 <span>1개</span>
+            주문 단위 <span>{item.unit_amount}개</span>
           </S.Component>
           <S.Component>
-            잔여 수량 <span>16개</span>
+            잔여 수량 <span>{item.left_amount}개</span>
           </S.Component>
         </S.OrderInfo>
         <S.DateInfo>
