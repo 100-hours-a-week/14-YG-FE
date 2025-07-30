@@ -23,6 +23,19 @@ export const RowScrollContainer = styled.div`
 
 export const StyledMoong = styled.img``;
 
+export const MessageList = styled.div`
+  padding: 0 16px;
+`;
+
+export const MessageBubble = styled.div<{ isUser: boolean }>`
+  background-color: ${({ isUser }) => (isUser ? "#DCF8C6" : "#f1f1f1")};
+  margin: 6px 0;
+  padding: 10px 14px;
+  border-radius: 16px;
+  max-width: 80%;
+  align-self: ${({ isUser }) => (isUser ? "flex-end" : "flex-start")};
+`;
+
 export const MessagePart = styled.div`
   margin: 30px;
   padding: 15px 20px;
