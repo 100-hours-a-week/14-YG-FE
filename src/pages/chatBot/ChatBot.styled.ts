@@ -88,12 +88,6 @@ export const StructuredCardWrapper = styled.div`
   ${FontStyles.MD2_Medium};
 `;
 
-export const RecommendCardList = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-`;
-
 export const CardHeader = styled.h4`
   font-weight: bold;
   margin-bottom: 8px;

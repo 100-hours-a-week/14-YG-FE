@@ -2,13 +2,14 @@ import styled from "styled-components";
 import { Colors, FontStyles } from "../../../styles";
 
 export const Container = styled.div`
-  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
   width: 220px;
   border-radius: 10px;
   display: flex;
   flex-direction: column;
   flex-shrink: 0;
   position: relative;
+  height: 100%;
 `;
 
 export const FixedButton = styled.div`
@@ -37,13 +38,22 @@ export const Image = styled.img`
 
 export const Title = styled.p`
   ${FontStyles.MD2_SemiBold};
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
 `;
 
 export const Name = styled.p`
   ${FontStyles.SM_Medium};
   color: ${Colors.Grayscale70};
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
 `;
-
 export const Price = styled.div`
   display: flex;
   flex-direction: column;
