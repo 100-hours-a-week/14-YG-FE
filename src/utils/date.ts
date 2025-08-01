@@ -9,6 +9,21 @@ export const formatDateTimeForDTO = (date: Date): string => {
 };
 
 /**
+ * 문자열 형식의 날짜를 "M월 D일" 형식으로 변환
+ * @param dateString "YYYY-MM-DD HH:mm:ss" 형식의 날짜 문자열
+ * @returns "8월 16일" 같은 형식의 문자열
+ */
+export const formatDateToMonthDay = (dateString: string): string => {
+  const date = new Date(dateString);
+  if (isNaN(date.getTime())) return ""; // 유효하지 않은 날짜일 경우
+
+  const month = date.getMonth() + 1; // 0-based
+  const day = date.getDate();
+
+  return `${month}월 ${day}일`;
+};
+
+/**
  * YYYY.MM.DD HH:mm 형식으로 날짜+시간 포맷
  */
 export function formatDateTime(dateString: string): string {

@@ -82,15 +82,13 @@ const ChatBot = () => {
                   <S.Message>
                     <S.StyledMoong src={Moong} />
                     <S.StructuredCardWrapper key={idx}>
-                      <S.CardHeader>🔍 {parsed.search_type}</S.CardHeader>
+                      <S.CardHeader>🔍 공구 검색</S.CardHeader>
                       <p>{parsed.query} 관련 공구를 찾았어요!</p>
-                      <S.RecommendCardList>
+                      <S.RowScrollContainer>
                         {parsed.results.map((item: RecommendCardProps) => (
                           <RecommendCard key={item.id} item={item} />
                         ))}
-                      </S.RecommendCardList>
-                      <p>🧠 분석 결과: {parsed.analysis?.user_intent}</p>
-                      <p>💡 사유: {parsed.analysis?.reasoning}</p>
+                      </S.RowScrollContainer>
                     </S.StructuredCardWrapper>
                   </S.Message>
                 );
