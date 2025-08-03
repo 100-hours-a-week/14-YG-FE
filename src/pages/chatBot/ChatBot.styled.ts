@@ -89,8 +89,8 @@ export const StructuredCardWrapper = styled.div`
 `;
 
 export const CardHeader = styled.h4`
-  font-weight: bold;
   margin-bottom: 8px;
+  ${FontStyles.SM_Bold}
 `;
 
 export const OutroText = styled.div`
@@ -135,4 +135,8 @@ export const LoadingDots = styled.div`
       opacity: 0.2;
     }
   }
+`;
+
+export const Info = styled.p`
+  ${FontStyles.SM_Medium}
 `;

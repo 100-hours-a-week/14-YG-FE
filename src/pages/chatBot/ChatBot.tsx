@@ -82,8 +82,26 @@ const ChatBot = () => {
                   <S.Message>
                     <S.StyledMoong src={Moong} />
                     <S.StructuredCardWrapper key={idx}>
-                      <S.CardHeader>🔍 공구 검색</S.CardHeader>
-                      <p>{parsed.query} 관련 공구를 찾았어요!</p>
+                      {parsed.total_count === 0 ? (
+                        <>
+                          <S.CardHeader>
+                            🔍 {parsed.query} 관련 공구가 없습니다.
+                          </S.CardHeader>
+                          <S.Info>
+                            {parsed.query} 관련 공구를 생성해보세요.
+                          </S.Info>
+                        </>
+                      ) : (
+                        <>
+                          <S.CardHeader>
+                            🔍 {parsed.query} 관련 공구 검색 결과입니다.
+                          </S.CardHeader>
+                          <S.Info>
+                            카드를 클릭하여 원하는 공구에 참여해보세요!
+                          </S.Info>
+                        </>
+                      )}
+
                       <S.RowScrollContainer>
                         {parsed.results.map((item: RecommendCardProps) => (
                           <RecommendCard key={item.id} item={item} />
@@ -145,7 +163,9 @@ const ChatBot = () => {
 
               try {
                 const parsed = JSON.parse(jsonText.trim());
-                navigate("/writePost", { state: parsed });
+                setTimeout(() => {
+                  navigate("/writePost", { state: parsed });
+                }, 0);
               } catch (err) {
                 console.error("CREATE_PRODUCT 파싱 실패", err);
               }
