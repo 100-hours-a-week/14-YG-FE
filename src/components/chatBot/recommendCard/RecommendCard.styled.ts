@@ -10,6 +10,7 @@ export const Container = styled.div`
   flex-shrink: 0;
   position: relative;
   height: 100%;
+  cursor: pointer;
 `;
 
 export const FixedButton = styled.div`
@@ -37,7 +38,22 @@ export const Image = styled.img`
 `;
 
 export const Title = styled.p`
-  ${FontStyles.MD2_SemiBold};
+  ${FontStyles.SM_SemiBold};
+  line-height: 1.4; /* 예시: 1.2em */
+  height: calc(1.4em * 2); /* 2줄 높이 */
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-bottom: 2px;
+`;
+
+export const Name = styled.p`
+  ${FontStyles.XS_Medium};
+  color: ${Colors.Grayscale70};
+  line-height: 1.4;
+  height: calc(1.4em * 2);
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
@@ -45,20 +61,11 @@ export const Title = styled.p`
   text-overflow: ellipsis;
 `;
 
-export const Name = styled.p`
-  ${FontStyles.SM_Medium};
-  color: ${Colors.Grayscale70};
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  text-overflow: ellipsis;
-`;
 export const Price = styled.div`
   display: flex;
   flex-direction: column;
   align-items: end;
-  ${FontStyles.XS_Medium};
+  ${FontStyles.XXS_Medium};
   color: ${Colors.Grayscale70};
   span {
     color: ${Colors.Main10};
@@ -79,13 +86,13 @@ export const Component = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  ${FontStyles.XS_SemiBold};
+  ${FontStyles.XXS_SemiBold};
   color: ${Colors.Grayscale60};
   border-radius: 10px;
   border: 1px solid ${Colors.Grayscale40};
   span {
     color: ${Colors.Grayscale90};
-    ${FontStyles.SM_Bold};
+    ${FontStyles.XS_Bold};
   }
 `;
 
@@ -102,10 +109,10 @@ export const DateComponent = styled.div`
   border-bottom: 1px solid ${Colors.Grayscale40};
   display: flex;
   flex-direction: column;
-  ${FontStyles.XS_SemiBold};
+  ${FontStyles.XXS_SemiBold};
   color: ${Colors.Grayscale60};
   span {
     color: ${Colors.Grayscale90};
-    ${FontStyles.SM_Bold};
+    ${FontStyles.XS_Bold};
   }
 `;
